@@ -18,7 +18,7 @@ return CMap::mergeArray(
                         'levels'    => 'error, warning, debug',
                     ),
                     array(
-                        'class'     => 'application.extensions.debug.YiiDebugToolbarRoute',
+                        'class'     => 'application.extensions.yii-debug-toolbar.YiiDebugToolbarRoute',
                         'ipFilters' => array('127.0.0.1', '195.66.89.207'),
                     ),
                 ),

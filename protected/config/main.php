@@ -45,15 +45,6 @@ return array(
         'bootstrap'=>array(
             'class'=>'ext.bootstrap.components.Bootstrap'
         ),
-        
-        'easyImage' => array(
-            'class' => 'application.extensions.easyimage.EasyImage',
-            //'driver' => 'GD',
-            //'quality' => 100,
-            //'cachePath' => '/assets/easyimage/',
-            //'cacheTime' => 2592000,
-            //'retinaSupport' => false,
-        ),
 
         'authManager'=>array(
             'class' => 'phpAuthManager',
@@ -108,10 +99,6 @@ return array(
             'urlFormat' => 'path',
             'showScriptName'=>false,
             'rules'=> array(
-                'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
-                'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
-                'admin/user' => 'user/admin/default',
-                
                 array(
                     'class'=>'UrlRuleAdminNode'
                 ),
