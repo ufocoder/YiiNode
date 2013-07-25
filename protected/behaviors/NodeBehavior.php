@@ -5,12 +5,12 @@ class NodeBehavior extends CBehavior
     const LEVEL_LIMIT = 10;
 
     /**
-     * Текущий узел
+     * Current node
      */
     protected $_nodeCurrent = null;
     
     /**
-     * Цепочка узлов до текущего
+     * Chain nodes for current node
      */
     protected $_nodeChain = array();
 
