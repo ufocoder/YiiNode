@@ -35,24 +35,14 @@ return array(
         'admin',
         'articles',
         'page',
-        'recipe',
         'user'
     ),
 
     /* begin: components */
-    
+
     'components'=> array(
         'bootstrap'=>array(
             'class'=>'ext.bootstrap.components.Bootstrap'
-        ),
-        
-        'easyImage' => array(
-            'class' => 'application.extensions.easyimage.EasyImage',
-            //'driver' => 'GD',
-            //'quality' => 100,
-            //'cachePath' => '/assets/easyimage/',
-            //'cacheTime' => 2592000,
-            //'retinaSupport' => false,
         ),
 
         'authManager'=>array(
@@ -111,7 +101,7 @@ return array(
                 'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
                 'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
                 'admin/user' => 'user/admin/default',
-                
+
                 array(
                     'class'=>'UrlRuleAdminNode'
                 ),
