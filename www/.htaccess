@@ -1,0 +1,23 @@
+# encoding
+AddDefaultCharset utf-8
+AddCharset utf-8 *
+<IfModule mod_charset.c>
+    CharsetSourceEnc utf-8
+    CharsetDefault utf-8
+</IfModule>
+
+# rewrite
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-s
+RewriteCond %{REQUEST_FILENAME} !-l
+#RewriteRule ^(.+)$ /index.php?%{QUERY_STRING} [L]
+RewriteRule . index.php
+
+# common
+ErrorDocument 403 /index.php
+ErrorDocument 404 /index.php
+DirectoryIndex index.php
+Options -Indexes
