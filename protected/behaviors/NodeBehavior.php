@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Node behavior
+ *
+ * @author Sergei Ivanov <xifrin@gmail.com>
+ * @copyright 2013
+ *
+ * @version GIT: $Id$
+ * @revision: $Revision$
+ */
 class NodeBehavior extends CBehavior
 {
     const LEVEL_LIMIT = 10;
@@ -15,27 +23,27 @@ class NodeBehavior extends CBehavior
     protected $_nodeChain = array();
 
     /**
-     * Список узлов
+     * Node list
      */
     protected $_nodeList = null;
 
     /**
-     * Список всех путей узлов
+     * Node path list
      */
     protected $_nodePaths = null;
 
     /**
-     * Маршрутизаторы модулей
+     * Moduel url managers
      */
     protected $_moduleUrlManager = array();
 
     /**
-     * Экземпляр маршрутизатора без правил маршрутизации
+     * UrlManager instance without rules
      */
     protected $_instanceUrlManager;
 
     /**
-     * Устанавливаем текущий узел
+     * Set current node
      */
     public function setNode($node){
         if ($this->_nodeCurrent == null)
@@ -43,7 +51,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Устанавливаем текущую цепочку узлов
+     * Set chain nodes for current node
      */
     public function setNodeChain($nodeChain){
         if ($this->_nodeChain == null)
@@ -51,7 +59,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить ID текущего узла
+     * Get current node Id
      */
     public function getNodeId()
     {
@@ -60,7 +68,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить путь текущего узла
+     * Get current node path
      */
     public function getNodePath()
     {
@@ -69,7 +77,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить атрибуты текущего узла
+     * Get current node attribute
      */
     public function getNodeAttribute($attr = null)
     {
@@ -82,7 +90,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить путь к узлу по id узла
+     * Get node by ID
      */
     public function getNodeByID($id_node = null)
     {
@@ -94,7 +102,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить путь к узлу по id узла
+     * Get node by path
      */
     public function getNodeByPath($path_node = null)
     {
@@ -109,7 +117,7 @@ class NodeBehavior extends CBehavior
     }
 
     /** 
-     * Получить список узлов из БД
+     * Get node list from database
      */
     protected function _getNodeList()
     {
@@ -123,7 +131,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить цепочку узлов относительно текущего
+     * Get node chain
      */
     public function getNodeChain()
     {
@@ -131,7 +139,7 @@ class NodeBehavior extends CBehavior
     }
 
     /** 
-     * Сформировать массив путей
+     * Get array path for string path
      */
     protected function _getNodePathList($path)
     {
@@ -155,7 +163,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     * Получить url-менеджер модуля
+     * Get module UrlManager
      */
     public function getModuleUrlManager(&$node)
     {
@@ -178,7 +186,7 @@ class NodeBehavior extends CBehavior
     }
 
     /** 
-     * Получаем UrlManager с настройками
+     * Get UrlManager with settings
      */
     public function _getUrlManager(){
     
@@ -197,37 +205,6 @@ class NodeBehavior extends CBehavior
         return clone $this->_instanceUrlManager;
     }
 
-    /**
-     * Создать ссылку для текущего узла
-     */
-    public function createNodeUrl($id_node, $route, $params=array(), $ampersand='&')
-    {
-        $node = $this->getNodeByID($id_node);
-
-        if (empty($node->id_node)){
-            if (YII_DEBUG)
-                throw new CException(Yii::t('yii','Node ID #{id_node} not exists.', array('{id_node}' => $id_node)));
-            else
-                throw new CHttpException(404, Yii::t('site', 'The requested page does not exist.'));
-        }
-
-        $moduleName = $node->module;
-
-        if (!isset($this->_moduleUrlManager[$id_node]) && Yii::app()->hasModule($moduleName)){
-            $moduleRoute = array();
-            $rules = Yii::app()->getModule($moduleName)->route();
-            foreach($rules as $key => $route)
-                $moduleRoute[ltrim($node->path,"/").$key] = $route;
-
-            $manager = $this->_getUrlManager();
-            $manager->rules = null;
-            $manager->addRules($moduleRoute);
-            $this->_moduleUrlManager[$id_node] = $manager;
-        }
-        $manager = $this->_moduleUrlManager[$id_node];
-
-        return $manager->createUrl($route, $params, $ampersand);
-    }
 }
 
 ?>

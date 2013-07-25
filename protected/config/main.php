@@ -98,10 +98,6 @@ return array(
             'urlFormat' => 'path',
             'showScriptName'=>false,
             'rules'=> array(
-                'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
-                'admin/user/<controller:\w+>/<action:\w+>' => 'user/admin/<controller>/<action>',
-                'admin/user' => 'user/admin/default',
-
                 array(
                     'class'=>'UrlRuleAdminNode'
                 ),
