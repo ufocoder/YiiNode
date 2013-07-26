@@ -16,7 +16,7 @@ class NodeBehavior extends CBehavior
      * Current node
      */
     protected $_nodeCurrent = null;
-    
+
     /**
      * Chain nodes for current node
      */
@@ -116,7 +116,7 @@ class NodeBehavior extends CBehavior
         }
     }
 
-    /** 
+    /**
      * Get node list from database
      */
     protected function _getNodeList()
@@ -138,7 +138,7 @@ class NodeBehavior extends CBehavior
         return $this->_nodeChain;
     }
 
-    /** 
+    /**
      * Get array path for string path
      */
     protected function _getNodePathList($path)
@@ -165,7 +165,7 @@ class NodeBehavior extends CBehavior
     /**
      * Get module UrlManager
      */
-    public function getModuleUrlManager(&$node)
+    public function getModuleUrlManager($node)
     {
         if (empty($node))
             return false;
@@ -185,11 +185,11 @@ class NodeBehavior extends CBehavior
             return $this->_moduleUrlManager[$node->id_node];
     }
 
-    /** 
+    /**
      * Get UrlManager with settings
      */
     public function _getUrlManager(){
-    
+
         if ($this->_instanceUrlManager == null)
         {
             $class = get_class(Yii::app()->urlManager);
@@ -198,7 +198,7 @@ class NodeBehavior extends CBehavior
             $params = array('useStrictParsing', 'caseSensitive', 'urlSuffix', 'showScriptName', 'appendParams');
             foreach ($params as $param)
                 $manager->$param = Yii::app()->urlManager->$param;
-            
+
             $this->_instanceUrlManager = $manager;
         }
 
