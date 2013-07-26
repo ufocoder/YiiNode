@@ -31,7 +31,7 @@ class UrlRuleModuleNode extends CBaseUrlRule
         else
             return false;
 
-        if ($manager = Yii::app()->getModuleUrlManager(&$node)){
+        if ($manager = Yii::app()->getModuleUrlManager($node)){
             return ltrim($manager->createUrl($route, $params, $ampersand), "/");
         }else
             return false;
@@ -52,7 +52,6 @@ class UrlRuleModuleNode extends CBaseUrlRule
     {
         $path = Yii::app()->getRequest()->getPathInfo();
 
-        // ���� ����
         $criteria = new CDbCriteria;
         $criteria->order = 'path';
         $criteria->addInCondition('path', Yii::app()->_getNodePathList($path));
@@ -67,7 +66,7 @@ class UrlRuleModuleNode extends CBaseUrlRule
             $chain[$node->id_node] = $node;
         Yii::app()->setNodeChain($chain);
 
-        if ($urlManager = Yii::app()->getModuleUrlManager(&$node))
+        if ($urlManager = Yii::app()->getModuleUrlManager($node))
             return $urlManager->parseUrl($request);
     }
 
