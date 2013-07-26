@@ -1,6 +1,6 @@
 <?php
 /**
- * Админ-панель [с поддержкой Bootstrap]
+ * Admin module [with Bootstrap]
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -8,19 +8,19 @@
 class AdminModule extends WebModule
 {
     /**
-     * Инициализация модуля [начальная настройка]
+     * Module initialization
      */
     public function init()
     {
         parent::init();
 
-        // Импорт моделей и компонентов на уровне модуля
+        // Import module models and components
         $this->setImport(array(
             'admin.components.*',
             'admin.models.*',
         ));
 
-        // Загружаем Bootstrap
+        // Bootstrap preload
         $this->configure(array(
             'components'=>array(
                 'bootstrap'=>array(
@@ -30,7 +30,7 @@ class AdminModule extends WebModule
         ));
         $this->getComponent('bootstrap');
 
-        // переопределяем ссылки для администратора
+        // redefine user url list
         Yii::app()->user->recoveryUrl = array('/admin/recovery');
         Yii::app()->user->loginUrl = array('/admin/login');
         Yii::app()->user->returnUrl = array('/admin');

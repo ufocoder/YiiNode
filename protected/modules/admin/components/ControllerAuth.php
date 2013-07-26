@@ -1,19 +1,19 @@
 <?php
 /**
- * Компонент auth-контроллер
- * подключаем layout и фильтра для доступа
+ * Auth controller component
  *
  * @version GIT: $Id$
  * @revision: $Revision$
  */
 class ControllerAuth extends Controller
 {
+    /**
+     * layout form
+     */
     public $layout = '/layouts/form';
 
     /**
-     * Список фильтров
-     *
-     * @return type
+     * @return type filters
      */
     public function filters()
     {

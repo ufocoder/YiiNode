@@ -1,6 +1,6 @@
 <?php
 /**
- * Контроллер управления файлами
+ * Admin module - Filemanager
  *
  * @version GIT: $Id$
  * @revision: $Revision$

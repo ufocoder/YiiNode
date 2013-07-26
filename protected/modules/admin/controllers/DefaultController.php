@@ -1,6 +1,6 @@
 <?php
 /**
- * Главный контроллер 'AdminModule'
+ * Admin module - Default controller
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -8,7 +8,7 @@
 class DefaultController extends ControllerAdmin
 {
     /**
-     * Последние изменения [действие по умолчанию]
+     * Index page with last changes widgets
      */
     public function actionIndex()
     {
