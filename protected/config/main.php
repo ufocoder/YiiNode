@@ -112,6 +112,8 @@ return array(
     ),
     /* end: components */
 
-    'params'=>array(),
+    'params'=>array(
+        'version' => '0.1'
+    ),
 
 );
