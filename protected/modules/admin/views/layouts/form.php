@@ -58,6 +58,9 @@
         margin: 0;
         list-style: none;
     }
+    .wrapper-form form {
+        margin-bottom: 0;
+    }
     .powered {
         text-align: center;
         font-size: 11px;
@@ -77,34 +80,34 @@
 <?php if (!empty($this->title)): ?>
         <h2 class="form-signin-heading"><?php echo $this->title; ?></h2>
 <?php endif; ?>
-<?php 
+<?php
     $this->widget('bootstrap.widgets.TbAlert', array(
         'block'=>true,
         'fade'=>true,
         'closeText'=>'&times;',
         'alerts'=>array(
             'success'=>array(
-                'block'=>true, 
-                'fade'=>true, 
+                'block'=>true,
+                'fade'=>true,
                 'closeText'=>'&times;'
             ),
             'info'=>array(
-                'block'=>true, 
-                'fade'=>true, 
+                'block'=>true,
+                'fade'=>true,
                 'closeText'=>'&times;'
             ),
             'warning'=>array(
-                'block'=>true, 
-                'fade'=>true, 
+                'block'=>true,
+                'fade'=>true,
                 'closeText'=>'&times;'
             ),
             'error'=>array(
-                'block'=>true, 
-                'fade'=>true, 
+                'block'=>true,
+                'fade'=>true,
                 'closeText'=>'&times;'
             ),
         ),
-    )); 
+    ));
 ?>
 <?php echo $content?>
         </div>

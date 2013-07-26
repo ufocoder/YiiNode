@@ -1,4 +1,4 @@
-<?php 
+<?php
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'type' => 'horizontal',
@@ -8,11 +8,11 @@
             'validateOnSubmit'=>true,
         )
     ));
-    
+
     $this->title =  Yii::t('site', 'Control panel');
 ?>
 
-<?php 
+<?php
     $error_list = $model->getErrors();
     if (!empty($error_list)):
 ?>
@@ -26,31 +26,31 @@
     <?php endforeach; ?>
     </div>
 <?php
-    endif; 
+    endif;
 ?>
 
-    <div class="form-signin-wrapper">
+<div class="form-signin-wrapper">
     <?php echo $form->textField($model, 'login', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter login'))); ?>
     <?php echo $form->passwordField($model, 'password', array('class' => 'span4 password', 'placeholder' => Yii::t('site', 'Enter password'))); ?>
     <div>
-    <?php $this->widget('CCaptcha', array(
-            'captchaAction' => '/admin/login/captcha', 
-            'showRefreshButton'=>false,
-            'clickableImage' =>true, 
-            'imageOptions' => array(
-                'class' => 'captcha',
-            ))
-        ); 
-    ?>
-    <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
+        <?php $this->widget('CCaptcha', array(
+                'captchaAction' => Yii::app()->createUrl('/admin/login/captcha'),
+                'showRefreshButton'=>false,
+                'clickableImage' =>true,
+                'imageOptions' => array(
+                    'class' => 'captcha',
+                ))
+            );
+        ?>
+        <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
     </div>
 
     <?php echo $form->label($model, 'rememberMe', array('label'=> $form->checkBox($model, 'rememberMe'). Yii::t('site', 'Remember me next time'), 'class' => 'checkbox')); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Login'))); ?>
-    </div>
+</div>
     <hr>
-    <div style="text-align:justify;">
-    <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
-    <?php echo CHtml::link(Yii::t("site", "Go main page"), array('/')); ?>
+    <div style="text-align:center;">
+        <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
+        <?php echo CHtml::link(Yii::t("site", "Go main page"), array('../')); ?>
     </div>
 <?php $this->endWidget(); ?>

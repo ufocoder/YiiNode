@@ -15,7 +15,7 @@
         $this->title =  Yii::t('site', 'Change password');
     ?>
 
-<?php 
+<?php
     $error_list = $model->getErrors();
     if (!empty($error_list)):
 ?>
@@ -29,7 +29,7 @@
     <?php endforeach; ?>
     </div>
 <?php
-    endif; 
+    endif;
 ?>
     <?php echo $form->passwordField($model, 'password', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter your new password'))); ?>
     <?php echo $form->passwordField($model, 'verifyPassword', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
@@ -37,9 +37,9 @@
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Change'))); ?>
 
     <hr>
-    <div style="text-align:justify;">
-    <?php echo CHtml::link(Yii::t("site", "Authorization"), Yii::app()->user->loginUrl); ?> |
-    <?php echo CHtml::link(Yii::t("site", "Go main page"), array('/')); ?>
+    <div style="text-align:center;">
+        <?php echo CHtml::link(Yii::t("site", "Authorization"), Yii::app()->user->loginUrl); ?> |
+        <?php echo CHtml::link(Yii::t("site", "Go main page"), array('../')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

@@ -1,4 +1,4 @@
-<?php 
+<?php
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'type' => 'horizontal',
@@ -8,7 +8,7 @@
             'validateOnSubmit'=>true,
         )
     ));
-    
+
     $this->title =  Yii::t('site', 'Password recovery');
 ?>
 
@@ -26,20 +26,20 @@
     <?php endforeach; ?>
     </div>
 <?php
-    endif; 
+    endif;
 ?>
 
     <?php echo $form->textField($model, 'login_or_email', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter login or email'))); ?>
 
     <div>
     <?php $this->widget('CCaptcha', array(
-            'captchaAction' => '/admin/recovery/captcha', 
+            'captchaAction' => Yii::app()->createUrl('/admin/recovery/captcha'),
             'showRefreshButton'=>false,
-            'clickableImage' =>true, 
+            'clickableImage' =>true,
             'imageOptions' => array(
                 'class' => 'captcha',
             ))
-        ); 
+        );
     ?>
     <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
     </div>
@@ -47,9 +47,9 @@
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Restore'))); ?>
 
     <hr>
-    <div style="text-align:justify;">
-    <?php echo CHtml::link(Yii::t("site", "Authorization"), Yii::app()->user->loginUrl); ?> |
-    <?php echo CHtml::link(Yii::t("site", "Go main page"), array('/')); ?>
+    <div style="text-align:center;">
+        <?php echo CHtml::link(Yii::t("site", "Authorization"), Yii::app()->user->loginUrl); ?> |
+        <?php echo CHtml::link(Yii::t("site", "Go main page"), array('../')); ?>
     </div>
 
 <?php $this->endWidget(); ?>
