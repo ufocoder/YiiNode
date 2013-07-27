@@ -9,7 +9,6 @@ class UserIdentity extends CUserIdentity
 {
     private $_id;
     private $_login;
-    private $_role;
 
     /**
      * Error status list
@@ -68,12 +67,15 @@ class UserIdentity extends CUserIdentity
             }
             else
             {
+                $this->errorCode = self::ERROR_NONE;
+
+                // set attributes
                 $this->_id = $user->id_user;
                 $this->_login = $user->login;
-                $this->setState('role', $user->role);
+
+                // update last visited time
                 $user->time_visited = time();
                 $user->save(false);
-                $this->errorCode = self::ERROR_NONE;
             }
         }
 
@@ -95,4 +97,5 @@ class UserIdentity extends CUserIdentity
     {
         return $this->_login;
     }
+
 }
