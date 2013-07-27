@@ -1,6 +1,6 @@
 <?php
 /**
- * Контроллер: авторизация
+ * Admin module - Login
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -8,9 +8,7 @@
 class LoginController extends ControllerAuth
 {
     /**
-     * Список действий [добавляем captcha]
-     * 
-     * @return type
+     * @return type Actions
      */
     public function actions()
     {
@@ -24,9 +22,7 @@ class LoginController extends ControllerAuth
     }
 
     /**
-     * Список правил доступа
-     *
-     * @return type
+     * @return type Access rules
      */
     public function accessRules()
     {
@@ -40,7 +36,7 @@ class LoginController extends ControllerAuth
     }
 
     /**
-     * Форма входа [действие по умолчанию]
+     * Login form [index action]
      */
     public function actionIndex()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Главный контроллер 'AdminModule'
+ * Admin module - Logout
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -8,9 +8,7 @@
 class LogoutController extends ControllerAuth
 {
     /**
-     * Список правил доступа
-     *
-     * @return type
+     * @return type Access rules
      */
     public function accessRules()
     {
@@ -23,7 +21,9 @@ class LogoutController extends ControllerAuth
         );
     }
 
-    
+    /**
+     * Logout and redirect [index action]
+     */
     public function actionIndex()
     {
         Yii::app()->user->logout();

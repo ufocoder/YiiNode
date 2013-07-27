@@ -1,6 +1,6 @@
 <?php
 /**
- * Главный контроллер 'AdminModule'
+ * Admin module - Recovery password
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -8,9 +8,7 @@
 class RecoveryController extends ControllerAuth
 {
     /**
-     * Список действий [добавляем captcha]
-     * 
-     * @return type
+     * @return type Actions
      */
     public function actions()
     {
@@ -24,9 +22,7 @@ class RecoveryController extends ControllerAuth
     }
 
     /**
-     * Список правил доступа
-     *
-     * @return type
+     * @return type Access Rules
      */
     public function accessRules()
     {
@@ -39,6 +35,9 @@ class RecoveryController extends ControllerAuth
         );
     }
 
+    /**
+     * Recovery password [index action]
+     */
     public function actionIndex()
     {
         $class_change = "FormChangePassword";
@@ -46,7 +45,7 @@ class RecoveryController extends ControllerAuth
 
         $form = new $class_recovery;
 
-        // если пользователь авторизован переадресовываем его
+        // redirect auth user
         if (!Yii::app()->user->isGuest)
             $this->redirect(Yii::app()->user->returnUrl);
         else
@@ -85,7 +84,7 @@ class RecoveryController extends ControllerAuth
                     $this->redirect(Yii::app()->user->recoveryUrl);
                 }
             }
-            // форма восстановления пароля
+            // recovery form
             else {
 
                 if (isset($_POST[$class_recovery]))
