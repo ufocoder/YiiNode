@@ -72,7 +72,7 @@ class zTree extends CJuiWidget
 	 * 
 	 * @var array|string
 	 */
-	public $scriptFile=array('jquery.ztree.all-3.1.min.js');
+	public $scriptFile=array('jquery.ztree.all-3.5.min.js');
 	/**
 	 * 样式文件列表
 	 * 
