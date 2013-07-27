@@ -176,8 +176,11 @@ class zTree extends CJuiWidget
         parent::init();
         
 		$this->htmlOptions['id']=$this->id;
-		$this->htmlOptions['class']	.= ' ztree';
-	
+		if (!empty($this->htmlOptions['class']))
+			$this->htmlOptions['class'] .= ' ztree';
+		else
+			$this->htmlOptions['class'] = ' ztree';
+
 		if (!isset($this->options['data']))
 		{
 			$this->options['data']	= array();
