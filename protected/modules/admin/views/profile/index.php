@@ -8,8 +8,8 @@
     );
 
     $this->actions = array(
-        array('label'=>Yii::t('site', 'Update profile'), 'url'=>array('update')),
-        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword')),
+        array('label'=>Yii::t('site', 'Update profile'), 'url'=>array('update'), 'icon'=>'pencil'),
+        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword'), 'icon'=>'lock'),
     );
 
     $this->title = Yii::t("site", "Your profile");
@@ -19,6 +19,10 @@
     'data'=>$model,
     'attributes'=>array(
         'login',
+        array(
+            'name' => 'role',
+            'value' => User::values('role', $model->role)
+        ),
         'email',
         array(
             'name'=>'time_created',

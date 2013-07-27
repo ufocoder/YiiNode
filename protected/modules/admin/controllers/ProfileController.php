@@ -1,13 +1,15 @@
 <?php
 /**
- * Контроллер управления текущим аккаунтом пользователя системы
+ * Admin module - Current user profile
  *
  * @version GIT: $Id$
  * @revision: $Revision$
  */
 class ProfileController extends ControllerAdmin
 {
-
+    /**
+     * View profile [index action]
+     */
     public function actionIndex()
     {
         $this->render('/profile/index',array(
@@ -15,7 +17,9 @@ class ProfileController extends ControllerAdmin
         ));
     }
 
-    
+    /**
+     * Update profile
+     */
     public function actionUpdate()
     {
         $profile = $this->loadModel();
@@ -27,13 +31,15 @@ class ProfileController extends ControllerAdmin
             if($profile->save())
                 $this->redirect(array('index'));
         }
-        
+
         $this->render('/profile/update',array(
             'model' => $profile
         ));
     }
 
-    
+    /**
+     * Change password
+     */
     public function actionChangepassword()
     {
         $user = $this->loadModel();
@@ -49,7 +55,7 @@ class ProfileController extends ControllerAdmin
             {
                 $new_password = User::model()->findbyPk(Yii::app()->user->id);
                 $new_password->password = Yii::app()->user->encrypting($model->password);
-                $new_password->activekey=Yii::app()->user->encrypting(microtime().$model->password);
+                $new_password->activekey = Yii::app()->user->encrypting(microtime().$model->password);
                 if ($new_password->save())
                     Yii::app()->user->setFlash('success', Yii::t("site", "New password is saved."));
 
@@ -60,6 +66,9 @@ class ProfileController extends ControllerAdmin
 
     }
 
+    /**
+     *
+     */
     public function loadModel()
     {
         $model = User::model()->findByPk(Yii::app()->user->id);

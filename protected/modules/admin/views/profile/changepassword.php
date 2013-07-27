@@ -7,6 +7,11 @@
         Yii::t("site", "Profile") => array('/'.$this->module->id.'/profile'),
         Yii::t('site', 'Change password')
     );
+
+    $this->actions = array(
+        array('label'=>Yii::t('site', 'View profile'), 'url'=>array('index'), 'icon'=>'eye-open'),
+        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword'), 'icon'=>'lock'),
+    );
 ?>
 
 <?php
@@ -25,7 +30,7 @@
 ?>
 
     <?php echo $form->errorSummary($model); ?>
-    
+
     <?php echo $form->passwordFieldRow($model, 'oldPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your old password'))); ?>
     <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password'))); ?>
     <?php echo $form->passwordFieldRow($model, 'verifyPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
@@ -34,7 +39,7 @@
         <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Change'))); ?>
         <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
     </div>
-    
+
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
