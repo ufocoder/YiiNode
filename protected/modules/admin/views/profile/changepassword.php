@@ -9,8 +9,8 @@
     );
 
     $this->actions = array(
-        array('label'=>Yii::t('site', 'View profile'), 'url'=>array('index'), 'icon'=>'eye-open'),
-        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword'), 'icon'=>'lock'),
+        array('label'=>Yii::t('site', 'View profile'), 'url'=>array('index'), 'icon'=>'user'),
+        array('label'=>Yii::t('site', 'Update profile'), 'url'=>array('update'), 'icon'=>'pencil'),
     );
 ?>
 
