@@ -17,7 +17,8 @@ body {
 }
 
 .header {
-  margin: 50px 0;
+  background: #fafafa;
+  padding: 50px 0;
   text-align: center;
 }
 
