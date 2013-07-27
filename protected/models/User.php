@@ -10,6 +10,7 @@
  * @property string $role
  * @property string $email
  * @property string $time_created
+ * @property string $time_updated
  * @property string $time_visited
  * @property integer $status
  *
@@ -52,11 +53,6 @@ class User extends CActiveRecord
 				self::STATUS_BANNED => Yii::t('site', 'User banned'),
 				self::STATUS_ACTIVE => Yii::t('site', 'User active'),
 				self::STATUS_NOACTIVE => Yii::t('site', 'User noactive'),
-			),
-			'sex' => array(
-				self::SEX_UNDEFINED => Yii::t('site', 'Sex undefined'),
-				self::SEX_MALE => Yii::t('site', 'Sex male'),
-				self::SEX_FEMALE => Yii::t('site', 'Sex female'),
 			)
 		);
 
@@ -91,7 +87,7 @@ class User extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'db_user';
+		return '{{db_user}}';
 	}
 
 	/**
@@ -125,13 +121,16 @@ class User extends CActiveRecord
 	{
 		return array(
 			'id_user' => 'Id User',
-			'login' => 'Login',
-			'password' => 'Password',
-			'role' => 'Role',
-			'email' => 'Email',
-			'time_created' => 'Time Created',
-			'time_visited' => 'Time Visited',
-			'status' => 'Status',
+			'login' => Yii::t('site', 'Login'),
+			'password' => Yii::t('site', 'Password'),
+			'oldPassword' => Yii::t('site', 'Old password'),
+			'verifyPassword' => Yii::t('site', 'Verify password'),
+			'role' => Yii::t('site', 'Role'),
+			'email' => Yii::t('site', 'Email'),
+			'time_created' => Yii::t('site', 'Time created'),
+			'time_updated' => Yii::t('site', 'Time updated'),
+			'time_visited' => Yii::t('site', 'Time visited'),
+			'status' => Yii::t('site', 'Status'),
 		);
 	}
 
@@ -142,13 +141,12 @@ class User extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_user', $this->id_user,true);
-		$criteria->compare('login', $this->login,true);
-		$criteria->compare('password', $this->password,true);
-		$criteria->compare('role', $this->role,true);
-		$criteria->compare('email', $this->email,true);
-		$criteria->compare('time_created', $this->time_created,true);
-		$criteria->compare('time_visited', $this->time_visited,true);
+		$criteria->compare('id_user', $this->id_user, true);
+		$criteria->compare('login', $this->login, true);
+		$criteria->compare('role', $this->role, true);
+		$criteria->compare('email', $this->email, true);
+		$criteria->compare('time_created', $this->time_created, true);
+		$criteria->compare('time_visited', $this->time_visited, true);
 		$criteria->compare('status', $this->status);
 
 		return new CActiveDataProvider($this, array(
@@ -157,10 +155,10 @@ class User extends CActiveRecord
 	}
 
 	/**
-	 * Получить статическую модуль определенную AR классом.
+	 * Get model
 	 *
 	 * @param string $className имя класса AR.
-	 * @return User статическая модель класса
+	 * @return User static class model
 	 */
 	public static function model($className=__CLASS__)
 	{
