@@ -25,22 +25,22 @@ class WebUser extends CWebUser
      */
     public $rememberMeTime = 6000;
 
-    /** 
+    /**
      * Return logout URL
      */
     public $returnLogoutUrl = array("/user/login");
 
-    /** 
+    /**
      * Recovery URL
      */
     public $recoveryUrl = array("/user/recovery");
 
-    /** 
+    /**
      * Login URL
      */
     public $loginUrl = array("/user/login");
 
-    /** 
+    /**
      * Logout URL
      */
     public $logoutUrl = array("/user/logout");
@@ -49,7 +49,7 @@ class WebUser extends CWebUser
      * Hash method
      */
     public $encrypting = 'md5';
-    
+
     /**
      * Hash function salt
      */
@@ -85,36 +85,22 @@ class WebUser extends CWebUser
         }
     }
 
-    public function getRole()
-    {
-        if ($user = $this->_getModel())
-            return $user->role;
-    }
-
     public function getLogin()
     {
         if ($user = $this->_getModel())
             return $user->login;
     }
 
+    public function getRole()
+    {
+        if ($user = $this->_getModel())
+            return $user->role;
+    }
+
     public function getPassword()
     {
         if ($user = $this->_getModel())
             return $user->password;
-    }
-
-    /**
-     * Passpord update
-     */
-    public function updatePassword($password)
-    {
-        if (empty($password))
-            return;
-
-        if ($user = $this->_getModel())
-            $user->saveAttributes(array(
-                'password' => $this->encrypting($password)
-            ));
     }
 
 }
