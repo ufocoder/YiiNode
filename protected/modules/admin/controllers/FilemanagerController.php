@@ -7,10 +7,13 @@
  */
 class FilemanagerController extends ControllerAdmin
 {
+    /**
+     * Main layout
+     */
     public $layout = 'application.modules.admin.views.layouts.column1';
 
     /**
-     * Массив действий
+     * @return array Actions
      */
     public function actions()
     {
@@ -27,13 +30,20 @@ class FilemanagerController extends ControllerAdmin
         );
     }
 
+    /**
+     * Elfinder as filemanager [index action]
+     */
     public function actionIndex()
     {
         $this->render('/filemanager/index');
     }
 
+    /**
+     * Elfinder popup widget [without layout]
+     */
     public function actionEditor()
     {
+        $this->layout = null;
         $this->render('/filemanager/widget');
     }
 }

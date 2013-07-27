@@ -1,4 +1,5 @@
 <?php
+    /* @var $this FilemanagerController */
     $this->title = Yii::t('site', 'File manager');
     $this->pageTitle[] = Yii::t('site', 'File manager');
 
