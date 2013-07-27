@@ -1,19 +1,19 @@
-    <?php
-        /* @var BootActiveForm $form */
-        $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-            'type' => 'horizontal',
-            'action' => Yii::app()->createUrl($this->route, array(
-                'activekey' => $activekey,
-                'email' => $email,
-            )),
-            'method' => 'post',
-            'clientOptions' => array(
-                'validateOnSubmit'=>true,
-            )
-        ));
+<?php
+    /* @var BootActiveForm $form */
+    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+        'type' => 'horizontal',
+        'action' => Yii::app()->createUrl($this->route, array(
+            'activekey' => $activekey,
+            'email' => $email,
+        )),
+        'method' => 'post',
+        'clientOptions' => array(
+            'validateOnSubmit'=>true,
+        )
+    ));
 
-        $this->title =  Yii::t('site', 'Change password');
-    ?>
+    $this->title =  Yii::t('site', 'Change password');
+?>
 
 <?php
     $error_list = $model->getErrors();
