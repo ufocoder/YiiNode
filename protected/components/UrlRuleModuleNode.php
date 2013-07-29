@@ -65,6 +65,9 @@ class UrlRuleModuleNode extends CBaseUrlRule
         foreach($nodes as $node)
             $chain[$node->id_node] = $node;
         Yii::app()->setNodeChain($chain);
+        
+        if (!empty($node) && $node->isRoot())
+            Yii::app()->controller->layout = "//layouts/default";
 
         if ($urlManager = Yii::app()->getModuleUrlManager($node))
             return $urlManager->parseUrl($request);

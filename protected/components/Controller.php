@@ -33,7 +33,7 @@ class Controller extends CController
     /**
      * Layout
      */
-    public $layout = '//layouts/default';
+    public $layout = '//layouts/column2';
 
     /**
      * @return array action filters

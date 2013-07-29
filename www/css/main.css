@@ -12,6 +12,11 @@ body {
   overflow: hidden;
 }
 
+.masthead h2{
+  display: inline-block;
+  margin: 0;
+}
+
 .masthead .nav {
   margin-bottom: 0;
 }
