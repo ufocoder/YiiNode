@@ -4,13 +4,14 @@ Yii framework based CMS with tree structure
 
 Extensions
 ----------
-* [YiiBooster](https://github.com/clevertech/YiiBooster).
-* [Yii Debug Toolbar](http://www.yiiframework.com/extension/yii-debug-toolbar/).
-* [Mail](http://www.yiiframework.com/extension/mail/).
+* [YiiBooster](https://github.com/clevertech/YiiBooster);
+* [Yii Debug Toolbar](http://www.yiiframework.com/extension/yii-debug-toolbar);
+* [Mail](http://www.yiiframework.com/extension/mail);
+* [zTree](http://www.yiiframework.com/extension/ztree).
 
 Features
 --------
-User manage is part of YiiNode CMS that provides:
+Admin and User modules are parts of YiiNode CMS, other standart modules could be node in site tree structure
 
 Modules
 -------
