@@ -14,7 +14,8 @@
 
     $this->title = Yii::t("site", "Your profile");
 ?>
-<h4><?php echo Yii::t('site', '');?></h4>
+<fieldset>
+<legend><h4><?php echo Yii::t('site', 'Account information');?></h4></legend>
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
     'data'=>$model,
     'attributes'=>array(
@@ -42,3 +43,26 @@
         ),
     ),
 )); ?>
+
+<?php
+
+
+?>
+<fieldset>
+<legend><h4><?php echo Yii::t('site', 'Profile information');?></h4></legend>
+
+    <?php 
+        $profileFields=ProfileField::model()->forOwner()->sort()->findAll();
+        if ($profileFields) {
+            foreach($profileFields as $field) {
+                //echo "<pre>"; print_r($profile); die();
+            ?>
+    <tr>
+        <th class="label"><?php echo CHtml::encode(UserModule::t($field->title)); ?></th>
+        <td><?php echo (($field->widgetView($profile))?$field->widgetView($profile):CHtml::encode((($field->range)?Profile::range($field->range,$profile->getAttribute($field->varname)):$profile->getAttribute($field->varname)))); ?></td>
+    </tr>
+            <?php
+            }//$profile->getAttribute($field->varname)
+        }
+    ?>
+</fieldset>

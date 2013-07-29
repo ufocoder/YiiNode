@@ -22,18 +22,18 @@ class ProfileController extends ControllerAdmin
      */
     public function actionUpdate()
     {
-        $profile = $this->loadModel();
-        $profile->scenario = 'profile';
+        $user = $this->loadModel();
+        $user->scenario = 'profile';
 
         if (isset($_POST['User']))
         {
-            $profile->attributes=$_POST['User'];
-            if($profile->save())
+            $user->attributes=$_POST['User'];
+            if($user->save())
                 $this->redirect(array('index'));
         }
 
         $this->render('/profile/update',array(
-            'model' => $profile
+            'model' => $user
         ));
     }
 
@@ -67,11 +67,11 @@ class ProfileController extends ControllerAdmin
     }
 
     /**
-     *
+     * load User model with profile relation
      */
     public function loadModel()
     {
-        $model = User::model()->findByPk(Yii::app()->user->id);
+        $model = User::model()->with('profile')->findByPk(Yii::app()->user->id);
         if($model===null)
             $this->redirect(Yii::app()->user->loginUrl);
 
