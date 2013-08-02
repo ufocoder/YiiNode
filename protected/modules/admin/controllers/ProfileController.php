@@ -27,8 +27,10 @@ class ProfileController extends ControllerAdmin
 
         if (isset($_POST['User']))
         {
-            $user->attributes=$_POST['User'];
-            if($user->save())
+            $user->attributes = $_POST['User'];
+            $user->profile->attributes = $_POST['Profile'];
+
+            if ($user->withRelated->save(true, array('profile')))
                 $this->redirect(array('index'));
         }
 

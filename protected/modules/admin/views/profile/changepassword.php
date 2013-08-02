@@ -9,8 +9,8 @@
     );
 
     $this->actions = array(
-        array('label'=>Yii::t('site', 'View profile'), 'url'=>array('index'), 'icon'=>'user'),
-        array('label'=>Yii::t('site', 'Update profile'), 'url'=>array('update'), 'icon'=>'pencil'),
+        array('label'=>Yii::t('site', 'View profile'), 'url' => array('index'), 'icon'=>'user'),
+        array('label'=>Yii::t('site', 'Update profile'), 'url' => array('update'), 'icon'=>'pencil'),
     );
 ?>
 
@@ -40,6 +40,4 @@
         <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
     </div>
 
-
 <?php $this->endWidget(); ?>
-</div><!-- form -->

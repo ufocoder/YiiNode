@@ -15,7 +15,7 @@
     $this->title = Yii::t("site", "Your profile");
 ?>
 <fieldset>
-<legend><h4><?php echo Yii::t('site', 'Account information');?></h4></legend>
+<legend><?php echo Yii::t('site', 'Account information');?></legend>
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
     'data'=>$model,
     'attributes'=>array(
@@ -45,24 +45,34 @@
 )); ?>
 
 <?php
+    $profile = $model->profile;
+    $profileFields = $profile->getFields();
+    if ($profileFields):
+        $attributes = array();
+        foreach($profileFields as $field){
+            $value = null;
 
+            if ($field->widgetView($profile))
+                $value = $field->widgetView($profile);
+            elseif (CHtml::encode($field->range))
+                $value = Profile::range($field->range,$profile->getAttribute($field->varname));
+            else
+                $value = $profile->getAttribute($field->varname);
+
+            $attributes[] = array(
+                'name' => $field->varname,
+                'label' => CHtml::encode(Yii::t('site', $field->title)),
+                'value' => $value
+            );
+        }
 
 ?>
-<fieldset>
-<legend><h4><?php echo Yii::t('site', 'Profile information');?></h4></legend>
 
-    <?php 
-        $profileFields=ProfileField::model()->forOwner()->sort()->findAll();
-        if ($profileFields) {
-            foreach($profileFields as $field) {
-                //echo "<pre>"; print_r($profile); die();
-            ?>
-    <tr>
-        <th class="label"><?php echo CHtml::encode(UserModule::t($field->title)); ?></th>
-        <td><?php echo (($field->widgetView($profile))?$field->widgetView($profile):CHtml::encode((($field->range)?Profile::range($field->range,$profile->getAttribute($field->varname)):$profile->getAttribute($field->varname)))); ?></td>
-    </tr>
-            <?php
-            }//$profile->getAttribute($field->varname)
-        }
-    ?>
+<fieldset>
+<legend><?php echo Yii::t('site', 'Profile information');?></legend>
+<?php $this->widget('bootstrap.widgets.TbDetailView', array(
+    'data'=>$model,
+    'attributes'=> $attributes,
+)); ?>
 </fieldset>
+<?php endif; ?>

@@ -24,7 +24,7 @@
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'user-form',
         'type'=>'horizontal',
-        'action'=>Yii::app()->createUrl($this->route, (!empty($model->isNewRecord)?array():array('id'=>$model->id_user))),
+        'action'=>Yii::app()->createUrl($this->route),
         'method'=>'post',
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,
@@ -53,7 +53,6 @@
     <legend><h4><?php echo Yii::t('site', 'Profile information'); ?></h4></legend>
 <?php foreach($profileFields as $field): ?>
     <div class="control-group">
-    <label class="control-label required" for="User_login">
         <?php echo $form->labelEx($profile, $field->varname, array('class'=>'control-label')); ?>
         <div class="controls">
             <?php
