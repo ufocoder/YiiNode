@@ -1,16 +1,8 @@
-<?php 
-
-    $this->title = Yii::app()->getNodeAttribute('title');
-    $this->breadcrumbs = array(
-        Yii::app()->getNodeAttribute('title')
-    );
+<?php
 
     $nodeId = Yii::app()->getNodeId();
-
-    $this->actions = array(
-        array('label' => Yii::t('site', 'Node content'), 'url' => Yii::app()->createUrl('/admin/node/'.$nodeId), 'icon' => 'file'),
-        array('label' => Yii::t('site', 'Node settings'), 'url' => Yii::app()->createUrl('/admin/node/update', array('id'=>$nodeId)), 'icon' => 'pencil'),
-        //array('label' => Yii::t('site', 'Node settings'), 'icon' => 'cog'),
+    $this->breadcrumbs = array(
+        Yii::t('all', 'Content')
     );
 
     /* @var BootActiveForm $form */
@@ -27,6 +19,8 @@
             'class'=>'well'
         )
     ));
+
+
 ?>
 
 <?php echo $form->errorSummary($model); ?>

@@ -31,7 +31,8 @@ class Page extends CActiveRecord
     public function rules()
     {
         return array(
-            array('content', 'required'),
+            array('id_node', 'numerical'),
+            array('content', 'default', 'value'=>null),
             array('title', 'length', 'max'=>255),
             // Правило, использующиеся в search
             // @todo удалить лишние атрибуты
@@ -89,5 +90,20 @@ class Page extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
+    }
+
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            if($this->isNewRecord)
+                $this->time_created = time();
+            else
+                $this->time_updated = time();
+
+            return true;
+        }
+        else
+            return false;
     }
 }
