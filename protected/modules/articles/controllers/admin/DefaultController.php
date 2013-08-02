@@ -4,6 +4,7 @@ class DefaultController extends ControllerAdmin
 {
     public function actionView($id)
     {
+        $this->layout = "application.modules.admin.views.layouts.column1";
         $this->render('/admin/view',array(
             'model'=>$this->loadModel($id),
         ));
@@ -25,6 +26,8 @@ class DefaultController extends ControllerAdmin
             }
         }
 
+        $this->layout = "application.modules.admin.views.layouts.column1";
+
         $this->render('/admin/create',array(
             'model'=>$model,
         ));
@@ -43,6 +46,8 @@ class DefaultController extends ControllerAdmin
                 $this->redirect(array('view', 'id'=>$model->id));
             }
         }
+
+        $this->layout = "application.modules.admin.views.layouts.column1";
 
         $this->render('/admin/update',array(
             'model'=>$model,
@@ -67,7 +72,6 @@ class DefaultController extends ControllerAdmin
         $model_class = "Article";
         $model = new $model_class('search');
         $model->unsetAttributes();
-        $model->node();
 
         if(isset($_POST[$model_class]))
             $model->attributes=$_POST[$model_class];

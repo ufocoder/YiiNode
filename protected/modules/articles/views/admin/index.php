@@ -1,15 +1,17 @@
 <?php
-	/* @var $this ArticlesController */
+    /* @var $this ArticlesController */
 
-	$this->breadcrumbs = array(
-		Yii::t('site', 'Article list'),
-	);
+    $nodeId = Yii::app()->getNodeId();
 
-	$this->titleButton = array(
-		array('label'=>Yii::t('site', 'Add'), 'url'=>array('create'))
-	);
+    $this->title = Yii::t('site', 'Articles manage');
+    $this->titleButton = array(
+        array('label'=>Yii::t('site', 'Add'), 'url'=> Yii::app()->createUrl('default/create', array('nodeAdmin'=>true, 'nodeId'=> $nodeId)), 'icon'=>'white plus')
+    );
 
-	$this->title = Yii::t('site', 'Articles manage');
+    $this->breadcrumbs = array(
+        Yii::t('site', 'Article list'),
+    );
+
 ?>
 
 <?php echo $this->renderPartial('/admin/_grid', array('model'=>$model)); ?>

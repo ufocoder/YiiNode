@@ -3,10 +3,12 @@
     /* @var $model Article */
 
     $nodeId = Yii::app()->getNodeId();
+    $viewUrl = Yii::app()->createUrl('default/view', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId));
+    $deleteUrl = Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
     $this->breadcrumbs=array(
         Yii::t('site', 'Article list') => array('/admin/node/'.$nodeId),
-        CHtml::encode($model->title) => array('view', 'id'=>$model->id_article),
+        Yii::t('site', 'Article #{id}', array('{id}'=>$model->id_article)).": ".CHtml::encode($model->title) => $viewUrl,
         Yii::t('site', 'Update'),
     );
 
@@ -14,8 +16,8 @@
     Yii::app()->getClientScript()->registerScriptFile($baseUrl.'/js/admin.js');
 
     $this->actions = array(
-        array('label'=>Yii::t('site', 'View article'), 'url'=>array('view', 'id'=>$model->id_article)),
-        array('label'=>Yii::t('site', 'Delete article'), 'url'=>array('delete', 'id'=>$model->id_article),
+        array('label'=>Yii::t('site', 'View article'), 'url' => $viewUrl, 'icon'=>'eye-open'),
+        array('label'=>Yii::t('site', 'Delete article'), 'url' => Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',
             'htmlOptions'=>array(
                 'data-confirm-title' => Yii::t('site', 'Confirm dialog'),
                 'data-confirm-content' => Yii::t('site', 'Are you sure to delete?'),
@@ -23,7 +25,6 @@
         )
     );
 
-    $this->title = Yii::t("site", "Update company");
-
+    $this->title = Yii::t("site", "Update article");
 ?>
-<?php echo $this->renderPartial('_form', array('model'=>$model, 'users'=>$users)); ?>
+<?php echo $this->renderPartial('/admin/_form', array('model'=>$model)); ?>

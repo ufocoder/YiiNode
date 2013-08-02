@@ -14,13 +14,16 @@
 		array(
 			'name'  => 'time_published',
 			'value' => '!empty($data->time_published)?date("m.d.y, H:i:s", $data->time_published):null',
-			'htmlOptions'=>array(
-				'style'=>'width: 120px;'
+			'htmlOptions' => array(
+				'style' => 'width: 120px;'
 			)
 		),
 		array(
-			'class'=>'bootstrap.widgets.TbButtonColumn',
-			'htmlOptions'=>array('style'=>'width: 70px'),
+			'class' => 'bootstrap.widgets.TbButtonColumn',
+			'htmlOptions' => array('style'=>'width: 70px'),
+			'viewButtonUrl' => 'Yii::app()->createUrl("default/view", array("id"=>$data->id_article, "nodeAdmin" => true, "nodeId" => Yii::app()->getNodeId()))',
+			'updateButtonUrl' => 'Yii::app()->createUrl("default/update", array("id"=>$data->id_article, "nodeAdmin" => true, "nodeId" => Yii::app()->getNodeId()))',
+			'deleteButtonUrl' => 'Yii::app()->createUrl("default/delete", array("id"=>$data->primaryKey, "nodeAdmin" => true, "nodeId" => Yii::app()->getNodeId()))'
 		),
 	),
-)); ?>
+));
