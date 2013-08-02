@@ -74,7 +74,7 @@ class User extends CActiveRecord
                 'condition' => 'status=' . self::STATUS_ACTIVE,
             ),
             'notactive' => array(
-                'condition' => 'tstatus=' . self::STATUS_NOACTIVE,
+                'condition' => 't.status=' . self::STATUS_NOACTIVE,
             ),
             'banned' => array(
                 'condition' => 't.status=' . self::STATUS_BANNED,
@@ -91,12 +91,24 @@ class User extends CActiveRecord
     }
 
     /**
+     *
+     */
+    public function behaviors()
+    {
+        return array(
+            'withRelated' => array(
+                'class' => 'WithRelatedBehavior',
+            ),
+        );
+    }
+
+    /**
      * @return array Rules
      */
     public function rules()
     {
         return array(
-            array('login, password, role, email', 'required'),
+            array('login, password, email', 'required'),
             array('status', 'numerical', 'integerOnly'=>true),
             array('login, email', 'length', 'max'=>255),
             array('password, role', 'length', 'max'=>64),

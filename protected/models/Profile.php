@@ -2,7 +2,6 @@
 
 class Profile extends CActiveRecord
 {
-
     const GROUP_FIELD_ALL = 1;
     const GROUP_FIELD_REGISTRATION = 2;
 
@@ -84,7 +83,7 @@ class Profile extends CActiveRecord
                     array_push($rules,$field_rule);
                 }
             }
-            
+
             array_push($rules,array(implode(',', $required), 'required'));
             array_push($rules,array(implode(',', $numerical), 'numerical', 'integerOnly'=>true));
             array_push($rules,array(implode(',', $float), 'type', 'type'=>'float'));
@@ -116,14 +115,14 @@ class Profile extends CActiveRecord
 
         return $labels;
     }
-    
+
     private function rangeRules($str) {
         $rules = explode(';',$str);
         for ($i=0;$i<count($rules);$i++)
             $rules[$i] = current(explode("==",$rules[$i]));
         return $rules;
     }
-    
+
     static public function range($str,$fieldValue=NULL) {
         $rules = explode(';',$str);
         $array = array();
@@ -131,12 +130,12 @@ class Profile extends CActiveRecord
             $item = explode("==",$rules[$i]);
             if (isset($item[0])) $array[$item[0]] = ((isset($item[1]))?$item[1]:$item[0]);
         }
-        if (isset($fieldValue)) 
+        if (isset($fieldValue))
             if (isset($array[$fieldValue])) return $array[$fieldValue]; else return '';
         else
             return $array;
     }
-    
+
     public function widgetAttributes()
     {
         $data = array();
