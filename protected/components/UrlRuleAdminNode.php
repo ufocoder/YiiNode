@@ -29,8 +29,13 @@ class UrlRuleAdminNode extends CBaseUrlRule
         else
             return false;
 
+        unset($params['nodeId']);
+        unset($params['nodeAdmin']);
+
+        $_manager = Yii::app()->_getUrlManager();
+
         if (!empty($node))
-            return 'admin/node/'.$node->id_node.'/'.$route;
+            return 'admin/node/'.$node->id_node.$_manager->createUrl($route, $params, $ampersand);
         else
             return false;
 
@@ -58,7 +63,9 @@ class UrlRuleAdminNode extends CBaseUrlRule
                 else
                     throw new CHttpException(404, Yii::t('site', 'The requested page does not exist.'));
             }
+
             Yii::app()->setNode($node);
+
             $path = !empty($matches['path'])?$matches['path']:'default';
             return $node->module."/admin/".$path;
         }
