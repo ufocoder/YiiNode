@@ -3,7 +3,6 @@
  * Model of table "db_node".
  *
  * Column list:
- *
  * @property string $id_node
  * @property string $id_node_parent
  * @property integer $position
@@ -42,7 +41,7 @@ class Node extends CActiveRecord
      *
      */
     protected $has_root = null;
-     
+
     /**
      * @return string get the table name
      */
@@ -80,21 +79,22 @@ class Node extends CActiveRecord
 
         $rules = array(
             array('module', 'required', 'on'=>'create'),
-            array('enabled', 'boolean', 'allowEmpty'=>true),
-            array('title, slug', 'required'),
+            array('enabled', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
+            array('title', 'required', 'on'=>'create,update'),
             array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
-            array('id_node_parent, rgt, lft', 'length', 'max'=>11),
-            array('path, module, title, image', 'length', 'max'=>255),
-            array('content', 'default', 'value' => null),
+            array('id_node_parent, rgt, lft', 'length', 'max'=>11, 'on'=>'create,update'),
+            array('path, module, title, image', 'length', 'max'=>255, 'on'=>'create,update'),
+            array('content', 'default', 'value' => null, 'on'=>'create,update'),
             // Правило, использующиеся в search
             array('id_node, id_node_parent, position, rgt, lft, level, path, module, title, time_created, time_updated', 'safe', 'on'=>'search'),
         );
 
         if ($this->has_root){
             $rules = array_merge($rules, array(
-                array('node_position', 'in', 'range'=> array_keys($this->values('position')), 'allowEmpty'=>true, 'on'=>'create'),
-                array('node_related', 'numerical', 'integerOnly'=>true, 'on'=>'create'),
-                array('node_position, node_related', 'required', 'on'=>'create'),
+                array('slug', 'required'),
+                array('node_position', 'in', 'range'=> array_keys($this->values('position')), 'allowEmpty'=>true, 'on'=>'create, move'),
+                array('node_related', 'numerical', 'integerOnly'=>true, 'on'=>'create, move'),
+                array('node_position, node_related', 'required', 'on'=>'create, move'),
             ));
         }
 
@@ -122,11 +122,11 @@ class Node extends CActiveRecord
                 'condition' => 't.enabled = 1',
             ),
             'route' => array(
-                'select' => 'id_node, title, path, module',
                 'order' => 't.path DESC'
             ),
             'tree' => array(
-                'select' => "*, CONCAT(REPEAT('—', level-1), IF(level > 0,' ',''),`title`) as `title`"
+                'select' => "*, CONCAT(REPEAT('—', level-1), IF(level > 0,' ',''),`title`) as `title`",
+                'order' => 't.lft'
             )
         );
     }
@@ -138,7 +138,7 @@ class Node extends CActiveRecord
     {
         return array(
             'NestedSet' => array(
-                'class' => 'application.behaviors.NestedSetBehavior',
+                'class' => 'NestedSetBehavior',
                 'rootAttribute' => 'root',
                 'leftAttribute' => 'lft',
                 'rightAttribute' => 'rgt',
@@ -211,97 +211,108 @@ class Node extends CActiveRecord
         return parent::model($className);
     }
 
-    
+
     public function moveNode()
     {
-        if (!isset($this->node_position) || !isset($this->node_related))
-            return;
+        if (!$this->has_root){
+            $this->slug = "/";
+            $this->path = "/";
+        }
+        elseif (!isset($this->node_position) || !isset($this->node_related))
+            return false;
 
         $node = self::model()->findByPk($this->node_related);
 
-        if (!empty($node)){
+        if (!empty($node))
             switch($this->node_position)
             {
                 case self::POSITION_PREV:
-                    if ($node->isRoot()){
+                    if ($node->isRoot())
                         throw new CHttpException(403, Yii::t('error', 'There is only one root node.'));
-                    }
-                    else{
-                        if ($this->isNewRecord)
-                            $this->insertBefore($node);
-                        else
-                            $this->moveBefore($node);
-                            
-                        $parentNode = self::model()->findByPk($node->id_node_parent);
-                        $this->id_node_parent = $parentNode->id_node;
-                    }
 
+                    // Nested Set
+                    if ($this->isNewRecord)
+                        $this->insertBefore($node);
+                    else
+                        $this->moveBefore($node);
+
+                    // Adjacency List
+                    $parentNode = self::model()->findByPk($node->id_node_parent);
+                    $this->id_node_parent = $parentNode->id_node;
+                    $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
                     $this->setPosition($node->position, true);
+
+                    return true;
                 break;
 
                 case self::POSITION_NEXT:
-                    if ($node->isRoot()){
+                    if ($node->isRoot())
                         throw new CHttpException(403, Yii::t('error', 'There is only one root node.'));
-                    }
-                    else{
-                        if ($this->isNewRecord)
-                            $this->insertAfter($node);
-                        else
-                            $this->moveAfter($node);
 
-                        $parentNode = self::model()->findByPk($node->id_node_parent);
-                        $this->id_node_parent = $parentNode->id_node;
-                        
-                    }
+                    // Nested Set
+                    if ($this->isNewRecord)
+                        $this->insertAfter($node);
+                    else
+                        $this->moveAfter($node);
+
+                    // Adjacency List
+                    $parentNode = self::model()->findByPk($node->id_node_parent);
+                    $this->id_node_parent = $parentNode->id_node;
+                    $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
                     $this->setPosition($node->position, false);
+
+                    return true;
                 break;
 
                 case self::POSITION_CHILD:
-                    $criteria=new \CDbCriteria;
-                    $criteria->select='max(position) AS position';
-                    $criteria->addCondition('id_node_parent = :id_parent');
-                    $criteria->params = array(':id_parent' => $node->id_node);
-                    $row = self::model()->find($criteria);
-
+                    // Nested Set
                     if ($this->isNewRecord)
                         $this->appendTo($node);
                     else
                         $this->moveAsLast($node);
 
+                    // Adjacency List
+                    $criteria = new CDbCriteria;
+                    $criteria->select='max(position) AS position';
+                    $criteria->addCondition('id_node_parent = :id_parent');
+                    $criteria->params = array(':id_parent' => $node->id_node);
+                    $row = self::model()->find($criteria);
+
                     $this->id_node_parent = $node->id_node;
+                    $this->path = rtrim($node->path, "/")."/".$this->slug;
                     $this->setPosition($row['position'], false);
+
+                    return true;
+
                 break;
             }
-        }
     }
 
     protected function setPosition($position, $before = true)
     {
         $position = intval($position);
 
-        $where = (!empty($this->id_parent))?'= '.$this->id_parent:"is NULL";
+        $where = (!empty($this->id_node_parent))?' = '.$this->id_node_parent:" is NULL";
 
-        $up     = 'UPDATE '.$this->tableName().' SET position=position+1 WHERE position >= '.$position.' AND id_node_parent '.$where;
-        $down   = 'UPDATE '.$this->tableName().' SET position=position-1 WHERE position <= '.$position.' AND id_node_parent '.$where;
+        $up     = 'UPDATE '.$this->tableName().' SET position=position+1 WHERE position >= '.$position.' AND id_node_parent'.$where;
+        $down   = 'UPDATE '.$this->tableName().' SET position=position-1 WHERE position <= '.$position.' AND id_node_parent'.$where;
 
-        if ($before)
-            Yii::app()->db->createCommand($up)->execute(); 
-        else
-            Yii::app()->db->createCommand($down)->execute();
+        Yii::app()->db->createCommand($before ? $up : $down)->execute();
 
-        $this->position = $position;
+        $this->position = $position - 1;
+        $this->updatePosition();
     }
- 
+
     protected function updatePosition(){
 
         $criteria=new \CDbCriteria;
         $criteria->order = 'position ASC';
-        
-        if ($this->id_parent){
-            $criteria->addCondition('id_parent = :id_parent');
-            $criteria->params = array(':id_parent' => $this->id_parent);
+
+        if ($this->id_node_parent){
+            $criteria->addCondition('id_node_parent = :id_parent');
+            $criteria->params = array(':id_parent' => $this->id_node_parent);
         }else{
-            $criteria->addCondition('id_parent is NULL');
+            $criteria->addCondition('id_node_parent is NULL');
         }
 
         $list = self::model()->findAll($criteria);
@@ -309,9 +320,31 @@ class Node extends CActiveRecord
         foreach($list as $item){
             $item->position = $i;
             $item->saveNode();
+            if ($item->id_node == $this->id_node)
+                $this->position = $i;
             $i++;
         }
     }
 
-    
+
+    public function afterSave()
+    {
+        if ($this->isNewRecord){
+            $event = new CModelEvent($this);
+            $module = Yii::app()->getModule($this->module);
+            $module->onCreate($event);
+        }
+
+        return true;
+    }
+
+
+    public function afterDelete()
+    {
+        $event = new CModelEvent($this);
+        $module = Yii::app()->getModule($this->module);
+        $module->onDelete($event);
+
+        return true;
+    }
 }
