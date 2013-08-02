@@ -17,16 +17,11 @@
 
 <?php echo $form->errorSummary($model); ?>
 
-<?php echo $form->textFieldRow($model, 'title', array('class'=>'span6')); ?>
-
-
-<?php if ($model->isNewRecord): ?>
 <?php if (!empty($nodes)): ?>
-<?php echo $form->textFieldRow($model, 'slug', array('class'=>'span6')); ?>
 <div class="control-group">
     <?php echo $form->labelEx($model, 'node_related', array('class'=>'control-label')); ?>
     <div class="controls">
-        <?php $this->widget('bootstrap.widgets.TbSelect2',array(
+        <?php $this->widget('bootstrap.widgets.TbSelect2', array(
             'model' => $model,
             'attribute' => 'node_related',
             'asDropDownList' => true,
@@ -42,7 +37,6 @@
 </div>
 <?php echo $form->radioButtonListRow($model, 'node_position', $model->values('position')); ?>
 <?php else: ?>
-<?php echo $form->textFieldRow($model, 'slug', array('value'=>'/', 'class'=>'span6', 'disabled'=>'disabled')); ?>
 <div class="control-group">
     <?php echo $form->labelEx($model, 'node_related', array('class'=>'control-label')); ?>
     <div class="controls">
@@ -50,45 +44,6 @@
     </div>
 </div>
 <?php endif; ?>
-
-<div class="control-group">
-    <?php echo $form->labelEx($model, 'module', array('class'=>'control-label')); ?>
-    <div class="controls">
-        <?php $this->widget('bootstrap.widgets.TbSelect2',array(
-            'model' => $model,
-            'attribute' => 'module',
-            'asDropDownList' => true,
-            'options' => array(
-                'placeholder' => Yii::t("site", "Select a module"),
-                'width' => '328px',
-            ),
-            'val' => null,
-            'data' => $modules,
-        ));
-        ?>
-    </div>
-</div>
-<?php endif; ?>
-
-<div class="control-group">
-    <?php echo $form->labelEx($model, 'content', array('class'=>'control-label')); ?>
-    <div class="controls">
-    <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
-        'model' => $model,
-        'attribute' => 'content',
-        'editorOptions' => array(
-            'language' => Yii::app()->language,
-            'toolbar' => array(
-                array('Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo'),
-                array('Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'),
-                array('Link','Unlink','Anchor'),
-            )
-        )
-    )); ?>
-    </div>
-</div>
-
-<?php echo $form->checkBoxRow($model, 'enabled', $model->isNewRecord?array('checked'=>'checked'):array()); ?>
 
 <div class="form-actions">
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('all', 'Create') : Yii::t('all', 'Save')))); ?>

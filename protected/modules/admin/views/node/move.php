@@ -6,7 +6,7 @@
 
     $this->title = Yii::t('catalog', 'Update node');
     $this->breadcrumbs = array(
-        Yii::t('all', 'Update')
+        Yii::t('all', 'Move')
     );
 
     $this->actions = array(
@@ -15,7 +15,8 @@
         array('label' => Yii::t('site', 'Node move'), 'url' => Yii::app()->createUrl('/admin/node/move', array('id'=>$nodeId)), 'icon' => 'move'),
     );
 
-    $this->renderPartial('/node/_form', array(
-        'model' => $model
+    $this->renderPartial('/node/_move', array(
+        'model' => $model,
+        'nodes' => $nodes,
     ));
 ?>
