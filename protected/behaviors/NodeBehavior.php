@@ -51,6 +51,14 @@ class NodeBehavior extends CBehavior
     }
 
     /**
+     * Get current node
+     */
+    public function getNode(){
+        if ($this->_nodeCurrent != null)
+            return $this->_nodeCurrent;
+    }
+
+    /**
      * Set chain nodes for current node
      */
     public function setNodeChain($nodeChain){
@@ -188,7 +196,7 @@ class NodeBehavior extends CBehavior
     /**
      * Get UrlManager with settings
      */
-    public function _getUrlManager(){
+    protected function _getUrlManager(){
 
         if ($this->_instanceUrlManager == null)
         {
