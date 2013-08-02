@@ -84,7 +84,7 @@ return array(
         ),
 
         'request' => array(
-            'enableCsrfValidation'=>true,
+            // 'enableCsrfValidation'=>true,
         ),
 
         'user'=>array(
@@ -97,6 +97,7 @@ return array(
         'urlManager'=>array(
             'urlFormat' => 'path',
             'showScriptName'=>false,
+            'useStrictParsing'=>true,
             'rules'=> array(
                 array(
                     'class'=>'UrlRuleAdminNode'
@@ -104,6 +105,9 @@ return array(
                 'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>' => 'admin/<controller>',
                 'admin/' => 'admin/default/index',
+                'user/<controller:\w+>/<action:\w+>' => 'user/<controller>/<action>',
+                'user/<controller:\w+>' => 'user/<controller>',
+                'user/' => 'user/default/index',
                 array(
                     'class' => 'UrlRuleModuleNode'
                 ),
