@@ -1,12 +1,14 @@
 <?php
-
+/**
+ * User module - Login
+ *
+ * @version GIT: $Id$
+ * @revision: $Revision$
+ */
 class LoginController extends Controller
 {
-
     /**
-     * Список действий [добовляем captcha]
-     * 
-     * @return type
+     * @return type Actions
      */
     public function actions()
     {
@@ -20,9 +22,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Список правил доступа
-     *
-     * @return type
+     * @return type Access rules
      */
     public function accessRules()
     {
@@ -35,52 +35,28 @@ class LoginController extends Controller
         );
     }
 
-
     /**
-     * Форма входа [действие по умолчанию]
+     * Login form [index action]
      */
     public function actionIndex()
-    {  
-        // auth thought service with eauth extension
-        $service = Yii::app()->request->getQuery('service');
-
-        if (isset($service)) {
-            $authIdentity = Yii::app()->eauth->getIdentity($service);
-            $authIdentity->redirectUrl = Yii::app()->user->returnUrl;
-            $authIdentity->cancelUrl = $this->createAbsoluteUrl('site/login');
-
-            if ($authIdentity->authenticate()) {
-                $identity = new EAuthUserIdentity($authIdentity);
-                if ($identity->authenticate()) {
-                    Yii::app()->user->login($identity);
-                    $authIdentity->redirect();
-                } else {
-                    $authIdentity->cancel();
+    {
+        // Р°РІС‚РѕСЂРёР·СѓРµРј, РµСЃР»Рё РіРѕСЃС‚СЊ
+        if (Yii::app()->user->isGuest)
+        {
+            $class_form = 'FormLogin';
+            $model = new $class_form;
+            if (isset($_POST[$class_form]))
+            {
+                $model->attributes = $_POST[$class_form];
+                if ($model->validate()){
+                    $this->redirect(Yii::app()->user->returnUrl);
                 }
             }
-
-            $this->redirect(array('site/login'));
+            $this->render('/user/login', array(
+                'model' => $model
+            ));
         }
-
-        // default auth
-        $class = "FormLogin";
-        $model=new $class;
-        if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
-        {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-
-        if(isset($_POST[$class]))
-        {
-            $model->attributes=$_POST[$class];
-            if ($model->validate() && $model->login())
-                $this->redirect(Yii::app()->user->returnUrl);
-        }
-
-        $this->render('/user/login', array(
-            'model'=>$model
-        ));
+        else
+            $this->redirect(Yii::app()->user->returnUrl);
     }
-
 }

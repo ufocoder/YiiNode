@@ -1,6 +1,6 @@
 <?php
 /**
- * Форма входа
+ * Form login
  *
  * @version GIT: $Id$
  * @revision: $Revision$
@@ -44,6 +44,7 @@ class FormLogin extends CFormModel
      */
     public function authenticate($attribute, $params)
     {
+        // @TODO: user module options
 
         if (!$this->hasErrors())
         {

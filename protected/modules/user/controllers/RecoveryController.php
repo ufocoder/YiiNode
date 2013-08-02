@@ -1,61 +1,122 @@
 <?php
-
-class RecoveryController extends Controller {
+/**
+ * User module - Recovery password
+ *
+ * @version GIT: $Id$
+ * @revision: $Revision$
+ */
+class RecoveryController extends Controller
+{
+    /**
+     * @return type Actions
+     */
+    public function actions()
+    {
+        return array(
+            'captcha'=>array(
+                'class' => 'CCaptchaAction',
+                'backColor' => 0xFFFFFF,
+                'testLimit' => '5',
+            ),
+        );
+    }
 
     /**
-     * Recovery password
+     * @return type Access Rules
      */
-    public function actionIndex() {
-        $form = new FormRecovery;
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions' => array('index', 'captcha'),
+                'users' => array('?'),
+            ),
+            array('deny')
+        );
+    }
 
-        if (Yii::app()->user->id) {
-            $this->redirect(Yii::app()->controller->module->returnUrl);
-        } else {
-            $email = ((isset($_GET['email'])) ? $_GET['email'] : '');
-            $activkey = ((isset($_GET['activkey'])) ? $_GET['activkey'] : '');
-            if ($email && $activkey) {
-                $form2 = new FormChangePassword;
-                $find = User::model()->notsafe()->findByAttributes(array('email' => $email));
-                if (isset($find) && $find->activkey == $activkey) {
-                    if (isset($_POST['FormChangePassword'])) {
-                        $form2->attributes = $_POST['FormChangePassword'];
-                        if ($form2->validate()) {
-                            $find->password = Yii::app()->controller->module->encrypting($form2->password);
-                            $find->activkey = Yii::app()->controller->module->encrypting(microtime() . $form2->password);
-                            if ($find->status == 0) {
-                                $find->status = 1;
-                            }
-                            $find->save();
-                            Yii::app()->user->setFlash('success', UserModule::t("New password is saved."));
-                            $this->redirect(Yii::app()->controller->module->recoveryUrl);
+    /**
+     * Recovery password [index action]
+     */
+    public function actionIndex()
+    {
+        $class_change = "FormChangePassword";
+        $class_recovery = "FormRecovery";
+
+        $form = new $class_recovery;
+
+        // redirect auth user
+        if (!Yii::app()->user->isGuest)
+            $this->redirect(Yii::app()->user->returnUrl);
+        else
+        {
+            $email = ((isset($_REQUEST['email'])) ? strval($_REQUEST['email']) : '');
+            $activekey = ((isset($_REQUEST['activekey'])) ? strval($_REQUEST['activekey']) : '');
+
+            // ôîðìà èçìåíåíèÿ ïàðîëÿ ïîëÿ [ïî êëþ÷ó]
+            if ($email && $activekey)
+            {
+                $form_change = new $class_change;
+                $form_change->scenario = 'recovery';
+                $user = User::model()->findByAttributes(array('email' => $email));
+
+                if (isset($user) && $user->activekey == $activekey)
+                {
+                    if (isset($_POST[$class_change]))
+                    {
+                        $form_change->attributes = $_POST[$class_change];
+                        if ($form_change->validate())
+                        {
+                            $user->password = Yii::app()->user->encrypting($form_change->password);
+                            $user->activekey = Yii::app()->user->encrypting(microtime() . $form_change->password);
+                            $user->save(false);
+                            Yii::app()->user->setFlash('success', Yii::t("site", "New password is saved."));
+                            $this->redirect(Yii::app()->user->loginUrl);
                         }
                     }
-                    $this->render('changepassword', array('form' => $form2));
+                    $this->render('/recovery/changepassword', array(
+                        'activekey' => $activekey,
+                        'email' => $user->email,
+                        'model' => $form_change
+                    ));
                 } else {
-                    Yii::app()->user->setFlash('warning', UserModule::t("Incorrect recovery link."));
-                    $this->redirect(Yii::app()->controller->module->recoveryUrl);
+                    Yii::app()->user->setFlash('warning', Yii::t("site", "Incorrect recovery link."));
+                    $this->redirect(Yii::app()->user->recoveryUrl);
                 }
-            } else {
-                if (isset($_POST['FormRecovery'])) {
-                    $form->attributes = $_POST['FormRecovery'];
+            }
+            // recovery form
+            else {
+
+                if (isset($_POST[$class_recovery]))
+                {
+                    $form->attributes = $_POST[$class_recovery];
                     if ($form->validate()) {
-                        $user = User::model()->notsafe()->findbyPk($form->user_id);
-                        $activation_url = 'http://' . $_SERVER['HTTP_HOST'] . $this->createUrl(implode(Yii::app()->controller->module->recoveryUrl), array("activkey" => $user->activkey, "email" => $user->email));
+                        $user = User::model()->findbyPk($form->id_user);
+                        if (empty($user->email)){
+                            $form->addError("login_or_email", Yii::t("site", "User's email is not exists"));
+                        }
+                        else
+                        {
+                            $activekey = md5(microtime().$user->password);
+                            $user->saveAttributes(array('activekey'=>$activekey));
 
-                        $subject = UserModule::t("Password recovery");
-                        $message = UserModule::t("To receive a new password, go to {activation_url}.", array(
-                                    '{activation_url}' => $activation_url,
-                                ));
+                            $activation_url = 'http://' . $_SERVER['HTTP_HOST'] . $this->createUrl(implode(Yii::app()->user->recoveryUrl), array("activekey" => $activekey, "email" => $user->email));
 
-                        UserModule::sendMail($user->email, $subject, $message);
+                            $subject = Yii::t("site", "Password recovery");
+                            $message = Yii::t("site", "To receive a new password, go to {activation_url}.", array(
+                                        '{activation_url}' => $activation_url,
+                                    ));
 
-                        Yii::app()->user->setFlash('info', UserModule::t("Please check your email. An instructions was sent to your email address."));
-                        $this->refresh();
+                            UserModule::sendMail($user->email, $subject, $message);
+
+                            Yii::app()->user->setFlash('info', Yii::t("site", "Please check your email. Instructions were sent to your email address."));
+                            $this->refresh();
+                        }
                     }
                 }
-                $this->render('recovery', array('form' => $form));
+
+                $this->render('/recovery/recovery', array('model' => $form));
             }
         }
     }
-
 }

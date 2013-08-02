@@ -1,45 +1,36 @@
-<?php 
-    $this->pageTitle = UserModule::t("Change Password");
-    $this->breadcrumbs=array(
-        UserModule::t("Profile"),
-    );
+<?php
+    /* @var BootActiveForm $form */
+    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+        'type' => 'horizontal',
+        'action' => Yii::app()->createUrl($this->route, array(
+            'activekey' => $activekey,
+            'email' => $email,
+        )),
+        'method' => 'post',
+        'clientOptions' => array(
+            'validateOnSubmit'=>true,
+        )
+    ));
+
+    $this->title =  Yii::t('site', 'Change password');
 ?>
 
-<div class="form">
-<?php echo CHtml::beginForm(); ?>
+    <?php echo $form->errorSummary($model); ?>
 
-    <?php echo CHtml::errorSummary($form); ?>
-    
-    <div class="row">
-        <div class="form-label">
-            <?php echo CHtml::activeLabelEx($form,'password'); ?>
-        </div>
-        <div class="form-element">
-            <?php echo CHtml::activePasswordField($form,'password'); ?>
-            <p class="hint"><?php echo UserModule::t("Minimal password length 4 symbols."); ?></p>
-       </div>
-    </div>
-    
-    <div class="row">
-        <div class="form-label">
-            <?php echo CHtml::activeLabelEx($form,'verifyPassword'); ?>
-        </div>
-        <div class="form-element">
-            <?php echo CHtml::activePasswordField($form,'verifyPassword'); ?>
+    <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter your new password'))); ?>
+    <?php echo $form->passwordFieldRow($model, 'verifyPassword', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
+
+    <hr>
+    <div class="control-group">
+        <label class="control-label"></label>
+        <div class="span4">
+            <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
+            <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
         </div>
     </div>
 
-    <div class="row">
-        <div class="form-label"></div>
-        <div class="form-element">
-            <?php echo CHtml::submitButton(UserModule::t("Save")); ?>
-        </div>
+    <div class="form-actions">
+        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Restore'))); ?>
     </div>
 
-    <div class="row">
-        <div class="waves"></div>
-        <p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
-    </div>
-
-<?php echo CHtml::endForm(); ?>
-</div><!-- form -->
+<?php $this->endWidget(); ?>

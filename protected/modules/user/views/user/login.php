@@ -1,72 +1,55 @@
 <?php
-    $this->pageTitle = Yii::t("site", "User login");
-    $this->breadcrumbs=array(
-        Yii::t("site", "Login"),
+    /* @var BootActiveForm $form */
+    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+        'type' => 'horizontal',
+        'action' => Yii::app()->createUrl($this->route),
+        'method' => 'post',
+        'clientOptions' => array(
+            'validateOnSubmit'=>true,
+        )
+    ));
+
+    $this->title = Yii::t('site', 'Authorization');
+    $this->breadcrumbs = array(
+        Yii::t("site", "Profile")
     );
 
 ?>
 
-<div class="form">
-<?php echo CHtml::beginForm(); ?>
+    <?php echo $form->errorSummary($model); ?>
 
-    <?php echo CHtml::errorSummary($model); ?>
-
-    <div class="row">
-        <div class="form-label">
-            <?php echo CHtml::activeLabelEx($model,'login'); ?>
-        </div>
-        <div class="form-element">
-            <?php echo CHtml::activeTextField($model, 'login') ?>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="form-label">
-            <?php echo CHtml::activeLabelEx($model,'password'); ?>
-        </div>
-        <?php 
-        echo "test:". Yii::app()->createNodeUrl(Yii::app()->getNodeID(), "registration/index");
-        ?>
-        <div class="form-element">
-            <?php echo CHtml::activePasswordField($model,'password') ?>
-            <p class="hint">
-            <?php echo CHtml::link(Yii::t("site", "Register"), Yii::app()->createNodeUrl(Yii::app()->getNodeID(), "user/registration")); ?> | <?php echo CHtml::link(Yii::t("site", "Lost Password?"),Yii::app()->user->recoveryUrl); ?>
-            </p>
-        </div>
-    </div>
-    
-    <div class="row">
-    <?php $this->widget('CCaptcha', array(
-            'captchaAction' => '/admin/login/captcha', 
-            'showRefreshButton'=>false,
-            'clickableImage' =>true, 
-            'imageOptions' => array(
-                'class' => 'captcha',
-            ))
-        ); 
-    ?>
-    <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
-    </div>
-
-    <div class="row">
-        <div class="form-label"></div>
-        <div class="form-element">
-            <?php echo CHtml::activeCheckBox($model,'rememberMe'); ?>
-            <?php echo CHtml::activeLabelEx($model,'rememberMe'); ?>
+    <?php echo $form->textFieldRow($model, 'login', array('class' => 'span4', 'placeholder' => Yii::t('site', 'Enter login'))); ?>
+    <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span4 password', 'placeholder' => Yii::t('site', 'Enter password'))); ?>
+    <div class="control-group">
+        <?php echo $form->label($model, 'captcha', array('class'=>'control-label')); ?>
+        <div class="span4">
+            <?php $this->widget('CCaptcha', array(
+                    'captchaAction' => Yii::app()->createUrl('/user/login/captcha'),
+                    'showRefreshButton'=>false,
+                    'clickableImage' =>true,
+                    'imageOptions' => array(
+                        'class' => 'captcha',
+                    ))
+                );
+            ?>
+            <br />
+            <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
         </div>
     </div>
 
-    <div class="row">
-        <div class="form-label"></div>
-        <div class="form-element">
-            <?php echo CHtml::submitButton(Yii::t("site", "Login")); ?>
+    <?php echo $form->checkBoxRow($model, 'rememberMe'); ?>
+
+    <hr>
+    <div class="control-group">
+        <label class="control-label"></label>
+        <div class="span4">
+            <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
+            <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
         </div>
     </div>
 
-    <div class="row">
-        <div class="waves"></div>
-        <p class="note"><?php echo Yii::t("site", 'Fields with <span class="required">*</span> are required.'); ?></p>
+    <div class="form-actions">
+        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Login'))); ?>
     </div>
 
-<?php echo CHtml::endForm(); ?>
-</div><!-- form -->
+<?php $this->endWidget(); ?>

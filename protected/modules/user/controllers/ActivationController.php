@@ -10,7 +10,7 @@ class ActivationController extends Controller {
     public function actionActivation() {
 
         $email = $_GET['email'];
-        $activkey = $_GET['activkey'];
+        $activkey = $_GET['activekey'];
 
         if ($email && $activkey) {
             $find = User::model()->notsafe()->findByAttributes(array('email' => $email));

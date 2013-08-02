@@ -1,105 +1,83 @@
 <?php
-
+/**
+ * User module - Current user profile
+ *
+ * @version GIT: $Id$
+ * @revision: $Revision$
+ */
 class ProfileController extends Controller
 {
-    public $defaultAction = 'profile';
-
     /**
-     * @var CActiveRecord the currently loaded data model instance.
+     * View profile [index action]
      */
-    private $_model;
-    /**
-     * Shows a particular model.
-     */
-    public function actionProfile()
+    public function actionIndex()
     {
-        $model = $this->loadUser();
-        $this->render('profile',array(
-            'model'=>$model,
-            'profile'=>$model->profile,
+        $this->render('/profile/index',array(
+            'model' => $this->loadModel()
         ));
     }
 
-
     /**
-     * Updates a particular model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Update profile
      */
-    public function actionEdit()
+    public function actionUpdate()
     {
-        $model = $this->loadUser();
-        $profile=$model->profile;
-        
-        // ajax validator
-        if(isset($_POST['ajax']) && $_POST['ajax']==='profile-form')
+        $user = $this->loadModel();
+        $user->scenario = 'profile';
+
+        if (isset($_POST['User']))
         {
-            echo UActiveForm::validate(array($model,$profile));
-            Yii::app()->end();
-        }
-        
-        if(isset($_POST['User']))
-        {
-            $model->attributes=$_POST['User'];
-            $profile->attributes=$_POST['Profile'];
-            
-            if($model->validate() && $profile->validate()) {
-                $model->save();
-                $profile->save();
-                Yii::app()->user->updateSession();
-                Yii::app()->user->setFlash('success', UserModule::t("Changes is saved."));
-                $this->redirect(array('/user/profile'));
-            } else $profile->validate();
+            $user->attributes = $_POST['User'];
+            $user->profile->attributes = $_POST['Profile'];
+
+            if ($user->withRelated->save(true, array('profile')))
+                $this->redirect(array('index'));
         }
 
-        $this->render('edit',array(
-            'model'=>$model,
-            'profile'=>$profile,
+        $this->render('/profile/update',array(
+            'model' => $user
         ));
     }
 
     /**
      * Change password
      */
-    public function actionChangepassword() {
-        $model = new FormChangePassword;
-        if (Yii::app()->user->id) {
-            
-            // ajax validator
-            if(isset($_POST['ajax']) && $_POST['ajax']==='changepassword-form')
+    public function actionChangepassword()
+    {
+        $user = $this->loadModel();
+
+        $class = "FormChangePassword";
+        $model = new $class;
+        $model->scenario = 'change';
+
+        if(isset($_POST[$class]))
+        {
+            $model->attributes=$_POST[$class];
+            if($model->validate())
             {
-                echo UActiveForm::validate($model);
-                Yii::app()->end();
+                $new_password = User::model()->findbyPk(Yii::app()->user->id);
+                $new_password->password = Yii::app()->user->encrypting($model->password);
+                $new_password->activekey = Yii::app()->user->encrypting(microtime().$model->password);
+                if ($new_password->save())
+                    Yii::app()->user->setFlash('success', Yii::t("site", "New password is saved."));
+
+                $this->redirect(array("index"));
             }
-            
-            if(isset($_POST['FormChangePassword'])) {
-                    $model->attributes=$_POST['FormChangePassword'];
-                    if($model->validate()) {
-                        $new_password = User::model()->notsafe()->findbyPk(Yii::app()->user->id);
-                        $new_password->password = UserModule::encrypting($model->password);
-                        $new_password->activkey=UserModule::encrypting(microtime().$model->password);
-                        $new_password->save();
-                        Yii::app()->user->setFlash('success', UserModule::t("New password is saved."));
-                        $this->redirect(array("profile"));
-                    }
-            }
-            $this->render('changepassword',array('model'=>$model));
         }
+        $this->render('/profile/changepassword', array('model'=>$model));
+
     }
 
     /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     * @param integer the primary key value. Defaults to null, meaning using the 'id' GET variable
+     * load User model with profile relation
      */
-    public function loadUser()
+    public function loadModel()
     {
-        if($this->_model===null)
-        {
-            if(Yii::app()->user->id)
-                $this->_model=Yii::app()->controller->module->user();
-            if($this->_model===null)
-                $this->redirect(Yii::app()->user->loginUrl);
-        }
-        return $this->_model;
+        $model = User::model()->with('profile')->findByPk(Yii::app()->user->id);
+        if($model===null)
+            $this->redirect(Yii::app()->user->loginUrl);
+
+        return $model;
     }
+
 }

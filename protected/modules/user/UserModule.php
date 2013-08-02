@@ -5,18 +5,11 @@ class UserModule extends WebModule {
     static private $_users = array();
     static private $_userByName = array();
 
-    /**
-     * @return hash string.
-     */
-    public static function encrypting($string = "") {
-        $hash = Yii::app()->getModule('user')->hash;
-        if ($hash == "md5")
-            return md5($string);
-        if ($hash == "sha1")
-            return sha1($string);
-        else
-            return hash($hash, $string);
-    }
+    // @TODO:
+    public $activeAfterRegister = false;
+    public $sendActivationMail = false;
+    public $autoLogin = true;
+    public $loginNotActiv = true;
 
     /**
      * Return safe user data.

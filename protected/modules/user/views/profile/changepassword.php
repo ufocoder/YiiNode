@@ -1,51 +1,43 @@
-<?php 
+<?php
+    /* @var $this ProfileController */
+    /* @var $model User */
 
-    $this->pageTitle=UserModule::t("Change Password");
+    $this->title = Yii::t("site", "Change password");
     $this->breadcrumbs=array(
-        UserModule::t("Profile") => array('/user/profile')
+        Yii::t("site", "Profile") => array('/'.$this->module->id.'/profile'),
+        Yii::t('site', 'Change password')
     );
 
-    $this->renderPartial('_menu');
-
+    $this->actions = array(
+        array('label'=>Yii::t('site', 'View profile'), 'url' => array('index'), 'icon'=>'user'),
+        array('label'=>Yii::t('site', 'Update profile'), 'url' => array('update'), 'icon'=>'pencil'),
+    );
 ?>
 
-<div class="form">
-<?php $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'changepassword-form',
-    'enableAjaxValidation'=>true,
-    'clientOptions'=>array(
-        'validateOnSubmit'=>true,
-    ),
-)); ?>
+<?php
+    /* @var BootActiveForm $form */
+    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+        'type' => 'horizontal',
+        'action' => Yii::app()->createUrl($this->route),
+        'method' => 'post',
+        'clientOptions' => array(
+            'validateOnSubmit'=>true,
+        ),
+        'htmlOptions' => array(
+            'class' => 'well'
+        )
+    ));
+?>
 
-    <p class="note"><?php echo UserModule::t('Fields with <span class="required">*</span> are required.'); ?></p>
     <?php echo $form->errorSummary($model); ?>
-    
-    <div class="row">
-    <?php echo $form->labelEx($model,'oldPassword'); ?>
-    <?php echo $form->passwordField($model,'oldPassword'); ?>
-    <?php echo $form->error($model,'oldPassword'); ?>
-    </div>
-    
-    <div class="row">
-    <?php echo $form->labelEx($model,'password'); ?>
-    <?php echo $form->passwordField($model,'password'); ?>
-    <?php echo $form->error($model,'password'); ?>
-    <p class="hint">
-    <?php echo UserModule::t("Minimal password length 4 symbols."); ?>
-    </p>
-    </div>
-    
-    <div class="row">
-    <?php echo $form->labelEx($model,'verifyPassword'); ?>
-    <?php echo $form->passwordField($model,'verifyPassword'); ?>
-    <?php echo $form->error($model,'verifyPassword'); ?>
-    </div>
-    
-    
-    <div class="row submit">
-    <?php echo CHtml::submitButton(UserModule::t("Save")); ?>
+
+    <?php echo $form->passwordFieldRow($model, 'oldPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your old password'))); ?>
+    <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password'))); ?>
+    <?php echo $form->passwordFieldRow($model, 'verifyPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
+
+    <div class="form-actions">
+        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Change'))); ?>
+        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
     </div>
 
 <?php $this->endWidget(); ?>
-</div><!-- form -->
