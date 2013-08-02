@@ -70,4 +70,12 @@ class WebModule extends CWebModule
         return Yii::app()->mail->send($mail);
     }
 
+    public function onCreate($event){
+
+    }
+
+    public function onDelete($event){
+
+    }
+
 }
