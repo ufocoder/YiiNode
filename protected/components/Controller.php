@@ -36,6 +36,11 @@ class Controller extends CController
     public $layout = '//layouts/column2';
 
     /**
+     * Action array
+     */
+    public $actions = array();
+
+    /**
      * @return array action filters
      */
     public function filters()
@@ -43,6 +48,17 @@ class Controller extends CController
         return array(
             'accessControl', // perform access control for CRUD operations
         );
+    }
+
+    // @TODO: setup layouts in node attributes
+    public function beforeAction($action)
+    {
+        $node = Yii::app()->getNode();
+
+        if (!empty($node) && $node->isRoot())
+            $this->layout = "//layouts/default";
+
+        return parent::beforeAction($action);
     }
 
     /**
