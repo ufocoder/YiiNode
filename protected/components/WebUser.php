@@ -46,6 +46,16 @@ class WebUser extends CWebUser
     public $logoutUrl = array("/user/logout");
 
     /**
+     * Profile URL
+     */
+    public $profileUrl = array("/user/profile");
+
+    /**
+     * Profile URL
+     */
+    public $registrationUrl = array("/user/registration");
+
+    /**
      * Hash method
      */
     public $encrypting = 'md5';
