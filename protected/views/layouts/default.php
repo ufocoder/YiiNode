@@ -16,7 +16,7 @@
         ));
       ?>
 
-      <?php $this->widget('zii.widgets.CMenu',array(
+      <?php $this->widget('zii.widgets.CMenu', array(
           'id'=>null,
           'items'=>array(
             array('label'=>Yii::t('site', 'Login'), 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
@@ -41,17 +41,59 @@
       <li>Version <?php echo Yii::app()->params['version'];?></li>
     <ul>
   </div>
+<br>
+<?php
+  $node = Yii::app()->getNode();
 
-  <hr>
+  $items = array();
+  if ($node->isRoot()){
+      $nodes = $node->children()->findAll();
+      foreach ($nodes as $node) {
+          $items[] = array('label'=>$node->title, 'url'=>$node->path);
+      }
+  }else{
 
+  }
+
+  $this->widget('bootstrap.widgets.TbNavbar', array(
+    'brand' => false,
+    'fixed' => false,
+    'items' => array(
+      array(
+        'class' => 'bootstrap.widgets.TbMenu',
+        'items' => $items
+      )
+    )
+  ));
+?>
   <div class="row-fluid">
-<?php echo $content; ?>
+    <div class="span7">
+      <?php echo $content; ?>
+    </div>
+    <div class="span5">
+      <h3>Last articles</h3>
+
+      <?php
+        Yii::import('application.modules.articles.models.*');
+        $articles = Article::model()->findAll();
+        foreach($articles as $article):
+          $url = Yii::app()->createUrl('/articles/default/view', array('id'=>$article->id_article, 'nodeId'=>$article->id_node));
+      ?>
+        <a href="<?php echo $url ?>"><?php echo CHtml::encode($article->title)?></a><br>
+        <small><i class="icon icon-calendar"></i> Pudlish date: <?php echo date("d.m.Y", $article->time_published); ?></small><br>
+        <?php echo $article->notice; ?>
+
+        <hr>
+
+      <?php endforeach ;?>
+    </div>
+
   </div>
 
   <hr>
 
   <div class="footer">
-    <p>&copy; <?php echo date("Y");?></p>
+    <p>&copy; <?php echo date("Y");?>, <?php echo Block::getValue('Footer: copyright', 'string', '{copyright}')?></p>
   </div>
 
 </div>
