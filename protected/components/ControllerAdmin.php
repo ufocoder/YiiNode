@@ -10,7 +10,7 @@ class ControllerAdmin extends Controller
     /**
      * layout
      */
-    public $layout='application.modules.admin.views.layouts.column2';
+    public $layout = 'application.modules.admin.views.layouts.column2';
 
     /**
      * Title button
@@ -59,6 +59,12 @@ class ControllerAdmin extends Controller
         );
     }
 
+    // @TODO: setup layouts in node attributes
+    public function beforeAction($action)
+    {
+        return true;
+    }
+
     /**
      * Render [переопредление]
      *
@@ -73,5 +79,5 @@ class ControllerAdmin extends Controller
         else
             parent::render($view, $data, $return);
     }
-    
+
 }
