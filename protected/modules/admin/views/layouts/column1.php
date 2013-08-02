@@ -2,7 +2,18 @@
 
                 <div class="span12">
     <?php if (!empty($this->title)):?>
-                <h2><?php echo $this->title?></h2>
+                <h2>
+                    <?php echo $this->title?>
+                    <?php if (!empty($this->titleButton))
+                        $this->widget('bootstrap.widgets.TbButtonGroup', array(
+                            'type' => 'primary',
+                            'size' => 'small',
+                            'encodeLabel' => false,
+                            'toggle' => 'radio',
+                            'buttons' => $this->titleButton
+                        ));
+                    ?>
+                </h2>
     <?php endif; ?>
 
     <?php if (!empty($this->actions)):?>
@@ -10,39 +21,39 @@
         <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
                 'toggle' => 'radio',
                 'buttons' => $this->actions
-            )); 
+            ));
         ?>
     </div>
     <?php endif; ?>
 
-    <?php 
+    <?php
         $this->widget('bootstrap.widgets.TbAlert', array(
             'block'=>true,
             'fade'=>true,
             'closeText'=>'&times;',
             'alerts'=>array(
                 'success'=>array(
-                    'block'=>true, 
-                    'fade'=>true, 
+                    'block'=>true,
+                    'fade'=>true,
                     'closeText'=>'&times;'
                 ),
                 'info'=>array(
-                    'block'=>true, 
-                    'fade'=>true, 
+                    'block'=>true,
+                    'fade'=>true,
                     'closeText'=>'&times;'
                 ),
                 'warning'=>array(
-                    'block'=>true, 
-                    'fade'=>true, 
+                    'block'=>true,
+                    'fade'=>true,
                     'closeText'=>'&times;'
                 ),
                 'error'=>array(
-                    'block'=>true, 
-                    'fade'=>true, 
+                    'block'=>true,
+                    'fade'=>true,
                     'closeText'=>'&times;'
                 ),
             ),
-        )); 
+        ));
     ?>
     <?php echo $content; ?>
             </div>

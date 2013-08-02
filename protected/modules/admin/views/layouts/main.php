@@ -1,4 +1,4 @@
-<?php 
+<?php
     if (!empty($this->pageTitle)){
         if (is_array($this->pageTitle))
             $pageTitle = implode(" / ", $this->pageTitle);
@@ -6,6 +6,7 @@
             $pageTitle = $this->pageTitle;
     }else
         $pageTitle = Yii::t('site', 'Control panel');
+
 ?><!DOCTYPE html>
 <html lang="ru">
   <head>
@@ -14,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 <?php
-$cs = Yii::app()->getClientScript(); 
+$cs = Yii::app()->getClientScript();
 $cs->registerCss('bootstrap-fix', '    body {
         padding-top: 60px;
         padding-bottom: 40px;
@@ -29,14 +30,16 @@ $cs->registerCss('bootstrap-fix', '    body {
     }
 
     #wrapper{
-        width:1000px;
+        min-width: 1000px;
+        width: 82%;
         margin: 0 auto;
     }
-    
+
     .wrapper-container .container{
-        width: 960px;
+        min-width: 1000px;
+        width: 82%;
     }
-    
+
     .help-block{
         font-size: 12px;
     }
@@ -60,9 +63,11 @@ $cs->registerCss('bootstrap-fix', '    body {
             array(
                 'class'=>'bootstrap.widgets.TbMenu',
                 'items'=>array(
-                    array('label'=> Yii::t('site', 'Structure'), 'url' => Yii::app()->createUrl('/admin/node/')),
+                    array('label'=> Yii::t('site', 'Content'), 'url'=> '#', 'items' => array(
+                        array('label'=> Yii::t('site', 'Structure'), 'url' => Yii::app()->createUrl('/admin/node/'), 'icon'=>'list-alt'),
+                        array('label'=> Yii::t('site', 'Info blocks'), 'url' => Yii::app()->createUrl('/admin/block/'), 'icon'=>'th-large'),
+                    )),
                     array('label'=> Yii::t('site', 'Services'), 'url' => '#', 'items' => array(
-                        array('label'=> Yii::t('site', 'Filemanager'), 'url' => Yii::app()->createUrl('/admin/filemanager/'), 'icon'=>'file'),
                         array('label'=> Yii::t('site', 'Filemanager'), 'url' => Yii::app()->createUrl('/admin/filemanager/'), 'icon'=>'file'),
                     )),
                     array('label'=> Yii::t('site', 'Settings'), 'url' => Yii::app()->createUrl('/admin/settings/')),
@@ -88,7 +93,7 @@ $cs->registerCss('bootstrap-fix', '    body {
         <div class="row-fluid">
     <?php if (!empty($this->breadcrumbs)):?>
             <div class="row-fluid">
-    <?php 
+    <?php
         $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
             'links' => $this->breadcrumbs,
             'homeLink' => CHtml::link(Yii::t('site', 'Control panel'), Yii::app()->createUrl('/admin'))
