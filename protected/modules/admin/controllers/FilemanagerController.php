@@ -21,10 +21,31 @@ class FilemanagerController extends ControllerAdmin
             'connector' => array(
                 'class'=> "ext.elfinder.ElFinderConnectorAction",
                 'settings' => array(
+                    'driver' => 'LocalFileSystem',
                     'root' => Yii::getPathOfAlias('webroot') . '/upload/',
                     'URL' => Yii::app()->baseUrl . '/upload/',
                     'rootAlias' => Yii::t('site', 'Home folder'),
-                    'mimeDetect' => 'none'
+                    'mimeDetect' => 'internal',
+                    'uploadOrder'  => 'deny,allow',
+                    'uploadDeny'   => array('all'),
+                    'uploadAllow'  => array(
+                        'image/*',
+                        'application/pdf',
+                        'application/x-shockwave-flash',
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.oasis.opendocument.text',
+                        'application/vnd.ms-excel',
+                        'application/vnd.ms-word',
+                        'text/rtf'
+                    ),
+                    'perms' => array(
+                        "/\.php$/i" => array(
+                            'read' => false,
+                            'write' => false,
+                            'rm' => false,
+                        )
+                    ),
                 )
             ),
         );
