@@ -2,33 +2,15 @@
 
 class ProfileField extends CActiveRecord
 {
-    const VISIBLE_ALL=3;
-    const VISIBLE_REGISTER_USER=2;
-    const VISIBLE_ONLY_OWNER=1;
-    const VISIBLE_NO=0;
+    const VISIBLE_NO = 0;
+    const VISIBLE_ALL = 1;
+    const VISIBLE_ONLY_OWNER =2;
+    const VISIBLE_REGISTER_USER =3;
 
     const REQUIRED_NO = 0;
-    const REQUIRED_YES_SHOW_REG = 1;
     const REQUIRED_NO_SHOW_REG = 2;
+    const REQUIRED_YES_SHOW_REG = 1;
     const REQUIRED_YES_NOT_SHOW_REG = 3;
-
-    /**
-     * The followings are the available columns in table 'profiles_fields':
-     * @var integer $id
-     * @var string $varname
-     * @var string $title
-     * @var string $field_type
-     * @var integer $field_size
-     * @var integer $field_size_mix
-     * @var integer $required
-     * @var integer $match
-     * @var string $range
-     * @var string $error_message
-     * @var string $other_validator
-     * @var string $default
-     * @var integer $position
-     * @var integer $visible
-     */
 
     /**
      * Returns the static model of the specified AR class.
@@ -54,8 +36,8 @@ class ProfileField extends CActiveRecord
     {
         return array(
             array('varname, title, field_type', 'required'),
-            array('varname', 'match', 'pattern' => '/^[A-Za-z_0-9]+$/u','message' => UserModule::t("Variable name may consist of A-z, 0-9, underscores, begin with a letter.")),
-            array('varname', 'unique', 'message' => UserModule::t("This field already exists.")),
+            array('varname', 'match', 'pattern' => '/^[A-Za-z_0-9]+$/u','message' => Yii::t('site', "Variable name may consist of A-z, 0-9, underscores, begin with a letter.")),
+            array('varname', 'unique', 'message' => Yii::t('site', "This field already exists.")),
             array('varname, field_type', 'length', 'max'=>50),
             array('field_size_min, required, position, visible', 'numerical', 'integerOnly'=>true),
             array('field_size', 'match', 'pattern' => '/^\s*[-+]?[0-9]*\,*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'),
@@ -66,38 +48,24 @@ class ProfileField extends CActiveRecord
     }
 
     /**
-     * @return array relational rules.
-     */
-    public function relations()
-    {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-        );
-    }
-
-    /**
      * @return array customized attribute labels (name=>label)
      */
     public function attributeLabels()
     {
         return array(
-            'id' => UserModule::t('Id'),
-            'varname' => UserModule::t('Variable name'),
-            'title' => UserModule::t('Title'),
-            'field_type' => UserModule::t('Field Type'),
-            'field_size' => UserModule::t('Field Size'),
-            'field_size_min' => UserModule::t('Field Size min'),
-            'required' => UserModule::t('Required'),
-            'match' => UserModule::t('Match'),
-            'range' => UserModule::t('Range'),
-            'error_message' => UserModule::t('Error Message'),
-            'other_validator' => UserModule::t('Other Validator'),
-            'default' => UserModule::t('Default'),
-            'widget' => UserModule::t('Widget'),
-            'widgetparams' => UserModule::t('Widget parametrs'),
-            'position' => UserModule::t('Position'),
-            'visible' => UserModule::t('Visible'),
+            'id_user_field' => Yii::t('site', 'Id'),
+            'varname' => Yii::t('site', 'Variable name'),
+            'title' => Yii::t('site', 'Title'),
+            'field_type' => Yii::t('site', 'Field type'),
+            'field_size' => Yii::t('site', 'Field size'),
+            'field_size_min' => Yii::t('site', 'Field size min'),
+            'required' => Yii::t('site', 'Required'),
+            'match' => Yii::t('site', 'Match'),
+            'range' => Yii::t('site', 'Range'),
+            'error_message' => Yii::t('site', 'Error message'),
+            'default' => Yii::t('site', 'Default'),
+            'position' => Yii::t('site', 'Position'),
+            'visible' => Yii::t('site', 'Visible'),
         );
     }
 
@@ -126,85 +94,43 @@ class ProfileField extends CActiveRecord
         );
     }
 
-    /**
-     * @param $value
-     * @return formated value (string)
-     */
-    public function widgetView($model)
+    public static function values($setting = null, $value = null)
     {
-        if ($this->widget && class_exists($this->widget))
-        {
-            $widgetClass = new $this->widget;
+        if (empty($setting))
+            return false;
 
-            $arr = $this->widgetparams;
-            if ($arr)
-            {
-                $newParams = $widgetClass->params;
-                $arr = (array)CJavaScript::jsonDecode($arr);
-                foreach ($arr as $p=>$v) {
-                    if (isset($newParams[$p])) $newParams[$p] = $v;
-                }
-                $widgetClass->params = $newParams;
-            }
-
-            if (method_exists($widgetClass,'viewAttribute')) {
-                return $widgetClass->viewAttribute($model,$this);
-            }
-        }
-        return false;
-    }
-
-    public function widgetEdit($model,$params=array()) {
-        if ($this->widget && class_exists($this->widget)) {
-            $widgetClass = new $this->widget;
-
-            $arr = $this->widgetparams;
-            if ($arr) {
-                $newParams = $widgetClass->params;
-                $arr = (array)CJavaScript::jsonDecode($arr);
-                foreach ($arr as $p=>$v) {
-                    if (isset($newParams[$p])) $newParams[$p] = $v;
-                }
-                $widgetClass->params = $newParams;
-            }
-
-            if (method_exists($widgetClass, 'editAttribute')) {
-                return $widgetClass->editAttribute($model,$this,$params);
-            }
-        }
-        return false;
-    }
-
-    public static function itemAlias($type,$code=NULL) {
-        $_items = array(
+        $settings = array(
             'field_type' => array(
-                'INTEGER' => UserModule::t('INTEGER'),
-                'VARCHAR' => UserModule::t('VARCHAR'),
-                'TEXT'=> UserModule::t('TEXT'),
-                'DATE'=> UserModule::t('DATE'),
-                'FLOAT'=> UserModule::t('FLOAT'),
-                'DECIMAL'=> UserModule::t('DECIMAL'),
-                'BOOL'=> UserModule::t('BOOL'),
-                'BLOB'=> UserModule::t('BLOB'),
-                'BINARY'=> UserModule::t('BINARY'),
+                'INTEGER' => Yii::t('site', 'INTEGER'),
+                'VARCHAR' => Yii::t('site', 'VARCHAR'),
+                'TEXT'=> Yii::t('site', 'TEXT'),
+                'DATE'=> Yii::t('site', 'DATE'),
+                'FLOAT'=> Yii::t('site', 'FLOAT'),
+                'DECIMAL'=> Yii::t('site', 'DECIMAL'),
+                'BOOL'=> Yii::t('site', 'BOOL'),
+                'BLOB'=> Yii::t('site', 'BLOB'),
+                'BINARY'=> Yii::t('site', 'BINARY'),
             ),
             'required' => array(
-                self::REQUIRED_NO => UserModule::t('No'),
-                self::REQUIRED_NO_SHOW_REG => UserModule::t('No, but show on registration form'),
-                self::REQUIRED_YES_SHOW_REG => UserModule::t('Yes and show on registration form'),
-                self::REQUIRED_YES_NOT_SHOW_REG => UserModule::t('Yes'),
+                self::REQUIRED_NO => Yii::t('site', 'No'),
+                self::REQUIRED_NO_SHOW_REG => Yii::t('site', 'No, but show on registration form'),
+                self::REQUIRED_YES_SHOW_REG => Yii::t('site', 'Yes and show on registration form'),
+                self::REQUIRED_YES_NOT_SHOW_REG => Yii::t('site', 'Yes'),
             ),
             'visible' => array(
-                self::VISIBLE_ALL => UserModule::t('For all'),
-                self::VISIBLE_REGISTER_USER => UserModule::t('Registered users'),
-                self::VISIBLE_ONLY_OWNER => UserModule::t('Only owner'),
-                self::VISIBLE_NO => UserModule::t('Hidden'),
+                self::VISIBLE_ALL => Yii::t('site', 'For all'),
+                self::VISIBLE_REGISTER_USER => Yii::t('site', 'Registered users'),
+                self::VISIBLE_ONLY_OWNER => Yii::t('site', 'Only owner'),
+                self::VISIBLE_NO => Yii::t('site', 'Hidden'),
             ),
         );
-        if (isset($code))
-            return isset($_items[$type][$code]) ? $_items[$type][$code] : false;
+
+        if ($value == null && isset($settings[$setting]))
+            return $settings[$setting];
+        else if ($value != null && isset($settings[$setting][$value]))
+            return $settings[$setting][$value];
         else
-            return isset($_items[$type]) ? $_items[$type] : false;
+            return false;
     }
 
     /**
@@ -218,7 +144,7 @@ class ProfileField extends CActiveRecord
 
         $criteria=new CDbCriteria;
 
-        $criteria->compare('id',$this->id);
+        $criteria->compare('id_user_field', $this->id_user_field);
         $criteria->compare('varname',$this->varname,true);
         $criteria->compare('title',$this->title,true);
         $criteria->compare('field_type',$this->field_type,true);
@@ -228,17 +154,14 @@ class ProfileField extends CActiveRecord
         $criteria->compare('match',$this->match,true);
         $criteria->compare('range',$this->range,true);
         $criteria->compare('error_message',$this->error_message,true);
-        $criteria->compare('other_validator',$this->other_validator,true);
         $criteria->compare('default',$this->default,true);
-        $criteria->compare('widget',$this->widget,true);
-        $criteria->compare('widgetparams',$this->widgetparams,true);
         $criteria->compare('position',$this->position);
         $criteria->compare('visible',$this->visible);
 
         return new CActiveDataProvider(get_class($this), array(
             'criteria'=>$criteria,
             'pagination'=>array(
-                'pageSize'=>Yii::app()->controller->module->fields_page_size,
+              //  'pageSize'=>Yii::app()->controller->module->fields_page_size,
             ),
             'sort'=>array(
                 'defaultOrder'=>'position',
