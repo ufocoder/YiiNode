@@ -5,7 +5,7 @@ class Profile extends CActiveRecord
     const GROUP_FIELD_ALL = 1;
     const GROUP_FIELD_REGISTRATION = 2;
 
-    private $_rules = array();
+    private $_rules = null;
 
     /**
      * Returns the static model of the specified AR class.
@@ -29,65 +29,84 @@ class Profile extends CActiveRecord
      */
     public function rules()
     {
-        if (!$this->_rules) {
-            $required = array();
-            $numerical = array();
-            $float = array();
-            $decimal = array();
-            $rules = array();
+        if ($this->_rules !== null)
+        {
+            $required   = array();
+            $numerical  = array();
+            $float      = array();
+            $decimal    = array();
+            $rules      = array();
 
-            $model=$this->getFields();
+            $model = $this->getFields();
 
-            foreach ($model as $field){
+            foreach ($model as $field)
+            {
                 $field_rule = array();
-                if ($field->required==ProfileField::REQUIRED_YES_NOT_SHOW_REG||$field->required==ProfileField::REQUIRED_YES_SHOW_REG)
+
+                if ($field->required == ProfileField::REQUIRED_YES_NOT_SHOW_REG || $field->required==ProfileField::REQUIRED_YES_SHOW_REG)
                     array_push($required,$field->varname);
-                if ($field->field_type=='FLOAT')
-                    array_push($float,$field->varname);
+
+                if ($field->field_type == 'FLOAT')
+                    array_push($float, $field->varname);
+
                 if ($field->field_type=='DECIMAL')
-                    array_push($decimal,$field->varname);
+                    array_push($decimal, $field->varname);
+
                 if ($field->field_type=='INTEGER')
-                    array_push($numerical,$field->varname);
-                if ($field->field_type=='VARCHAR'||$field->field_type=='TEXT') {
-                    $field_rule = array($field->varname, 'length', 'max'=>$field->field_size, 'min' => $field->field_size_min);
-                    if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
-                    array_push($rules,$field_rule);
+                    array_push($numerical, $field->varname);
+
+                if ($field->field_type == 'VARCHAR' || $field->field_type=='TEXT')
+                {
+                    $field_rule = array(
+                        $field->varname,
+                        'length',
+                        'max'=>$field->field_size,
+                        'min' => $field->field_size_min
+                    );
+                    if ($field->error_message)
+                        $field_rule['message'] = Yii::t('site', $field->error_message);
+                    array_push($rules, $field_rule);
                 }
-                if ($field->other_validator) {
-                    if (strpos($field->other_validator,'{')===0) {
-                        $validator = (array)CJavaScript::jsonDecode($field->other_validator);
-                        foreach ($validator as $name=>$val) {
-                            $field_rule = array($field->varname, $name);
-                            $field_rule = array_merge($field_rule,(array)$validator[$name]);
-                            if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
-                            array_push($rules,$field_rule);
-                        }
-                    } else {
-                        $field_rule = array($field->varname, $field->other_validator);
-                        if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
-                        array_push($rules,$field_rule);
-                    }
-                } elseif ($field->field_type=='DATE') {
+
+                if ($field->field_type=='DATE') {
                     $field_rule = array($field->varname, 'type', 'type' => 'date', 'dateFormat' => 'yyyy-mm-dd', 'allowEmpty'=>true);
-                    if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
+                    if ($field->error_message)
+                        $field_rule['message'] = Yii::t('site', $field->error_message);
                     array_push($rules,$field_rule);
                 }
+
                 if ($field->match) {
-                    $field_rule = array($field->varname, 'match', 'pattern' => $field->match);
-                    if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
+                    $field_rule = array(
+                        $field->varname,
+                        'match',
+                        'pattern' => $field->match
+                    );
+                    if ($field->error_message)
+                        $field_rule['message'] = Yii::t('site', $field->error_message);
                     array_push($rules,$field_rule);
                 }
-                if ($field->range) {
-                    $field_rule = array($field->varname, 'in', 'range' => self::rangeRules($field->range));
-                    if ($field->error_message) $field_rule['message'] = Yii::t('site', $field->error_message);
+
+                if ($field->range)
+                {
+                    $rules = explode(';', $field->range);
+                    for ($i=0;$i<count($rules);$i++)
+                        $rules[$i] = current(explode("==",$rules[$i]));
+
+                    $field_rule = array(
+                        $field->varname,
+                        'in',
+                        'range' => self::rangeRules($field->range)
+                    );
+                    if ($field->error_message)
+                        $field_rule['message'] = Yii::t('site', $field->error_message);
                     array_push($rules,$field_rule);
                 }
             }
 
-            array_push($rules,array(implode(',', $required), 'required'));
-            array_push($rules,array(implode(',', $numerical), 'numerical', 'integerOnly'=>true));
-            array_push($rules,array(implode(',', $float), 'type', 'type'=>'float'));
-            array_push($rules,array(implode(',', $decimal), 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'));
+            array_push($rules, array(implode(',', $required), 'required'));
+            array_push($rules, array(implode(',', $numerical), 'numerical', 'integerOnly'=>true));
+            array_push($rules, array(implode(',', $float), 'type', 'type'=>'float'));
+            array_push($rules, array(implode(',', $decimal), 'match', 'pattern' => '/^\s*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?\s*$/'));
             $this->_rules = $rules;
         }
         return $this->_rules;
@@ -117,9 +136,7 @@ class Profile extends CActiveRecord
     }
 
     private function rangeRules($str) {
-        $rules = explode(';',$str);
-        for ($i=0;$i<count($rules);$i++)
-            $rules[$i] = current(explode("==",$rules[$i]));
+
         return $rules;
     }
 
