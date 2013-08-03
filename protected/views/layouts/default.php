@@ -41,31 +41,11 @@
       <li>Version <?php echo Yii::app()->params['version'];?></li>
     <ul>
   </div>
+
 <br>
-<?php
-  $node = Yii::app()->getNode();
 
-  $items = array();
-  if ($node->isRoot()){
-      $nodes = $node->children()->findAll();
-      foreach ($nodes as $node) {
-          $items[] = array('label'=>$node->title, 'url'=>$node->path);
-      }
-  }else{
+<?php $this->renderPartial('//layouts/__menu'); ?>
 
-  }
-
-  $this->widget('bootstrap.widgets.TbNavbar', array(
-    'brand' => false,
-    'fixed' => false,
-    'items' => array(
-      array(
-        'class' => 'bootstrap.widgets.TbMenu',
-        'items' => $items
-      )
-    )
-  ));
-?>
   <div class="row-fluid">
     <div class="span7">
       <?php echo $content; ?>

@@ -9,7 +9,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Le styles -->
-    <link href="<?php echo $baseUrl; ?>/css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo $baseUrl; ?>/css/main.css" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
