@@ -12,6 +12,7 @@ class WebUser extends CWebUser
      */
     const ROLE_ADMIN        = 'admin';
     const ROLE_MODERATOR    = 'moderator';
+    const ROLE_MANAGER      = 'manager';
     const ROLE_USER         = 'user';
     const ROLE_GUEST        = 'guest';
 
