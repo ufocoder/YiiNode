@@ -297,9 +297,14 @@ class Node extends CActiveRecord
         $up     = 'UPDATE '.$this->tableName().' SET position=position+1 WHERE position >= '.$position.' AND id_node_parent'.$where;
         $down   = 'UPDATE '.$this->tableName().' SET position=position-1 WHERE position <= '.$position.' AND id_node_parent'.$where;
 
-        Yii::app()->db->createCommand($before ? $up : $down)->execute();
+        if ($before){
+            Yii::app()->db->createCommand($up)->execute();
+            $this->position = $position - 1;
+        }else{
+            Yii::app()->db->createCommand($down)->execute();
+            $this->position = $position + 1;
+        }
 
-        $this->position = $position - 1;
         $this->updatePosition();
     }
 
