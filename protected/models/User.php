@@ -41,12 +41,14 @@ class User extends CActiveRecord
     public static function values($setting = null, $value = null)
     {
         if (empty($setting))
-            return;
+            return false;
 
         $settings = array(
             'role' => array(
                 WebUser::ROLE_ADMIN => Yii::t('site', 'Administrator'),
                 WebUser::ROLE_MODERATOR => Yii::t('site', 'Moderator'),
+                WebUser::ROLE_MANAGER => Yii::t('site', 'Manager'),
+                WebUser::ROLE_USER => Yii::t('site', 'User'),
                 WebUser::ROLE_GUEST => Yii::t('site', 'Guest'),
             ),
             'status' => array(
@@ -58,10 +60,10 @@ class User extends CActiveRecord
 
         if ($value == null && isset($settings[$setting]))
             return $settings[$setting];
-        if ($value != null && isset($settings[$setting][$value]))
+        else if ($value != null && isset($settings[$setting][$value]))
             return $settings[$setting][$value];
         else
-            return;
+            return false;
     }
 
     /**
@@ -108,7 +110,7 @@ class User extends CActiveRecord
     public function rules()
     {
         return array(
-            array('login, password, email', 'required'),
+            array('login, password, email, role', 'required'),
             array('status', 'numerical', 'integerOnly'=>true),
             array('login, email', 'length', 'max'=>255),
             array('password, role', 'length', 'max'=>64),
