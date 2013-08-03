@@ -29,7 +29,7 @@ class Profile extends CActiveRecord
      */
     public function rules()
     {
-        if ($this->_rules !== null)
+        if ($this->_rules == null)
         {
             $required   = array();
             $numerical  = array();
