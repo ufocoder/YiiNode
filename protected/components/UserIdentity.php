@@ -19,18 +19,16 @@ class UserIdentity extends CUserIdentity
     const ERROR_EMAIL_OR_PASSWORD_INVALID = 3;
     const ERROR_STATUS_NOTACTIVE = 4;
     const ERROR_STATUS_BAN = 5;
-    const ERROR_ROLES = 6;
 
-    public function authenticate($allow_roles = array())
+    public function authenticate()
     {
         $params = array();
 
         // find user by e-mail or login
-        if (strpos($this->username, "@")) {
+        if (strpos($this->username, "@"))
             $params['email'] = $this->username;
-        } else {
+        else
             $params['login'] = $this->username;
-        }
 
         $user = User::model()->findByAttributes($params);
 
@@ -45,26 +43,12 @@ class UserIdentity extends CUserIdentity
         // user is exists
         else
         {
-            // role is not exists
-            if (!empty($allow_roles) && !in_array($user->role, $allow_roles)){
-                $this->_role = $user->role;
-                $this->errorCode = self::ERROR_ROLES;
-            }
-            // user is not active
-            else if ($user->status == 0)
-            {
+            if ($user->status == 0)
                 $this->errorCode = self::ERROR_STATUS_NOTACTIVE;
-            }
-            // user is banned
             else if ($user->status == -1)
-            {
                 $this->errorCode = self::ERROR_STATUS_BAN;
-            }
-            // invalid password
             else if (Yii::app()->user->encrypting($this->password) !== $user->password)
-            {
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;
-            }
             else
             {
                 $this->errorCode = self::ERROR_NONE;
