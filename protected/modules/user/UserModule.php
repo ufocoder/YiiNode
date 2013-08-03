@@ -6,7 +6,7 @@ class UserModule extends WebModule {
     static private $_userByName = array();
 
     // @TODO:
-    public $activeAfterRegister = false;
+    public $activeAfterRegister = true;
     public $sendActivationMail = false;
     public $autoLogin = true;
     public $loginNotActiv = true;

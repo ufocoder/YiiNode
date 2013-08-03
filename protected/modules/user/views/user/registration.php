@@ -52,9 +52,7 @@
     <legend><?php echo Yii::t('site', 'Profile information')?></legend>
 <?php foreach($profileFields as $field): ?>
         <?php
-        if ($widgetEdit = $field->widgetEdit($profile)) {
-            echo $widgetEdit;
-        } elseif ($field->range) {
+        if ($field->range) {
             echo $form->dropDownListRow($profile,$field->varname,Profile::range($field->range));
         } elseif ($field->field_type=="TEXT") {
             echo$form->textAreaRow($profile,$field->varname,array('rows'=>6, 'cols'=>50));

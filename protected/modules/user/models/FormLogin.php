@@ -58,10 +58,10 @@ class FormLogin extends CFormModel
                     Yii::app()->user->login($identity, $duration);
                 break;
                 case UserIdentity::ERROR_EMAIL_OR_PASSWORD_INVALID:
-                    $this->addError("username", Yii::t("site", "Email is incorrect."));
+                    $this->addError("username", Yii::t("site", "Email or password is incorrect."));
                 break;
                 case UserIdentity::ERROR_USERNAME_OR_PASSWORD_INVALID:
-                    $this->addError("username", Yii::t("site", "Username is incorrect."));
+                    $this->addError("username", Yii::t("site", "Username or password is incorrect."));
                 break;
                 case UserIdentity::ERROR_STATUS_NOTACTIVE:
                     $this->addError("status", Yii::t("site", "You account is not activated."));

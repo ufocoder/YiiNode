@@ -14,6 +14,20 @@ class RegistrationController extends Controller
     }
 
     /**
+     * @return type Access rules
+     */
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions' => array('index', 'captcha'),
+                'users' => array('*'),
+            ),
+            array('deny')
+        );
+    }
+
+    /**
      * Registration user
      */
     public function actionIndex()
@@ -33,7 +47,8 @@ class RegistrationController extends Controller
             {
                 $user =  new User;
                 $user->login = $form->login;
-                $user->email = $form->login;
+                $user->email = $form->email;
+                $user->role = WebUser::ROLE_USER;
                 $user->activekey = Yii::app()->user->encrypting(microtime().$form->password);
                 $user->password = Yii::app()->user->encrypting($form->password);
 
@@ -61,11 +76,14 @@ class RegistrationController extends Controller
                         );
                     }
 
-                    if ((Yii::app()->controller->module->loginNotActiv||(Yii::app()->controller->module->activeAfterRegister&&Yii::app()->controller->module->sendActivationMail==false))&&Yii::app()->controller->module->autoLogin) {
+                    if ((Yii::app()->controller->module->loginNotActiv
+                        || (Yii::app()->controller->module->activeAfterRegister
+                            && Yii::app()->controller->module->sendActivationMail==false)
+                        ) && Yii::app()->controller->module->autoLogin) {
                         $identity = new UserIdentity($user->login, $form->password);
                         $identity->authenticate();
                         Yii::app()->user->login($identity, 0);
-                        $this->redirect(Yii::app()->controller->module->returnUrl);
+                        $this->redirect(Yii::app()->user->returnUrl);
 
                     } else {
                         if (!Yii::app()->controller->module->activeAfterRegister && !Yii::app()->controller->module->sendActivationMail) {

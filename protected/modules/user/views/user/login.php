@@ -13,7 +13,6 @@
     $this->breadcrumbs = array(
         Yii::t("site", "Profile")
     );
-
 ?>
 
     <?php echo $form->errorSummary($model); ?>

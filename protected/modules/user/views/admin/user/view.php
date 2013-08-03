@@ -1,19 +1,17 @@
 <?php
-    /* @var $this ProfileController */
-    /* @var $model User */
 
-    $this->title = Yii::t('site', 'View');
-    $this->breadcrumbs=array(
-        Yii::t("site", "Profile")
+    $this->title = Yii::t('site', 'View profile').' "'.$model->login.'"';
+    $this->breadcrumbs = array(
+        Yii::t('site', 'Users') => array('/admin/user'),
+        $model->login,
     );
 
     $this->actions = array(
-        array('label'=>Yii::t('site', 'Update profile'), 'url'=>array('update'), 'icon'=>'pencil'),
-        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword'), 'icon'=>'lock'),
+        array('label'=>Yii::t('site', 'Update user'), 'url'=>array('update', 'id'=>$model->id_user), 'icon'=>'pencil'),
+        array('label'=>Yii::t('site', 'Change password'), 'url'=>array('changepassword', 'id'=>$model->id_user), 'icon'=>'lock'),
     );
-
-    $this->title = Yii::t("site", "Your profile");
 ?>
+
 <fieldset>
 <legend><?php echo Yii::t('site', 'Account information');?></legend>
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
