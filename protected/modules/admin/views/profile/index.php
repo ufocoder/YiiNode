@@ -51,10 +51,7 @@
         $attributes = array();
         foreach($profileFields as $field){
             $value = null;
-
-            if ($field->widgetView($profile))
-                $value = $field->widgetView($profile);
-            elseif (CHtml::encode($field->range))
+            if (CHtml::encode($field->range))
                 $value = Profile::range($field->range,$profile->getAttribute($field->varname));
             else
                 $value = $profile->getAttribute($field->varname);

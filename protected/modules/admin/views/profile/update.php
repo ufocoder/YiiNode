@@ -56,11 +56,9 @@
         <?php echo $form->labelEx($profile, $field->varname, array('class'=>'control-label')); ?>
         <div class="controls">
             <?php
-                if ($widgetEdit = $field->widgetEdit($profile)) {
-                    echo $widgetEdit;
-                } elseif ($field->range) {
+                if ($field->range) {
                     echo $form->dropDownList($profile, $field->varname, Profile::range($field->range));
-                } elseif ($field->field_type=="TEXT") {
+                } elseif ($field->field_type == "TEXT") {
                     echo $form->textArea($profile,$field->varname,array('rows'=>6, 'cols'=>50));
                 } else {
                     echo $form->textField($profile,$field->varname,array('size'=>60,'maxlength'=>(($field->field_size)?$field->field_size:255)));
