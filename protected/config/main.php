@@ -102,12 +102,19 @@ return array(
                 array(
                     'class'=>'UrlRuleAdminNode'
                 ),
+
+                'admin/<module:(user)>/<controller:\w+>/<action:\w+>/*' => '<module>/admin/<controller>/<action>',
+                'admin/<module:(user)>/<controller:\w+>' => '<module>/admin/<controller>',
+                'admin/<module:(user)>' => '<module>/admin/default/index',
+
                 'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>' => 'admin/<controller>',
                 'admin/' => 'admin/default/index',
+
                 'user/<controller:\w+>/<action:\w+>' => 'user/<controller>/<action>',
                 'user/<controller:\w+>' => 'user/<controller>',
                 'user/' => 'user/default/index',
+
                 array(
                     'class' => 'UrlRuleModuleNode'
                 ),
