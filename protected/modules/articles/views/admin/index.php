@@ -3,7 +3,7 @@
 
     $nodeId = Yii::app()->getNodeId();
 
-    $this->title = Yii::t('site', 'Articles manage');
+    $this->title = Yii::t('site', 'Article list');
     $this->titleButton = array(
         array('label'=>Yii::t('site', 'Add'), 'url'=> Yii::app()->createUrl('default/create', array('nodeAdmin'=>true, 'nodeId'=> $nodeId)), 'icon'=>'white plus')
     );

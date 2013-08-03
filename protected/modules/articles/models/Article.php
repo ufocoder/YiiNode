@@ -89,7 +89,9 @@ class Article extends CActiveRecord
             array('delete_image', 'boolean', 'allowEmpty'=>true),
             array('id_node, title, content', 'required'),
             array('id_node', 'length', 'max'=>11),
-            array('title, content', 'length', 'max'=>255),
+            array('title', 'length', 'max'=>255),
+            array('content, notice', 'default', 'value'=>null),
+            array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
             // Правило, использующиеся в search
             // @todo удалить лишние атрибуты

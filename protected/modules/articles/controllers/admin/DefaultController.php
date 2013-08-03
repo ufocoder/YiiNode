@@ -16,13 +16,13 @@ class DefaultController extends ControllerAdmin
         $model = new $model_class;
         $model->isNewRecord = true;
 
-        if(isset($_POST[$model_class]))
+        if (isset($_POST[$model_class]))
         {
             $model->attributes = $_POST[$model_class];
             $model->id_node = Yii::app()->getNodeId();
             if ($model->save()){
                 Yii::app()->user->setFlash('success', Yii::t('all', 'Article was created successful!'));
-                $this->redirect(array('index'));
+                $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
         }
 
@@ -43,7 +43,7 @@ class DefaultController extends ControllerAdmin
             $model->attributes = $_POST[$model_class];
             if($model->save()){
                 Yii::app()->user->setFlash('success', Yii::t('all', 'Form values were saved!'));
-                $this->redirect(array('view', 'id'=>$model->id));
+                $this->redirect(array('/default/view', 'id'=>$model->id_article, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
         }
 
@@ -61,7 +61,7 @@ class DefaultController extends ControllerAdmin
             $model = $this->loadModel($id);
             $model->delete();
             if(!isset($_GET['ajax']))
-                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
         }
         else
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
