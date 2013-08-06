@@ -22,14 +22,13 @@ class ElFinderWidget extends CWidget
         $cs->registerCoreScript('jquery');
         $cs->registerCoreScript('jquery.ui');
         $cs->registerCssFile($assets . '/css/elfinder.min.css');
+        $cs->registerCssFile($assets . '/css/theme.css');
         $cs->registerScriptFile($assets . '/js/elfinder.min.js');
 
-        // elFinder translation
         $langs = array('ar', 'bg', 'ca', 'cs', 'de', 'es', 'fr', 'hu', 'jp', 'nl', 'no', 'pl', 'pt_BR', 'ru', 'zh_CN');
 
         $lang = Yii::app()->language;
-
-        if (!in_array($lang, $langs)) {
+        if (!in_array($lang, $langs)){
             $lang = current(explode('_', $lang));
             if (!in_array($lang, $langs))
                 $cs->registerScriptFile($assets . '/js/i18n/elfinder.' . $lang . '.js');
@@ -44,8 +43,8 @@ class ElFinderWidget extends CWidget
         $id = $this->getId();
         $settings = CJavaScript::encode($this->settings);
         $cs = Yii::app()->getClientScript();
-        $cs->registerScript('elFinder', "$('#$id').elfinder($settings);");
-        echo "<div id=\"$id\"></div>";
+        $cs->registerScript('elFinder', "$('#".$id."').elfinder($settings);");
+        echo "<div id=\"".$id."\"></div>";
     }
 
 }
