@@ -16,7 +16,7 @@
 <div id="file-uploader"></div>
 
 <?php
-    $this->widget('ext.elfinder.ElFinderWidget', array(
+    $this->widget('ext.elfinder2.ElFinderWidget', array(
         'connectorRoute' => 'admin/filemanager/connector',
     ));
 ?>

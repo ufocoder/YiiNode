@@ -1,6 +1,6 @@
 <?php
     /* @var $this FilemanagerController */
-    $this->widget('ext.elfinder.ElFinderWidget', array(
+    $this->widget('ext.elfinder2.ElFinderWidget', array(
         'connectorRoute' => 'admin/filemanager/connector',
         'settings' => array(
             'editorCallback'=>'js:function(url) {
