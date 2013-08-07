@@ -2,13 +2,13 @@
 
 class ElFinderWidget extends CWidget
 {
-    public $settings = array();
+    public $options = array();
     public $connectorRoute = false;
 
     public function init()
     {
         if (empty($this->connectorRoute))
-            throw new CException('$connectorRoute must be set!');
+            throw new CException("Set 'connectorRoute' value!");
 
         $assets = Yii::app()->assetManager->publish(dirname(__FILE__) . '/assets');
 
@@ -25,7 +25,10 @@ class ElFinderWidget extends CWidget
         $cs->registerCssFile($assets . '/css/theme.css');
         $cs->registerScriptFile($assets . '/js/elfinder.min.js');
 
-        $langs = array('ar', 'bg', 'ca', 'cs', 'de', 'es', 'fr', 'hu', 'jp', 'nl', 'no', 'pl', 'pt_BR', 'ru', 'zh_CN');
+        $langs = array(
+            'ar', 'bg', 'ca', 'cs', 'de', 'es', 'fr',
+            'hu', 'jp', 'nl', 'no', 'pl', 'pt_BR', 'ru', 'zh_CN'
+        );
 
         $lang = Yii::app()->language;
         if (!in_array($lang, $langs)){
@@ -34,16 +37,16 @@ class ElFinderWidget extends CWidget
                 $cs->registerScriptFile($assets . '/js/i18n/elfinder.' . $lang . '.js');
         }
 
-        $this->settings['url'] = Yii::app()->createUrl($this->connectorRoute);
-        $this->settings['lang'] = Yii::app()->language;
+        $this->options['url'] = Yii::app()->createUrl($this->connectorRoute);
+        $this->options['lang'] = Yii::app()->language;
     }
 
     public function run()
     {
         $id = $this->getId();
-        $settings = CJavaScript::encode($this->settings);
+        $options = CJavaScript::encode($this->options);
         $cs = Yii::app()->getClientScript();
-        $cs->registerScript('elFinder', "$('#".$id."').elfinder($settings);");
+        $cs->registerScript('elFinder', "$('#".$id."').elfinder(".$options.");");
         echo "<div id=\"".$id."\"></div>";
     }
 
