@@ -36,19 +36,15 @@
     <div class="control-group">
         <?php echo $form->labelEx($model, 'time_published', array('class'=>'control-label')); ?>
         <div class="controls">
-        <?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
-            'model'=>$model,
-            'attribute'=>'time_published',
+        <?php $this->widget('ext.datetimepicker.DatetimePickerWidget', array(
+            'model' => $model,
+            'attribute' => 'time_published',
             'options'=>array(
-                'showAnim'=>'fold',
-            ),
-            'htmlOptions'=>array(
-                'style'=>'height:20px;'
+
             ),
         ));?>
         </div>
     </div>
-    <?php echo $form->textFieldRow($model, 'time_published', array('class'=>'span8')); ?>
 
     <?php
         $attributeFile = get_class($model).'[filename]';
