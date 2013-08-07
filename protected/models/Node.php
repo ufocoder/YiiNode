@@ -78,14 +78,17 @@ class Node extends CActiveRecord
         $this->has_root = ($count == 0) ? false : true;
 
         $rules = array(
-            array('module', 'required', 'on'=>'create'),
+            // default
+            array('module', 'required'),
+            array('slug', 'match', 'pattern' => '/^\w+[\-\.\w]+$/i'),
+            array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
+            // create & update
             array('enabled', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
             array('title', 'required', 'on'=>'create,update'),
-            array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
             array('id_node_parent, rgt, lft', 'length', 'max'=>11, 'on'=>'create,update'),
             array('path, module, title, image', 'length', 'max'=>255, 'on'=>'create,update'),
             array('content', 'default', 'value' => null, 'on'=>'create,update'),
-            // Правило, использующиеся в search
+            // search
             array('id_node, id_node_parent, position, rgt, lft, level, path, module, title, time_created, time_updated', 'safe', 'on'=>'search'),
         );
 
