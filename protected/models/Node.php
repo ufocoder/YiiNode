@@ -80,7 +80,7 @@ class Node extends CActiveRecord
         $rules = array(
             // default
             array('module', 'required'),
-            array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
+
             array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
             // create & update
             array('enabled', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
@@ -92,14 +92,14 @@ class Node extends CActiveRecord
             array('id_node, id_node_parent, position, rgt, lft, level, path, module, title, time_created, time_updated', 'safe', 'on'=>'search'),
         );
 
-        if ($this->has_root){
+        if ($this->has_root)
             $rules = array_merge($rules, array(
                 array('slug', 'required'),
+                array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
                 array('node_position', 'in', 'range'=> array_keys($this->values('position')), 'allowEmpty'=>true, 'on'=>'create, move'),
                 array('node_related', 'numerical', 'integerOnly'=>true, 'on'=>'create, move'),
                 array('node_position, node_related', 'required', 'on'=>'create, move'),
             ));
-        }
 
         return $rules;
     }
@@ -220,6 +220,7 @@ class Node extends CActiveRecord
         if (!$this->has_root){
             $this->slug = "/";
             $this->path = "/";
+            return true;
         }
         elseif (!isset($this->node_position) || !isset($this->node_related))
             return false;
