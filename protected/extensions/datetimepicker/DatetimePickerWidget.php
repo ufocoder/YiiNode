@@ -7,7 +7,7 @@ class DatetimePickerWidget extends CJuiInputWidget
     public $model = null;
     public $attribute = null;
     public $value = null;
-    public $dataFormat = "yyyy-MM-dd";
+    public $dataFormat = "yyyy-MM-dd hh:mm";
     public $options = array();
     public $htmlOptions = array();
 
