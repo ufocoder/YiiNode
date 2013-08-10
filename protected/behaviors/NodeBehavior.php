@@ -43,11 +43,28 @@ class NodeBehavior extends CBehavior
     protected $_instanceUrlManager;
 
     /**
+     * Admin module flag
+     */
+    protected $_nodeAdmin = false;
+
+    /**
      * Set current node
      */
-    public function setNode($node){
-        if ($this->_nodeCurrent == null)
+    public function setNode($node, $flag_admin = false)
+    {
+        if ($this->_nodeCurrent == null){
             $this->_nodeCurrent = $node;
+            if ($flag_admin)
+                $this->_nodeAdmin = true;
+        }
+    }
+
+    /**
+     *
+     */
+    public function isAdminNode()
+    {
+        return $this->_nodeAdmin;
     }
 
     /**
