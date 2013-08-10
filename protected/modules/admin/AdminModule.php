@@ -30,11 +30,6 @@ class AdminModule extends WebModule
         ));
         $this->getComponent('bootstrap');
 
-        // assets
-        $assets = Yii::app()->assetManager->publish(dirname(__FILE__) . '/assets');
-        $cs = Yii::app()->getClientScript();
-        $cs->registerScriptFile($assets . '/admin.js');
-
         // redefine user url list
         Yii::app()->user->recoveryUrl = array('/admin/recovery');
         Yii::app()->user->loginUrl = array('/admin/login');
