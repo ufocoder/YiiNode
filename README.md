@@ -5,6 +5,7 @@ Yii framework based CMS with tree structure
 Extensions
 ----------
 * [YiiBooster](https://github.com/clevertech/YiiBooster);
+* [elfinder2](https://github.com/xifrin/elfinder2);
 * [Yii Debug Toolbar](http://www.yiiframework.com/extension/yii-debug-toolbar);
 * [Mail](http://www.yiiframework.com/extension/mail);
 * [zTree](http://www.yiiframework.com/extension/ztree).
@@ -19,5 +20,6 @@ There are few cms module that is able to help you build website:
 
 * Admin
 * Articles
+* Gallery
 * Page
 * User
