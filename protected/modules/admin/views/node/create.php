@@ -2,12 +2,12 @@
     /* @var $this NodeController */
     /* @var $model Node */
 
-    $this->title = Yii::t('catalog', 'Create node');
+    $this->title = Yii::t('site', 'Create node');
     $this->breadcrumbs = array(
-        Yii::t('all', 'Create')
+        Yii::t('site', 'Create')
     );
 
-    Yii::app()->user->setFlash('warning', Yii::t('all', 'Fields with <span class="required">*</span> are required.'));
+    Yii::app()->user->setFlash('warning', Yii::t('site', 'Fields with <span class="required">*</span> are required.'));
 
     $this->renderPartial('/node/_form', array(
         'model' => $model,

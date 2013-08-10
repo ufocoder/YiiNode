@@ -4,9 +4,9 @@
 
     $nodeId = $model->id_node;
 
-    $this->title = Yii::t('catalog', 'Update node');
+    $this->title = Yii::t('site', 'Update node');
     $this->breadcrumbs = array(
-        Yii::t('all', 'Update')
+        Yii::t('site', 'Update')
     );
 
     $this->actions = array(
