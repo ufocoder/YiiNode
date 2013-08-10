@@ -64,7 +64,7 @@ class UrlRuleAdminNode extends CBaseUrlRule
                     throw new CHttpException(404, Yii::t('site', 'The requested page does not exist.'));
             }
 
-            Yii::app()->setNode($node);
+            Yii::app()->setNode($node, true);
 
             $path = !empty($matches['path'])?$matches['path']:'default';
             return $node->module."/admin/".$path;
