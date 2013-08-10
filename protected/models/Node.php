@@ -80,7 +80,7 @@ class Node extends CActiveRecord
         $rules = array(
             // default
             array('module', 'required'),
-            array('slug', 'match', 'pattern' => '/^\w+[\-\.\w]+$/i'),
+            array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
             array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
             // create & update
             array('enabled', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
