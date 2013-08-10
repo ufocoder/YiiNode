@@ -26,7 +26,7 @@ class ArticleSetting extends CFormModel
     public function attributeLabels()
     {
         return array(
-            'pager' => Yii::t('all', 'Total per page'),
+            'pager' => Yii::t('site', 'Total per page'),
         );
     }
 

@@ -56,7 +56,7 @@ class DefaultController extends ControllerAdmin
             }
 
             if ($model->save()){
-                Yii::app()->user->setFlash('success', Yii::t('all', 'Article was created successful!'));
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Article was created successful!'));
                 $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
         }
@@ -97,7 +97,7 @@ class DefaultController extends ControllerAdmin
             }
 
             if($model->save()){
-                Yii::app()->user->setFlash('success', Yii::t('all', 'Form values were saved!'));
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Form values were saved!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_article, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
         }
