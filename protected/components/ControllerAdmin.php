@@ -65,6 +65,42 @@ class ControllerAdmin extends Controller
         return true;
     }
 
+
+    public function createUrl($route, $params=array(), $ampersand='&')
+    {
+        $flag_admin = !empty($matches[1]);
+        $flag_module = !in_array($this->module->id, array('admin','user'));
+
+        if ($flag_admin && $flag_module){
+
+            $controller = $matches[1];
+
+            if($route==='')
+                $route=$controller.'/'.$this->getAction()->getId();
+            elseif(strpos($route,'/')===false)
+                $route=$controller.'/'.$route;
+
+            if ($nodeId = Yii::app()->getNodeId())
+                $params['nodeId'] = $nodeId;
+
+            $params['nodeAdmin'] = true;
+
+            return Yii::app()->createUrl(trim($route,'/'),$params,$ampersand);
+        }
+        else
+        {
+            if($route==='')
+                $route=$this->getId().'/'.$this->getAction()->getId();
+            elseif(strpos($route,'/')===false)
+                $route=$this->getId().'/'.$route;
+            if($route[0]!=='/' && ($module=$this->getModule())!==null)
+                $route=$module->getId().'/'.$route;
+
+             return Yii::app()->createUrl(trim($route,'/'),$params,$ampersand);
+        }
+
+    }
+
     /**
      * Render [переопредление]
      *

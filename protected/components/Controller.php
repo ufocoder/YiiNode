@@ -50,6 +50,21 @@ class Controller extends CController
         );
     }
 
+    public function createUrl($route,$params=array(),$ampersand='&')
+    {
+        if($route==='')
+            $route=$this->getId().'/'.$this->getAction()->getId();
+        elseif(strpos($route,'/')===false)
+            $route=$this->getId().'/'.$route;
+        if($route[0]!=='/' && ($module=$this->getModule())!==null)
+            $route=$module->getId().'/'.$route;
+
+        if ($nodeId = Yii::app()->getNodeId())
+            $params['nodeId'] = $nodeId;
+
+        return Yii::app()->createUrl(trim($route,'/'),$params,$ampersand);
+    }
+
     // @TODO: setup layouts in node attributes
     public function beforeAction($action)
     {
