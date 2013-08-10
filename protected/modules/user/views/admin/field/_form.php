@@ -138,8 +138,8 @@
     <?php echo CHtml::tag("div", array('field'=>'visible'), $form->dropDownListRow($model, 'visible', ProfileField::values ('visible'), array('class'=>'span4'))); ?>
 
 <div class="form-actions">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('all', 'Create') : Yii::t('all', 'Save')))); ?>
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('all', 'Clear'))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('site', 'Create') : Yii::t('site', 'Save')))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
 </div>
 
 <?php $this->endWidget(); ?>
