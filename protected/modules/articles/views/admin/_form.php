@@ -1,6 +1,6 @@
 <?php
-    /* @var $this UserController */
-    /* @var $model User */
+    /* @var $this DefaultController */
+    /* @var $model Article */
     /* @var $form BootActiveForm */
 
     $nodeId = Yii::app()->getNodeId();
@@ -23,6 +23,22 @@
             'class'=>'well'
         ),
     ));
+
+    // get Title html ID
+    $attribute = 'title';
+    $htmlOptions = array();
+    CHtml::resolveNameID($model, $attribute, $htmlOptions);
+    $titleFieldID = $htmlOptions['id'];
+
+    // get Slug html ID
+    $htmlOptions = array();
+    $attribute = 'slug';
+    CHtml::resolveNameID($model, $attribute, $htmlOptions);
+    $slugFieldID = $htmlOptions['id'];
+
+    // register script
+    $script = "\$(document).ready(function(){\$('#" . $titleFieldID . "').syncTranslit({destination:'" . $slugFieldID . "'});});";
+    Yii::app()->getClientScript()->registerScript('article-form-slug', $script);
 ?>
 
     <?php echo $form->errorSummary($model); ?>
