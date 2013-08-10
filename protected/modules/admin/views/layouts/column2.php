@@ -3,8 +3,8 @@
     {
         $node = Yii::app()->getNode();
         $this->breadcrumbs = array_merge(array(
-            Yii::t("site", "Structure") => array('/admin/node'),
-            $node->title => array('/admin/node/'.$node->id_node),
+            Yii::t("site", "Structure") => Yii::app()->createUrl('/admin/node/'),
+            $node->title => Yii::app()->createUrl('/admin/node/'.$node->id_node),
         ), $this->breadcrumbs);
 
         $nodeActions = array(
@@ -19,13 +19,24 @@
             ),
         );
         $nodeTitle = Yii::app()->getNodeAttribute('title');
-
-        $this->title = !empty($this->title)?$this->title:$nodeTitle;
     }
 ?>
 <?php $this->beginContent('application.modules.admin.views.layouts.main'); ?>
                 <div class="span3" id="left-menu">
+
+<?php if (!empty($this->menu)): ?>
+    <h3><?php echo Yii::t('site', 'Menu');?></h3>
+<?php $this->widget('bootstrap.widgets.TbMenu', array(
+        'type'=>'list',
+        'items'=> $this->menu,
+        'htmlOptions' => array(
+            'class'=> 'well'
+        )
+    )); ?>
+<?php else: ?>
 <?php $this->renderPartial('application.modules.admin.views.layouts.widgets.nodes'); ?>
+<?php endif; ?>
+
                 </div>
                 <div class="span9">
     <?php if (!empty($nodeTitle)):?>

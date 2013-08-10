@@ -1,4 +1,4 @@
-$(document).ready(function(){
+jQuery(document).ready(function($){
 
     $('a[data-confirm-content]').click(function(){
         return false;

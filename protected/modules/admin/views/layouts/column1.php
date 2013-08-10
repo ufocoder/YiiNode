@@ -1,3 +1,14 @@
+<?php
+    if ($nodeId = Yii::app()->getNodeId())
+    {
+        $node = Yii::app()->getNode();
+        $this->breadcrumbs = array_merge(array(
+            Yii::t("site", "Structure") => array('/admin/node'),
+            $node->title => array('/admin/node/'.$node->id_node),
+        ), $this->breadcrumbs);
+
+    }
+?>
 <?php $this->beginContent('application.modules.admin.views.layouts.main'); ?>
 
                 <div class="span12">

@@ -70,7 +70,7 @@ $cs->registerCss('bootstrap-fix', '    body {
                     array('label'=> Yii::t('site', 'Services'), 'url' => '#', 'items' => array(
                         array('label'=> Yii::t('site', 'Filemanager'), 'url' => Yii::app()->createUrl('/admin/filemanager/'), 'icon'=>'file'),
                     )),
-                    array('label'=> Yii::t('site', 'Settings'), 'url' => Yii::app()->createUrl('/admin/setting/')),
+                    array('label'=> Yii::t('site', 'Settings'), 'url' => Yii::app()->createUrl('/admin/settings/')),
                     array('label'=> Yii::t('site', 'Users'), 'url' => '#', 'items'=> array(
                         array('label'=> Yii::t('site', 'Manage users'), 'url' => Yii::app()->createUrl('/admin/user/admin'), 'icon'=>'user'),
                         array('label'=> Yii::t('site', 'Manage profile fields'), 'url' => Yii::app()->createUrl('/admin/user/field'), 'icon'=>'list'),

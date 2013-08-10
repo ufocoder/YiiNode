@@ -42,4 +42,24 @@ class AdminModule extends WebModule
         Yii::app()->user->returnLogoutUrl = array('/admin/login');
     }
 
+    /**
+     * Returns the description of this module.
+     *
+     * @return string the description of this module.
+     */
+    public function getDescription()
+    {
+        return '';
+    }
+
+    /**
+     * Returns the version of this module.
+     *
+     * @return string the version of this module.
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
 }
