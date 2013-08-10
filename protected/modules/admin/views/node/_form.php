@@ -1,4 +1,5 @@
 <?php
+    /* @var $model Node */
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'service-form',
@@ -19,9 +20,25 @@
 
 <?php echo $form->textFieldRow($model, 'title', array('class'=>'span6')); ?>
 
-
 <?php if ($model->isNewRecord): ?>
-<?php if (!empty($nodes)): ?>
+<?php if (!empty($nodes)):
+    // get Title html ID
+    $attribute = 'title';
+    $htmlOptions = array();
+    CHtml::resolveNameID($model, $attribute, $htmlOptions);
+    $titleFieldID = $htmlOptions['id'];
+
+    // get Slug html ID
+    $htmlOptions = array();
+    $attribute = 'slug';
+    CHtml::resolveNameID($model, $attribute, $htmlOptions);
+    $slugFieldID = $htmlOptions['id'];
+
+    // register script
+    $script = "\$(document).ready(function(){\$('#" . $titleFieldID . "').syncTranslit({destination:'" . $slugFieldID . "'});});";
+    Yii::app()->getClientScript()->registerScript('article-form-slug', $script);
+
+?>
 <?php echo $form->textFieldRow($model, 'slug', array('class'=>'span6')); ?>
 <div class="control-group">
     <?php echo $form->labelEx($model, 'node_related', array('class'=>'control-label')); ?>
@@ -91,8 +108,8 @@
 <?php echo $form->checkBoxRow($model, 'enabled', $model->isNewRecord?array('checked'=>'checked'):array()); ?>
 
 <div class="form-actions">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('all', 'Create') : Yii::t('all', 'Save')))); ?>
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('all', 'Clear'))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('site', 'Create') : Yii::t('site', 'Save')))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
 </div>
 
 <?php $this->endWidget(); ?>
