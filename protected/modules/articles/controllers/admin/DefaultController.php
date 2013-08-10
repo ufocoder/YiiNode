@@ -2,6 +2,29 @@
 
 class DefaultController extends ControllerAdmin
 {
+    public function actionSetting()
+    {
+        $model_class = "ArticleSetting";
+        $model = new $model_class;
+        $nodeId = Yii::app()->getNodeId();
+
+        $model->pager = Yii::app()->getNodeSetting($nodeId, 'pager', $model::values('pager', 'default'));
+
+        if (isset($_POST[$model_class]))
+        {
+            $model->attributes = $_POST[$model_class];
+            if ($model->validate()){
+                Yii::app()->setNodeSettings($nodeId, $model->attributes);
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Settings were successfully saved.'));
+                $this->redirect(array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+            }
+        }
+
+        $this->render('/admin/setting',array(
+            'model'=>$model,
+        ));
+    }
+
     public function actionView($id)
     {
         $this->layout = "application.modules.admin.views.layouts.column1";
@@ -19,7 +42,19 @@ class DefaultController extends ControllerAdmin
         if (isset($_POST[$model_class]))
         {
             $model->attributes = $_POST[$model_class];
+            $model->time_published = strtotime($model->date_published);
             $model->id_node = Yii::app()->getNodeId();
+
+            // upload file
+            $instance   = CUploadedFile::getInstance($model, 'x_image');
+            if (!empty($instance)){
+                $extension  = CFileHelper::getExtension($instance->getName());
+                $pathname   = Article::getUploadPath();
+                $filename   = md5(time().$model->id_node) . '.' . $extension;
+                if ($instance->saveAs($pathname.$filename))
+                    $model->image = $filename;
+            }
+
             if ($model->save()){
                 Yii::app()->user->setFlash('success', Yii::t('all', 'Article was created successful!'));
                 $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
@@ -41,6 +76,26 @@ class DefaultController extends ControllerAdmin
         if(isset($_POST[$model_class]))
         {
             $model->attributes = $_POST[$model_class];
+            $model->time_published = strtotime($model->date_published);
+
+            // delete file
+            if ($model->delete_image){
+                $filename = Article::getUploadPath().$model->image;
+                if (file_exists($filename))
+                    unlink($filename);
+                $model->saveAttributes(array('image'=>null));
+            }
+
+            // upload file
+            $instance   = CUploadedFile::getInstance($model, 'x_image');
+            if (!empty($instance)){
+                $extension  = CFileHelper::getExtension($instance->getName());
+                $pathname   = Article::getUploadPath();
+                $filename   = md5(time().$model->id_node) . '.' . $extension;
+                if ($instance->saveAs($pathname.$filename))
+                    $model->image = $filename;
+            }
+
             if($model->save()){
                 Yii::app()->user->setFlash('success', Yii::t('all', 'Form values were saved!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_article, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));

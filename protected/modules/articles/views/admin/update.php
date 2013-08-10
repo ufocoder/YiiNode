@@ -6,8 +6,8 @@
     $viewUrl = Yii::app()->createUrl('default/view', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $deleteUrl = Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
+    $this->title = Yii::t("site", "Update article");
     $this->breadcrumbs=array(
-        Yii::t('site', 'Article list') => array('/admin/node/'.$nodeId),
         Yii::t('site', 'Article #{id}', array('{id}'=>$model->id_article)).": ".CHtml::encode($model->title) => $viewUrl,
         Yii::t('site', 'Update'),
     );
@@ -24,7 +24,5 @@
             )
         )
     );
-
-    $this->title = Yii::t("site", "Update article");
 ?>
 <?php echo $this->renderPartial('/admin/_form', array('model'=>$model)); ?>

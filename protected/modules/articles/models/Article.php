@@ -7,7 +7,7 @@
  * @property string $id_article
  * @property string $id_node
  * @property string $title
- * @property string $content
+ * @property string $value
  * @property string $time_created
  * @property string $time_updated
  *
@@ -21,9 +21,16 @@
 class Article extends CActiveRecord
 {
     /**
+     * Список дат
+     */
+    public $date_published;
+    public $date_created;
+    public $date_updated;
+
+    /**
      * Путь для загрузки документов в файловой системе
      */
-    protected static $uploadPath = 'assets/upload/services/';
+    protected static $uploadPath = 'upload/articles/';
 
     /*
      * Получить путь загрузки документов
@@ -36,7 +43,7 @@ class Article extends CActiveRecord
     /**
      * Url для загрузки документов
      */
-    protected static $uploadUrl = '/assets/upload/services/';
+    protected static $uploadUrl = '/upload/articles/';
 
     /*
      * Получить физический путь загрузки документов
@@ -74,8 +81,12 @@ class Article extends CActiveRecord
                 'params' => array(
                     ':id_node' => Yii::app()->getNodeId()
                 ),
-                'order' => 't.time_published'
-            ),
+                'order' => 't.time_published DESC, t.time_created DESC'
+            )   ,
+            'published' => array(
+                'condition' => ' t.time_published <= '. time(),
+                'order' => 't.time_published DESC, t.time_created DESC'
+            )
         );
     }
 
@@ -87,9 +98,11 @@ class Article extends CActiveRecord
         return array(
             array('x_image', 'file', 'types'=>'jpg, jpeg, gif, png', 'allowEmpty'=>true),
             array('delete_image', 'boolean', 'allowEmpty'=>true),
+            array('date_published', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm'),
             array('id_node, title, content', 'required'),
             array('id_node', 'length', 'max'=>11),
             array('title', 'length', 'max'=>255),
+            array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
             array('content, notice', 'default', 'value'=>null),
             array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
@@ -139,16 +152,20 @@ class Article extends CActiveRecord
         $criteria=new CDbCriteria;
 
         $criteria->compare('id_article', $this->id_article,true);
-        $criteria->compare('id_node', $this->id_node,true);
-        $criteria->compare('title', $this->title,true);
-        $criteria->compare('content', $this->content,true);
-        $criteria->compare('time_created', $this->time_created,true);
-        $criteria->compare('time_updated', $this->time_updated,true);
+        $criteria->compare('id_node', $this->id_node, true);
+        $criteria->compare('title', $this->title, true);
+        $criteria->compare('content', $this->content, true);
+        $criteria->compare('time_published', $this->time_published, true);
+        $criteria->compare('time_created', $this->time_created, true);
+        $criteria->compare('time_updated', $this->time_updated, true);
 
         $criteria->scopes[] = 'node';
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'sort'=>array(
+                'defaultOrder'=>'time_published DESC',
+            )
         ));
     }
 
@@ -161,5 +178,49 @@ class Article extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
+    }
+
+    /**
+     * Добавить значения дат
+     */
+    protected function afterFind()
+    {
+        $this->date_created = !empty($this->time_created)?date('d-m-Y H:i', $this->time_created):null;
+        $this->date_updated = !empty($this->time_updated)?date('d-m-Y H:i', $this->time_updated):null;
+        $this->date_published = !empty($this->time_published)?date('d-m-Y H:i', $this->time_published):null;
+
+        parent::afterFind();
+    }
+
+    /**
+     * Добавляем значения полей время создания/обновления
+     */
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            if($this->isNewRecord)
+            {
+                $this->time_created = time();
+            }
+            else
+                $this->time_updated = time();
+
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /**
+     * Удаляем файл после удаления модели
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete())
+        {
+            unlink(self::getUploadPath().$this->file);
+            return true;
+        }
     }
 }

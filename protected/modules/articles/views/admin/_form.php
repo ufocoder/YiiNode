@@ -38,10 +38,7 @@
         <div class="controls">
         <?php $this->widget('ext.datetimepicker.DatetimePickerWidget', array(
             'model' => $model,
-            'attribute' => 'time_published',
-            'options'=>array(
-
-            ),
+            'attribute' => 'date_published',
         ));?>
         </div>
     </div>
