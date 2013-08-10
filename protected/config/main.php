@@ -29,6 +29,9 @@ return array(
         array(
             'class'=>'NodeBehavior'
         ),
+        array(
+            'class'=>'SettingBehavior'
+        ),
     ),
 
     'modules'=>array(
