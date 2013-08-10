@@ -55,7 +55,7 @@
 
       <?php
         Yii::import('application.modules.articles.models.*');
-        $articles = Article::model()->findAll();
+        $articles = Article::model()->findAll(array('limit'=>5));
         foreach($articles as $article):
           $url = Yii::app()->createUrl('/articles/default/view', array('id'=>$article->id_article, 'nodeId'=>$article->id_node));
       ?>
