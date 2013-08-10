@@ -62,6 +62,13 @@ class ControllerAdmin extends Controller
     // @TODO: setup layouts in node attributes
     public function beforeAction($action)
     {
+        // assets
+        $path = Yii::getpathOfAlias('application.modules.admin.assets');
+        $assets = Yii::app()->assetManager->publish($path);
+        $cs = Yii::app()->getClientScript();
+        $cs->registerScriptFile($assets . '/admin.js');
+        $cs->registerScriptFile($assets . '/jquery.synctranslit.min.js');
+
         return true;
     }
 
