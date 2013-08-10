@@ -1,7 +1,18 @@
 <?php
+/**
+ * Console application
+ *
+ * @version GIT: $Id$
+ * @revision: $Revision$
+ */
 
-// change the following paths if necessary
-$yii = dirname(__FILE__).'/../framework/yii.php';
+// debug
+defined('YII_DEBUG') or define('YII_DEBUG', true);
+defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', 3);
+
+// path
+$yii = dirname(__FILE__).'/../framework/yiic.php';
 $config = dirname(__FILE__).'/../protected/config/console.php';
 
-require_once($yiic);
+// application
+require_once($yii);
