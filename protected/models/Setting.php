@@ -5,7 +5,6 @@
  * Column list:
  *
  * @property string $id_setting
- * @property string $group
  * @property string $title
  * @property string $value
  * @property string $time_created
@@ -31,11 +30,13 @@ class Setting extends CActiveRecord
     {
         return array(
             array('title', 'required'),
-            array('group, title, value', 'length', 'max'=>255),
+            array('title, value', 'length', 'max'=>255),
+            array('id_node, value', 'default', 'value'=>null),
+            array('id_node', 'numerical'),
             array('time_created, time_updated', 'length', 'max'=>11),
             // Правило, использующиеся в search
             // @todo удалить лишние атрибуты
-            array('id_setting, group, title, value, time_created, time_updated', 'safe', 'on'=>'search'),
+            array('id_setting, title, value, time_created, time_updated', 'safe', 'on'=>'search'),
         );
     }
 
@@ -73,7 +74,7 @@ class Setting extends CActiveRecord
         $criteria=new CDbCriteria;
 
         $criteria->compare('id_setting', $this->id_setting,true);
-        $criteria->compare('group', $this->group,true);
+        $criteria->compare('id_node', $this->id_setting,true);
         $criteria->compare('title', $this->title,true);
         $criteria->compare('value', $this->value,true);
         $criteria->compare('time_created', $this->time_created,true);
