@@ -63,6 +63,10 @@ return array(
             'schemaCachingDuration' => 5000,
         ),
 
+        'themeManager' => array(
+            'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'themes'
+        ),
+
         'mail' => array(
             'class' => 'ext.yii-mail.YiiMail',
             'transportType' => 'php',
