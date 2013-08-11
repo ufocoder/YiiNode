@@ -33,7 +33,7 @@ class Controller extends CController
     /**
      * Layout
      */
-    public $layout = '//layouts/column2';
+    public $layout = '/layouts/column2';
 
     /**
      * Action array
@@ -71,7 +71,7 @@ class Controller extends CController
         $node = Yii::app()->getNode();
 
         if (!empty($node) && $node->isRoot())
-            $this->layout = "//layouts/default";
+            $this->layout = "/layouts/default";
 
         return parent::beforeAction($action);
     }
@@ -81,7 +81,7 @@ class Controller extends CController
      */
     public function actionError()
     {
-        $this->layout='//layouts/error';
+        $this->layout='/layouts/error';
         if ( $error = Yii::app()->errorHandler->error)
         {
             if(Yii::app()->request->isAjaxRequest)
