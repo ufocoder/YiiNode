@@ -98,7 +98,7 @@
     <?php echo $form->textAreaRow($model, 'notice', array('class'=>'span8', 'style'=>'min-height: 90px;')); ?>
 
     <div class="control-group">
-        <?php echo $form->label($model, 'content', array('class'=>'control-label')); ?>
+        <?php echo $form->labelEx($model, 'content', array('class'=>'control-label')); ?>
         <div class="span8">
             <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
                 'model' => $model,

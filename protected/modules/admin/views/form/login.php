@@ -45,7 +45,7 @@
         <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
     </div>
 
-    <?php echo $form->label($model, 'rememberMe', array('label'=> $form->checkBox($model, 'rememberMe'). Yii::t('site', 'Remember me next time'), 'class' => 'checkbox')); ?>
+    <?php echo $form->labelEx($model, 'rememberMe', array('label'=> $form->checkBox($model, 'rememberMe'). Yii::t('site', 'Remember me next time'), 'class' => 'checkbox')); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Login'))); ?>
 </div>
     <hr>

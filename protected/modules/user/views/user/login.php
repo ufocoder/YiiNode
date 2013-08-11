@@ -20,7 +20,7 @@
     <?php echo $form->textFieldRow($model, 'login', array('class' => 'span4', 'placeholder' => Yii::t('site', 'Enter login'))); ?>
     <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span4 password', 'placeholder' => Yii::t('site', 'Enter password'))); ?>
     <div class="control-group">
-        <?php echo $form->label($model, 'captcha', array('class'=>'control-label')); ?>
+        <?php echo $form->labelEx($model, 'captcha', array('class'=>'control-label')); ?>
         <div class="span4">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/login/captcha'),

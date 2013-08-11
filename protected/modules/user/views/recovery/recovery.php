@@ -16,7 +16,7 @@
 
     <?php echo $form->textFieldRow($model, 'login_or_email', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter login or email'))); ?>
     <div class="control-group">
-        <?php echo $form->label($model, 'captcha', array('class'=>'control-label')); ?>
+        <?php echo $form->labelEx($model, 'captcha', array('class'=>'control-label')); ?>
         <div class="span4">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/recovery/captcha'),

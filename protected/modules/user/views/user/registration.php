@@ -27,7 +27,7 @@
     <?php echo $form->textFieldRow($model, 'verifyPassword', array('class'=>'span6')); ?>
     <?php echo $form->textFieldRow($model, 'email', array('class'=>'span6')); ?>
     <div class="control-group">
-        <?php echo $form->label($model, 'verifyCode', array('class'=>'control-label')); ?>
+        <?php echo $form->labelEx($model, 'verifyCode', array('class'=>'control-label')); ?>
         <div class="span4">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/registration/captcha'),
