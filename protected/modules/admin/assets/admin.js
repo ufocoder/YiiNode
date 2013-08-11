@@ -1,7 +1,6 @@
 jQuery(document).ready(function($){
 
     $('a[data-confirm-content]').click(function(){
-        return false;
         var confirmUrl = $(this).attr('href'),
             confirmTitle = $(this).attr('data-confirm-title'),
             confirmContent = $(this).attr('data-confirm-content'),
@@ -21,8 +20,8 @@ jQuery(document).ready(function($){
             $('#dataConfirmModal').remove();
 
         $('body').append(html);
-
         $('#dataConfirmModal').modal({show:true});
+
         return false;
     });
 
