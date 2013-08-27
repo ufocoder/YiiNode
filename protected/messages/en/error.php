@@ -17,6 +17,14 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'The requested node does not exist.' => '',
+  'Email is incorrect.' => '',
+  'Incorrect recovery link.' => '',
+  'Node ID #{id_node} not exists.' => '',
+  'The requested page does not exist.' => '',
   'There is only one root node.' => '',
+  'User\'s email is not exists' => '',
+  'Username is incorrect.' => '',
+  'Root node couldn\'t be moved.' => '@@@@',
+  'The requested node does not exist.' => '@@@@',
+  'There was error on creating node!' => '@@@@',
 );

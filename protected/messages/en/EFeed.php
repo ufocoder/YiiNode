@@ -17,12 +17,9 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Enter' => 'Ввести',
-  'Error while saving record!' => '',
-  'Model {class} does not have attribute "{attr}"' => '',
-  'Model {class} not found by primary key "{pk}"' => '',
-  'Model {class} rules do not allow to update attribute "{attr}"' => '',
-  'Property "attribute" should be defined.' => '',
-  'Property "primaryKey" should be defined.' => '',
-  'You should provide modelClass in constructor of EditableSaver.' => '',
+  'Feed version not supported' => '',
+  'For RSS 1.0 specifications link element should be add per item' => '',
+  'Link Element is not set and it is required for RSS 1.0 to be used as about attribute of item' => '',
+  'No feed items configured' => '',
+  'No items have been set' => '',
 );
