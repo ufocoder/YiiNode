@@ -13,7 +13,7 @@
  * @property string $module
  * @property string $title
  * @property string $image
- * @property string $content
+ * @property string $description
  * @property integer $time_created
  * @property integer $time_updated
  *
@@ -41,6 +41,11 @@ class Node extends CActiveRecord
      *
      */
     protected $has_root = null;
+
+    /**
+     *
+     */
+    protected $old_attributes = array();
 
     /**
      * @return string get the table name
@@ -79,20 +84,20 @@ class Node extends CActiveRecord
 
         $rules = array(
             // default
-            array('module', 'required'),
-
-            array('position, level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
+            array('position,level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
+            // create
+            array('module', 'default', 'value'=>null, 'on'=>'create'),
             // create & update
-            array('enabled', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
+            array('enabled, hidden', 'boolean', 'allowEmpty'=>true, 'on'=>'create,update'),
             array('title', 'required', 'on'=>'create,update'),
             array('id_node_parent, rgt, lft', 'length', 'max'=>11, 'on'=>'create,update'),
-            array('path, module, title, image', 'length', 'max'=>255, 'on'=>'create,update'),
-            array('content', 'default', 'value' => null, 'on'=>'create,update'),
+            array('path, module, title, image, layout', 'length', 'max'=>255, 'on'=>'create,update'),
+            array('description', 'default', 'value' => null, 'on'=>'create,update'),
             // search
             array('id_node, id_node_parent, position, rgt, lft, level, path, module, title, time_created, time_updated', 'safe', 'on'=>'search'),
         );
 
-        if ($this->has_root)
+        if ($this->has_root && !$this->isRoot()){
             $rules = array_merge($rules, array(
                 array('slug', 'required'),
                 array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
@@ -100,6 +105,7 @@ class Node extends CActiveRecord
                 array('node_related', 'numerical', 'integerOnly'=>true, 'on'=>'create, move'),
                 array('node_position, node_related', 'required', 'on'=>'create, move'),
             ));
+        }
 
         return $rules;
     }
@@ -121,14 +127,19 @@ class Node extends CActiveRecord
     public function scopes()
     {
         return array(
+            'menu' => array(
+                'condition' => 't.enabled = 1 AND t.hidden = 0',
+                'order' => 't.lft'
+            ),
             'active' => array(
                 'condition' => 't.enabled = 1',
+                'order' => 't.lft'
             ),
             'route' => array(
                 'order' => 't.path DESC'
             ),
             'tree' => array(
-                'select' => "*, CONCAT(REPEAT('—', level-1), IF(level > 0,' ',''),`title`) as `title`",
+                'select' => "*, CONCAT(REPEAT('—', level-1), IF(level > 0, ' ',''),`title`) as `title`",
                 'order' => 't.lft'
             )
         );
@@ -156,18 +167,21 @@ class Node extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id_node' => Yii::t('site', 'Id node'),
             'id_node_parent' => Yii::t('site', 'Parent node'),
             'node_position' => Yii::t('site', 'Node position'),
             'node_related' => Yii::t('site', 'Node related'),
+            'slug' => Yii::t('site', 'Slug'),
             'rgt' => Yii::t('site', 'Rigth child'),
             'lft' => Yii::t('site', 'Left child'),
             'level' => Yii::t('site', 'Level'),
+            'layout' => Yii::t('site', 'Layout'),
             'path' => Yii::t('site', 'Path'),
             'module' => Yii::t('site', 'Module'),
             'title' => Yii::t('site', 'Title'),
             'image' => Yii::t('site', 'Image'),
-            'content' => Yii::t('site', 'Description'),
+            'enabled' => Yii::t('site', 'Enabled'),
+            'hidden' => Yii::t('site', 'Hide in menu'),
+            'description' => Yii::t('site', 'Description'),
             'time_created' => Yii::t('site', 'Time created'),
             'time_updated' => Yii::t('site', 'Time updated'),
         );
@@ -192,7 +206,7 @@ class Node extends CActiveRecord
         $criteria->compare('module', $this->module,true);
         $criteria->compare('title', $this->title,true);
         $criteria->compare('image', $this->image,true);
-        $criteria->compare('content', $this->content,true);
+        $criteria->compare('description', $this->description,true);
         $criteria->compare('time_created', $this->time_created);
         $criteria->compare('time_updated', $this->time_updated);
 
@@ -217,7 +231,7 @@ class Node extends CActiveRecord
 
     public function moveNode()
     {
-        if (!$this->has_root){
+        if (!$this->has_root || $this->isRoot()){
             $this->slug = "/";
             $this->path = "/";
             return true;
@@ -246,7 +260,8 @@ class Node extends CActiveRecord
                     $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
                     $this->setPosition($node->position, true);
 
-                    return true;
+                    // save node
+                    return $this->saveNode();
                 break;
 
                 case self::POSITION_NEXT:
@@ -265,7 +280,8 @@ class Node extends CActiveRecord
                     $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
                     $this->setPosition($node->position, false);
 
-                    return true;
+                    // save node
+                    return $this->saveNode();
                 break;
 
                 case self::POSITION_CHILD:
@@ -286,7 +302,8 @@ class Node extends CActiveRecord
                     $this->path = rtrim($node->path, "/")."/".$this->slug;
                     $this->setPosition($row['position'], false);
 
-                    return true;
+                    // save node
+                    return $this->saveNode();
 
                 break;
             }
@@ -312,9 +329,24 @@ class Node extends CActiveRecord
         $this->updatePosition();
     }
 
-    protected function updatePosition(){
+    public function updatePaths()
+    {
+        if (!$this->isRoot()){
+            $this->saveAttributes(array('path'=>$this->Parent->path.$this->slug));
 
-        $criteria=new \CDbCriteria;
+            $condition  = $this->descendants()->getDbCriteria()->condition;
+            $value      = "CONCAT('".$this->path."', SUBSTRING(path, LENGTH('".$this->old_attributes['path']."') +1))";
+            $command    = "UPDATE `".$this->tableName()."` `".$this->getTableAlias()."` SET `path` = ".$value." WHERE ".$condition;
+
+            return Yii::app()->db->createCommand($command)->execute();
+        }else
+            return true;
+
+    }
+
+    protected function updatePosition()
+    {
+        $criteria=new CDbCriteria;
         $criteria->order = 'position ASC';
 
         if ($this->id_node_parent){
@@ -333,6 +365,16 @@ class Node extends CActiveRecord
                 $this->position = $i;
             $i++;
         }
+    }
+
+    /**
+     * Добавить значения дат
+     */
+    protected function afterFind()
+    {
+        $this->old_attributes = $this->attributes;
+
+        parent::afterFind();
     }
 
 
