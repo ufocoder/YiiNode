@@ -23,11 +23,13 @@ class Block extends CActiveRecord
     const TYPE_TEXT     = 'text';
     const TYPE_HTML     = 'html';
     const TYPE_FILE     = 'file';
+    const TYPE_IMAGE    = 'image';
+    const TYPE_FLASH    = 'flash';
 
     /**
      * Путь для загрузки документов в файловой системе
      */
-    protected static $uploadPath = 'assets/upload/block/';
+    protected static $uploadPath = 'upload/block/';
 
     /*
      * Получить путь загрузки документов
@@ -40,7 +42,7 @@ class Block extends CActiveRecord
     /**
      * Url для загрузки документов
      */
-    protected static $uploadUrl = '/assets/upload/block/';
+    protected static $uploadUrl = '/upload/block/';
 
     /*
      * Получить физический путь загрузки документов
@@ -66,11 +68,22 @@ class Block extends CActiveRecord
         $rules = array(
             array('title', 'required', 'on'=>'create'),
             array('type', 'default', 'value' => self::TYPE_STRING, 'on'=>'create'),
-            array('content', 'default', 'value' => null),
+            array('content, params', 'default', 'value' => null),
         );
 
-        if ($this->type == self::TYPE_FILE){
-            $rules[] = array('content', 'file');
+        switch ($this->type)
+        {
+            case self::TYPE_FILE:
+                $rules[] = array('content', 'file', 'on'=>'update');
+            break;
+
+            case self::TYPE_IMAGE:
+                $rules[] = array('content', 'file', 'types'=>'jpg,jpeg,gif,png', 'on'=>'update');
+            break;
+
+            case self::TYPE_FLASH:
+                $rules[] = array('content', 'file', 'types'=>'swf', 'on'=>'update');
+            break;
         }
 
         return $rules;
@@ -87,6 +100,7 @@ class Block extends CActiveRecord
             'time_created' => Yii::t('site', 'Time created'),
             'time_updated' => Yii::t('site', 'Time updated'),
             'content' =>  Yii::t('site', 'Content'),
+            'params' =>  Yii::t('site', 'Params')
         );
     }
 
@@ -101,9 +115,14 @@ class Block extends CActiveRecord
 
         $criteria->compare('title', $this->title, true);
         $criteria->compare('type', $this->title, true);
+        $criteria->compare('time_created', $this->time_created, true);
+        $criteria->compare('time_updated', $this->time_updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'sort'=>array(
+                'defaultOrder'=>'title',
+            )
         ));
     }
 
@@ -139,48 +158,93 @@ class Block extends CActiveRecord
     /**
      * Добавляем значения полей время создания/обновления
      */
-    public static function getValue($title, $type = null, $default = null)
+    public static function getValue($title, $type = null, $default = null, $params = null)
     {
         if (empty($title))
             return;
 
-        $model = self::model()->find("title=:title", array(":title"=>$title));
+        $theme = null;
+
+        if (Yii::app()->Theme){
+            $theme = Yii::app()->Theme->getName();
+            $model = self::model()->find("title=:title AND theme=:theme", array(
+                ":title" => $title,
+                ":theme" => $theme
+            ));
+        }
+        else
+            $model = self::model()->find("title=:title AND theme IS NULL", array(
+                ":title" => $title
+            ));
+
+        $value = null;
 
         if ($model === null){
             $types = array(
                 self::TYPE_STRING,
                 self::TYPE_TEXT,
                 self::TYPE_HTML,
-                self::TYPE_FILE
+                self::TYPE_FILE,
+                self::TYPE_IMAGE,
+                self::TYPE_FLASH,
             );
 
             $model = new Block;
             $model->scenario = 'create';
             $model->title = $title;
+            $model->theme = $theme;
             $model->type = in_array($type, $types)? $type : self::TYPE_STRING;
             $model->save();
         }
 
-        if (empty($model->content) && !empty($default))
-            $value = $default;
-        elseif (!empty($model->content))
+        if (!empty($model->content))
             $value = $model->content;
 
         if (!empty($value))
-            switch ($type){
+            switch ($type)
+            {
+                case self::TYPE_FLASH:
+                    if (!empty($value)){
+
+                        $htmlOptions = isset($params['htmlOptions'])?$params['htmlOptions']:array();
+                        $htmlOptions['type'] = 'application/x-shockwave-flash';
+                        $htmlOptions['data'] = $model->getUploadUrl().$value;
+
+                        $content = null;
+                        $object = CHtml::tag('object', $htmlOptions, $content);
+
+                        return $object;
+                    }
+                break;
+
+                case self::TYPE_IMAGE:
+                    if (!empty($value)){
+                        $src = $model->getUploadUrl().$value;
+                        $alt = isset($params['alt'])?$params['alt']:null;
+                        $htmlOptions = isset($params['htmlOptions'])?$params['htmlOptions']:array();
+                        return CHtml::image($src, $alt, $htmlOptions);
+                    }
+                break;
+
                 case self::TYPE_FILE:
-                    return $model->getUploadUrl().$value;
+                    if (!empty($value))
+                        return $model->getUploadUrl().$value;
                 break;
 
                 case self::TYPE_HTML:
-                    return $value;
+                    if (empty($value) && !empty($default))
+                        return $default;
+                    else
+                        return $value;
                 break;
 
                 default:
-                    return CHtml::encode($value);
+                    if (empty($value) && !empty($default))
+                        return CHtml::encode($default);
+                    else
+                        return CHtml::encode($value);
                 break;
             }
-
     }
 
 }
