@@ -59,9 +59,9 @@ class UrlRuleAdminNode extends CBaseUrlRule
             $node = Yii::app()->getNodeByID($matches['id']);
             if (empty($node->id_node)){
                 if (YII_DEBUG)
-                    throw new CException(Yii::t('yii','Node ID #{id_node} not exists.', array('{id_node}' => $matches['id'])));
+                    throw new CException(Yii::t('error','Node ID #{id_node} not exists.', array('{id_node}' => $matches['id'])));
                 else
-                    throw new CHttpException(404, Yii::t('site', 'The requested page does not exist.'));
+                    throw new CHttpException(404, Yii::t('error', 'The requested page does not exist.'));
             }
 
             Yii::app()->setNode($node, true);
