@@ -31,7 +31,7 @@ return CMap::mergeArray(
                     ),
                     array(
                         'class'     => 'application.extensions.yii-debug-toolbar.YiiDebugToolbarRoute',
-                        'ipFilters' => array('127.0.0.1', '195.66.89.207'),
+                        'ipFilters' => array('127.0.0.1'),
                     ),
                 ),
             ),
