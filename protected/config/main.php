@@ -8,11 +8,10 @@
 return array(
     'name' => 'Application name',
     'language' => 'ru',
-    'sourceLanguage' =>'ru',
-    'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-    'preload'=>array(
+    'sourceLanguage' =>'en',
+    'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+    'preload' => array(
         'log',
-        'bootstrap'
     ),
 
     'import'=>array(
@@ -34,9 +33,12 @@ return array(
         ),
     ),
 
-    'modules'=>array(
+    'modules' => array(
         'admin',
         'articles',
+        'contact',
+        'feedback',
+        'gallery',
         'page',
         'user'
     ),
@@ -44,6 +46,7 @@ return array(
     /* begin: components */
 
     'components'=> array(
+
         'bootstrap'=>array(
             'class'=>'ext.bootstrap.components.Bootstrap'
         ),
@@ -64,7 +67,13 @@ return array(
         ),
 
         'themeManager' => array(
-            'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'themes'
+            'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'themes',
+            'themeClass' => 'Theme'
+        ),
+
+        'image' => array(
+            'class' => 'ext.easyimage.EasyImage',
+            'cachePath' => '/cache/image/',
         ),
 
         'mail' => array(
@@ -90,10 +99,6 @@ return array(
             ),
         ),
 
-        'request' => array(
-            // 'enableCsrfValidation'=>true,
-        ),
-
         'user'=>array(
             'class' => 'WebUser',
             'allowAutoLogin' => true,
@@ -110,9 +115,9 @@ return array(
                     'class'=>'UrlRuleAdminNode'
                 ),
 
-                'admin/<module:(user)>/<controller:\w+>/<action:\w+>/*' => '<module>/admin/<controller>/<action>',
-                'admin/<module:(user)>/<controller:\w+>' => '<module>/admin/<controller>',
-                'admin/<module:(user)>' => '<module>/admin/default/index',
+                'admin/<module:(user|feedback)>/<controller:\w+>/<action:\w+>/*' => '<module>/admin/<controller>/<action>',
+                'admin/<module:(user|feedback)>/<controller:\w+>' => '<module>/admin/<controller>',
+                'admin/<module:(user|feedback)>' => '<module>/admin/default/index',
 
                 'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>' => 'admin/<controller>',
