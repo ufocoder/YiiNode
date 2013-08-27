@@ -1,0 +1,142 @@
+<?php
+
+class DefaultController extends ControllerAdmin
+{
+    public function actionSetting()
+    {
+        $model_class = "GallerySetting";
+        $model = new $model_class;
+        $nodeId = Yii::app()->getNodeId();
+
+        $model->pager = Yii::app()->getNodeSetting($nodeId, 'pager', $model::values('pager', 'default'));
+        $model->column = Yii::app()->getNodeSetting($nodeId, 'column', $model::values('column', 'default'));
+        $model->width = Yii::app()->getNodeSetting($nodeId, 'width', $model::values('width', 'default'));
+        $model->height = Yii::app()->getNodeSetting($nodeId, 'height', $model::values('height', 'default'));
+        $model->resize = Yii::app()->getNodeSetting($nodeId, 'resize');
+
+        if (isset($_POST[$model_class]))
+        {
+            $model->attributes = $_POST[$model_class];
+            if ($model->validate()){
+                Yii::app()->setNodeSettings($nodeId, $model->attributes);
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Settings were successfully saved.'));
+                $this->redirect(array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+            }
+        }
+
+        $this->render('/admin/setting',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionView($id)
+    {
+        $this->layout = "application.modules.admin.views.layouts.column1";
+        $this->render('/admin/image/view',array(
+            'model'=>$this->loadModel($id),
+        ));
+    }
+
+    public function actionCreate($id_category = null)
+    {
+        $model_class = "GalleryImage";
+        $model = new $model_class;
+        $model->isNewRecord = true;
+
+        if (isset($_POST[$model_class]))
+        {
+            $model->attributes = $_POST[$model_class];
+            $model->id_node = Yii::app()->getNodeId();
+            if (empty($model->id_gallery_category))
+                $model->id_gallery_category = null;
+
+            // upload file
+            $instance   = CUploadedFile::getInstance($model, 'x_image');
+            if (!empty($instance)){
+                $extension  = CFileHelper::getExtension($instance->getName());
+                $pathname   = GalleryImage::getUploadPath();
+                $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                if ($instance->saveAs($pathname.$filename))
+                    $model->image = $filename;
+            }
+
+            if ($model->save()){
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was created successful!'));
+                $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+            }
+        }
+
+        $this->layout = "application.modules.admin.views.layouts.column1";
+
+        $this->render('/admin/image/create',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionUpdate($id)
+    {
+        $model_class = "GalleryImage";
+        $model = $this->loadModel($id);
+
+        if(isset($_POST[$model_class]))
+        {
+            $model->attributes = $_POST[$model_class];
+            $model->id_node = Yii::app()->getNodeId();
+            if (empty($model->id_gallery_category))
+                $model->id_gallery_category = null;
+
+            // upload file
+            $instance   = CUploadedFile::getInstance($model, 'x_image');
+            if (!empty($instance)){
+                $extension  = CFileHelper::getExtension($instance->getName());
+                $pathname   = GalleryImage::getUploadPath();
+                $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                if ($instance->saveAs($pathname.$filename))
+                    $model->image = $filename;
+            }
+
+            if ($model->save()){
+                Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was updated successful!'));
+                $this->redirect(array('/default/view', 'id'=>$model->id_gallery_image, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+            }
+        }
+
+        $this->layout = "application.modules.admin.views.layouts.column1";
+
+        $this->render('/admin/image/update',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionDelete($id)
+    {
+        $model = $this->loadModel($id);
+        $model->delete();
+        if(!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+    }
+
+    public function actionIndex($id_category = null)
+    {
+        $model_class = "GalleryImage";
+        $model = new $model_class;
+        $model->search($id_category);
+        $model->unsetAttributes();
+
+        if(isset($_POST[$model_class]))
+            $model->attributes=$_POST[$model_class];
+
+        $this->render('/admin/image/index',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function loadModel($id)
+    {
+        $model = GalleryImage::model()->node()->findByPk($id);
+        if($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
+}
