@@ -1,10 +1,9 @@
 <?php
-  // @TODO: optimization and minimization
+
   $node   = Yii::app()->getNode();
 
-  if (empty($node)){
+  if (empty($node))
       $node = Node::model()->roots()->find();
-  }
 
   $nodeId = $node->id_node;
   $parent = $node->parent()->find();
@@ -15,34 +14,7 @@
       foreach ($nodes as $node)
           $items[] = array('label'=>$node->title, 'url'=>$node->path);
   }
-  elseif ($parent->isRoot())
-  {
-      $nodes = $parent->children()->findAll();
-      foreach ($nodes as $node)
-          if ($node->id_node == $nodeId){
-              $children = array();
-              $childs = $node->children()->findAll();
-
-              foreach ($childs as $child)
-                  $children[] = array(
-                      'label' => $child->title,
-                      'url' => $child->path,
-                  );
-              $items[] = array(
-                  'label' => $node->title,
-                  'url' => $node->path,
-                  //'active' => true,
-                  'items' => $children
-              );
-          }
-          else
-          {
-            $items[] = array(
-                'label'=>$node->title,
-                'url'=>$node->path);
-          }
-
-  } else {
+  else {
 
       $children = array();
 
@@ -106,15 +78,15 @@
 
       $items = $children;
   }
-
-  $this->widget('bootstrap.widgets.TbNavbar', array(
-    'brand' => false,
-    'fixed' => false,
-    'items' => array(
-      array(
-        'class' => 'bootstrap.widgets.TbMenu',
-        'items' => $items
-      )
-    )
-  ));
 ?>
+<div class="navbar">
+  <div class="navbar-inner">
+    <?php $this->widget('zii.widgets.CMenu', array(
+          'items' => $items,
+          'htmlOptions' => array(
+            'class' => 'nav'
+          )
+      ));
+    ?>
+  </div>
+</div>

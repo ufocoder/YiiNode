@@ -54,9 +54,11 @@
 
   <?php if (!empty($this->actions)):?>
     <div style="margin-bottom: 15px;">
-        <?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
-                'toggle' => 'radio',
-                'buttons' => $this->actions
+        <?php $this->widget('zii.widgets.CMenu', array(
+                'items' => $this->actions,
+                'htmlOptions' => array(
+                  'class' => 'nav nav-pills'
+                )
             ));
         ?>
     </div>
