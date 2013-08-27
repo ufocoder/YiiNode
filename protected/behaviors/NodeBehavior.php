@@ -93,6 +93,15 @@ class NodeBehavior extends CBehavior
     }
 
     /**
+     * Get current node title
+     */
+    public function getNodeTitle()
+    {
+        if ($this->_nodeCurrent)
+            return $this->_nodeCurrent->title;
+    }
+
+    /**
      * Get current node path
      */
     public function getNodePath()
