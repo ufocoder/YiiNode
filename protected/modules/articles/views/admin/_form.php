@@ -11,7 +11,7 @@
         $action = Yii::app()->createUrl('default/update', array('nodeAdmin'=>true, 'nodeId'=>$nodeId, 'id'=>$model->id_article));
 
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'id'=>'user-form',
+        'id'=>'articles-form',
         'type'=>'horizontal',
         'action'=>$action,
         'method'=>'post',
@@ -54,7 +54,7 @@
         <div class="controls">
         <?php $this->widget('ext.datetimepicker.DatetimePickerWidget', array(
             'model' => $model,
-            'attribute' => 'date_published',
+            'attribute' => 'date_published'
         ));?>
         </div>
     </div>
@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    <?php echo $form->checkBoxRow($model, 'enabled'); ?>
+    <?php echo $form->checkBoxRow($model, 'enabled', $model->isNewRecord?array('checked'=>'checked'):array()); ?>
 
     </fieldset>
 

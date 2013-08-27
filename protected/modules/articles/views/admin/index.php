@@ -11,7 +11,7 @@
     );
 
     $this->breadcrumbs = array(
-        Yii::t('site', 'Article list'),
+        Yii::t('site', 'Item list'),
     );
 
 ?>

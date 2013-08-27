@@ -1,3 +1,4 @@
-<h1><?php echo $model->title;?></h1>
-<b><small><?php echo Yii::app()->createUrl('articles/default/view', array('id'=>$model->id_article)); ?></small></b>
+<?php
+	$this->title = $model->title;
+?>
 <div><?php echo $model->content;?></div>

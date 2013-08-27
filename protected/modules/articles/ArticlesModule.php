@@ -41,8 +41,10 @@ class ArticlesModule extends WebModule
     public function route()
     {
         return array(
-            '/<id:\d+>' => 'articles/default/view',
-            '/'         => 'articles/default/index',
+            '/rss'                          => 'articles/default/rss',
+            '/<id:\d+>'                     => 'articles/default/view',
+            '/<slug:[^\d]\w+[\_\-\.\w]+>'   => 'articles/default/view',
+            '/'                             => 'articles/default/index',
         );
     }
 

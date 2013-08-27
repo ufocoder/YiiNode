@@ -9,6 +9,7 @@ class DefaultController extends ControllerAdmin
         $nodeId = Yii::app()->getNodeId();
 
         $model->pager = Yii::app()->getNodeSetting($nodeId, 'pager', $model::values('pager', 'default'));
+        $model->rss = Yii::app()->getNodeSetting($nodeId, 'rss', false);
 
         if (isset($_POST[$model_class]))
         {
@@ -92,11 +93,15 @@ class DefaultController extends ControllerAdmin
                 $extension  = CFileHelper::getExtension($instance->getName());
                 $pathname   = Article::getUploadPath();
                 $filename   = md5(time().$model->id_node) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
+                if ($instance->saveAs($pathname.$filename)){
+                    $old_filename = Article::getUploadPath().$model->image;
+                    if (file_exists($old_filename) && $old_filename != $filename)
+                        unlink($old_filename);
                     $model->image = $filename;
+                }
             }
 
-            if($model->save()){
+            if ($model->save()){
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Form values were saved!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_article, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
@@ -119,7 +124,7 @@ class DefaultController extends ControllerAdmin
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
         }
         else
-            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
     public function actionIndex()

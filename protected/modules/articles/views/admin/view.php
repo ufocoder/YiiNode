@@ -20,8 +20,6 @@
             )
         )
     );
-
-
 ?>
 
 <fieldset>
@@ -34,18 +32,16 @@
             'date_published',
             array(
                 'name'  => 'image',
-                'value' => CHtml::image($model->getUploadUrl().$model->image),
+                'value' => !empty($model->image)?CHtml::image($model->getUploadUrl().$model->image):null,
                 'type'  => 'raw'
             ),
-            'notice',
             array(
-                'name' => 'content',
-                'type' => 'raw'
+                'name'  => 'enabled',
+                'value' => !empty($model->enabled)?Yii::t('site', 'Yes'):Yii::t('site', 'No')
             )
         )
     )); ?>
 </fieldset>
-
 
 <fieldset>
     <legend><?php echo Yii::t('site', 'Meta information')?></legend>
@@ -56,4 +52,10 @@
             'meta_description',
         )
     )); ?>
+</fieldset>
+
+<fieldset>
+    <legend><?php echo Yii::t('site', 'Content')?></legend>
+    <div><?php echo $model->notice;?></div>
+    <div><?php echo $model->content;?></div>
 </fieldset>

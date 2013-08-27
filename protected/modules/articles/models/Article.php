@@ -76,15 +76,18 @@ class Article extends CActiveRecord
      */
     public function scopes(){
         return array(
+            'preview' => array(
+                'select' => 'id_article, id_node, time_published, slug, title, notice, image'
+            ),
             'node' => array(
                 'condition' => 't.id_node = :id_node',
                 'params' => array(
                     ':id_node' => Yii::app()->getNodeId()
                 ),
                 'order' => 't.time_published DESC, t.time_created DESC'
-            )   ,
+            ),
             'published' => array(
-                'condition' => ' t.time_published <= '. time(),
+                'condition' => 't.enabled = 1 AND t.time_published <= '. time(),
                 'order' => 't.time_published DESC, t.time_created DESC'
             )
         );
@@ -99,10 +102,9 @@ class Article extends CActiveRecord
             array('x_image', 'file', 'types'=>'jpg, jpeg, gif, png', 'allowEmpty'=>true),
             array('delete_image', 'boolean', 'allowEmpty'=>true),
             array('date_published', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm'),
-            array('id_node, title, content', 'required'),
-            array('id_node', 'length', 'max'=>11),
+            array('id_node, title, notice, time_published', 'required'),
             array('title', 'length', 'max'=>255),
-            array('slug', 'match', 'pattern' => '/^\w+[\_\-\.\w]+$/i'),
+            array('slug', 'match', 'pattern' => '/^[^\d]\w+[\_\-\.\w]+$/i'),
             array('content, notice', 'default', 'value'=>null),
             array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
@@ -118,7 +120,7 @@ class Article extends CActiveRecord
     public function relations()
     {
         return array(
-            'Parent' => array(self::BELONGS_TO, 'Node', 'id_node'),
+            'Node' => array(self::BELONGS_TO, 'Node', 'id_node'),
         );
     }
 
@@ -128,15 +130,19 @@ class Article extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id_article' => 'Id Article',
-            'id_node' => 'Id Node',
-            'x_image' => Yii::t('site', 'Image'),
-            'delete_image' => Yii::t('site', 'Delete image'),
             'title' => Yii::t('site', 'Title'),
             'notice' => Yii::t('site', 'Notice'),
+            'slug' => Yii::t('site', 'Slug'),
+            'meta_keywords' => Yii::t('site', 'Meta keywords'),
+            'meta_description' => Yii::t('site', 'Meta description'),
+            'x_image' => Yii::t('site', 'Image'),
+            'image' => Yii::t('site', 'Image'),
+            'delete_image' => Yii::t('site', 'Delete image'),
             'content' => Yii::t('site', 'Content'),
             'time_created' => Yii::t('site', 'Time created'),
             'time_updated' => Yii::t('site', 'Time updated'),
+            'time_published' => Yii::t('site', 'Time published'),
+            'enabled' => Yii::t('site', 'Enabled')
         );
     }
 
@@ -185,9 +191,9 @@ class Article extends CActiveRecord
      */
     protected function afterFind()
     {
-        $this->date_created = !empty($this->time_created)?date('d-m-Y H:i', $this->time_created):null;
-        $this->date_updated = !empty($this->time_updated)?date('d-m-Y H:i', $this->time_updated):null;
-        $this->date_published = !empty($this->time_published)?date('d-m-Y H:i', $this->time_published):null;
+        $this->date_created = !empty($this->time_created)?date('Y-m-d H:i', $this->time_created):null;
+        $this->date_updated = !empty($this->time_updated)?date('Y-m-d H:i', $this->time_updated):null;
+        $this->date_published = !empty($this->time_published)?date('Y-m-d H:i', $this->time_published):null;
 
         parent::afterFind();
     }
@@ -202,6 +208,8 @@ class Article extends CActiveRecord
             if($this->isNewRecord)
             {
                 $this->time_created = time();
+                if (empty($this->time_published))
+                    $this->time_published = time();
             }
             else
                 $this->time_updated = time();
@@ -219,7 +227,7 @@ class Article extends CActiveRecord
     {
         if (parent::beforeDelete())
         {
-            unlink(self::getUploadPath().$this->file);
+            unlink(self::getUploadPath().$this->image);
             return true;
         }
     }

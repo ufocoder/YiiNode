@@ -12,9 +12,6 @@
         Yii::t('site', 'Update'),
     );
 
-    $baseUrl = Yii::app()->baseUrl;
-    Yii::app()->getClientScript()->registerScriptFile($baseUrl.'/js/admin.js');
-
     $this->actions = array(
         array('label'=>Yii::t('site', 'View article'), 'url' => $viewUrl, 'icon'=>'eye-open'),
         array('label'=>Yii::t('site', 'Delete article'), 'url' => Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',

@@ -16,7 +16,8 @@
 ?>
 <?php echo $form->errorSummary($model); ?>
 
-<?php echo $form->textFieldRow($model, 'pager', array('class'=>'span5')); ?>
+<?php echo $form->textFieldRow($model, 'pager', array('class'=>'span6')); ?>
+<?php echo $form->checkBoxRow($model, 'rss'); ?>
 
 <div class="form-actions">
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Save'))); ?>
