@@ -69,6 +69,9 @@ class ControllerAdmin extends Controller
         $cs->registerScriptFile($assets . '/admin.js');
         $cs->registerScriptFile($assets . '/jquery.synctranslit.min.js');
 
+        // Bootstrap preload
+        Yii::app()->getComponent("bootstrap");
+
         return true;
     }
 

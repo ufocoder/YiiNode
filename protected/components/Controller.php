@@ -33,7 +33,7 @@ class Controller extends CController
     /**
      * Layout
      */
-    public $layout = '/layouts/column2';
+    public $layout = '//layouts/column2';
 
     /**
      * Action array
@@ -65,13 +65,18 @@ class Controller extends CController
         return Yii::app()->createUrl(trim($route,'/'),$params,$ampersand);
     }
 
-    // @TODO: setup layouts in node attributes
+    // setup layout from node attributes
     public function beforeAction($action)
     {
         $node = Yii::app()->getNode();
 
-        if (!empty($node) && $node->isRoot())
-            $this->layout = "/layouts/default";
+        if (Yii::app()->Theme)
+            $layouts = array_keys(Yii::app()->Theme->getSetting('layouts'));
+
+        if (!empty($node) && isset($layouts) && in_array($node->layout, $layouts))
+            $this->layout = "//layouts/".$node->layout;
+        elseif (!empty($node) && $node->isRoot())
+            $this->layout = "//layouts/default";
 
         return parent::beforeAction($action);
     }
@@ -81,7 +86,7 @@ class Controller extends CController
      */
     public function actionError()
     {
-        $this->layout='/layouts/error';
+        $this->layout='//layouts/error';
         if ( $error = Yii::app()->errorHandler->error)
         {
             if(Yii::app()->request->isAjaxRequest)
