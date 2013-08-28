@@ -69,11 +69,11 @@ class FormRecovery extends CFormModel
             {
                 if (strpos($this->login_or_email, "@"))
                 {
-                    $this->addError("login_or_email", Yii::t("site", "Email is incorrect."));
+                    $this->addError("login_or_email", Yii::t("error", "Email is incorrect."));
                 }
                 else
                 {
-                    $this->addError("login_or_email", Yii::t("site", "Username is incorrect."));
+                    $this->addError("login_or_email", Yii::t("error", "Username is incorrect."));
                 }
             }
         }

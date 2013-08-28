@@ -49,7 +49,7 @@ class NodeController extends ControllerAdmin
                     if ($flag)
                         Yii::app()->user->setFlash('success', Yii::t('site', 'Node was created success!'));
                     else
-                        Yii::app()->user->setFlash('warning', Yii::t('site', 'There was error on creating node!'));
+                        Yii::app()->user->setFlash('warning', Yii::t('error', 'There was error on creating node!'));
                     $this->redirect(array('index'));
                 }
             }
@@ -62,7 +62,7 @@ class NodeController extends ControllerAdmin
 
         $modules = array();
         foreach($_modules as $module)
-            $modules[$module] = Yii::t('site', 'Module '.$module);
+            $modules[$module] = Yii::t('module', $module);
 
         $nodes = CHtml::listData(Node::model()->tree()->findAll(), 'id_node', 'title');
 
@@ -89,9 +89,11 @@ class NodeController extends ControllerAdmin
         $class = "Node";
         if (isset($_POST[$class]))
         {
-            $model->attributes=$_POST[$class];
-            if ($model->saveNode())
+            $model->attributes = $_POST[$class];
+            if ($model->saveNode()){
+                $model->updatePaths();
                 $this->redirect(array('index'));
+            }
         }
 
         $this->render('update',array(
@@ -113,13 +115,8 @@ class NodeController extends ControllerAdmin
         Yii::app()->setNode($model);
 
         if ($model->isRoot()){
-            Yii::app()->user->setFlash('warning', Yii::t('site', 'Root node couldn\'t be moved.'));
+            Yii::app()->user->setFlash('warning', Yii::t('error', 'Root node couldn\'t be moved.'));
             $this->redirect(array('index'));
-        }
-
-        if (!empty($model->id_node_parent)){
-            $model->node_position = Node::POSITION_CHILD;
-            $model->node_related = $model->id_node_parent;
         }
 
         $class = "Node";

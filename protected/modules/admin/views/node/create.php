@@ -7,8 +7,6 @@
         Yii::t('site', 'Create')
     );
 
-    Yii::app()->user->setFlash('warning', Yii::t('site', 'Fields with <span class="required">*</span> are required.'));
-
     $this->renderPartial('/node/_form', array(
         'model' => $model,
         'nodes' => $nodes,

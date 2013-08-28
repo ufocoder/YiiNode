@@ -1,5 +1,5 @@
 
-                    <h4><?php echo Yii::t('site', 'Site structure');?> <a href="/admin/node/create"><button class="btn btn-mini"><i class="icon-plus"></i><?php echo Yii::t('site', 'Node add');?></button></a> </h4>
+                    <h4><?php echo Yii::t('site', 'Structure');?> <a href="/admin/node/create"><button class="btn btn-mini"><i class="icon-plus"></i><?php echo Yii::t('site', 'Node add');?></button></a> </h4>
 
 <?php
     $model = Node::model();

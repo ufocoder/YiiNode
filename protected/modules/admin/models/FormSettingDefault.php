@@ -36,12 +36,14 @@ class FormSettingDefault extends CFormModel
     }
 
     /**
-     * @return array Ìåòêè àòðèáóòîâ (name=>label)
+     * @return array Label list (name=>label)
      */
     public function attributeLabels()
     {
         return array(
             'sitename' => Yii::t('site', 'Site name'),
+            'emailAdmin' => Yii::t('site', 'Email admin'),
+            'datetimeFormat' => Yii::t('site', 'Datetime format'),
         );
     }
 }

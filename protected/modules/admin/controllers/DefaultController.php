@@ -7,6 +7,9 @@
  */
 class DefaultController extends ControllerAdmin
 {
+
+    public $layout = 'application.modules.admin.views.layouts.column1';
+
     /**
      * Index page with last changes widgets
      */

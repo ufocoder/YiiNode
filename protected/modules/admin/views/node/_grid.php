@@ -13,12 +13,16 @@
             'name' => 'title'
         ),
         array(
-            'name' => 'module',
-            'value' => '!empty($data->module)?Yii::t("site", "Module ".$data->module):null;'
+            'name'  => 'module',
+            'value' => '!empty($data->module)?Yii::t(\'module\', $data->module):null;'
         ),
         array(
-            'name' => 'enabled',
-            'value' => '!empty($data->enabled)?Yii::t("site", "Enabled"):Yii::t("site", "Disabled");',
+            'name'  => 'enabled',
+            'value' => '!empty($data->enabled)?"<i class=\'icon icon-ok\'></i>":"<i class=\'icon icon-remove\'></i>";',
+            'type'  => 'raw',
+            'htmlOptions' => array(
+                'style' => 'width: 100px;',
+            )
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',

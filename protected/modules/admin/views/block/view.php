@@ -3,6 +3,7 @@
 	/* @var $model Block */
 
 	$this->breadcrumbs = array(
+		Yii::t('site', 'Template'),
 		Yii::t('site', 'Block list') => array('/admin/block'),
 		CHtml::encode($model->title)
 	);
@@ -11,7 +12,7 @@
 	Yii::app()->getClientScript()->registerScriptFile($baseUrl.'/js/admin.js');
 
 	$this->titleButton = array(
-		array('label'=>Yii::t('site', 'Delete info block'), 'url'=>array('delete', 'id'=>$model->id_block),
+		array('label'=>Yii::t('site', 'Delete'), 'url'=>array('delete', 'id'=>$model->id_block),
 			'type' => 'danger',
 			'icon' => 'white trash',
 			'htmlOptions'=>array(

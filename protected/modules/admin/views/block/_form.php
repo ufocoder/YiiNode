@@ -45,7 +45,12 @@
 			); ?>
 		</div>
 	</div>
-<?php break; case $model::TYPE_FILE: ?>
+<?php
+	break;
+	case $model::TYPE_FILE:
+	case $model::TYPE_IMAGE:
+	case $model::TYPE_FLASH:
+?>
 	<?php
 		$fileID = substr(md5(time()), 0, 8);
 		$script = "$(document).ready(function(){
@@ -69,7 +74,7 @@
 	<?php echo $form->labelEx($model,'content', array('class'=>'control-label')); ?>
 	<div class="controls">
 			<?php echo $form->fileField($model, 'content', array('attachId'=>$fileID, 'class'=>'attach-input', 'style'=>'display: none;')); ?>
-			<?php echo CHtml::textField(null, null, array('attachId'=>$fileID, 'class' => 'attach-name span4', 'readonly'=>'true')); ?>
+			<?php echo CHtml::textField(null, $model->content, array('attachId'=>$fileID, 'class' => 'attach-name span4', 'readonly'=>'true')); ?>
 			<?php echo CHtml::link(Yii::t('site', 'Choose'), '#', array('attachId'=>$fileID, 'class'=>'attach-button btn'));?>
 		<?php if (!empty($model->content)): ?>
 			<?php echo CHtml::link(Yii::t('site', 'Download file'), $model->getUploadUrl().$model->content); ?>

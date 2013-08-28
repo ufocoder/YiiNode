@@ -20,16 +20,6 @@ class AdminModule extends WebModule
             'admin.models.*',
         ));
 
-        // Bootstrap preload
-        $this->configure(array(
-            'components'=>array(
-                'bootstrap'=>array(
-                    'class'=>'ext.booster.components.Bootstrap'
-                )
-            )
-        ));
-        $this->getComponent('bootstrap');
-
         // redefine user url list
         Yii::app()->user->recoveryUrl = array('/admin/recovery');
         Yii::app()->user->loginUrl = array('/admin/login');

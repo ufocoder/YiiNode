@@ -16,7 +16,7 @@ class SettingsController extends ControllerAdmin
         $model = new $class_form;
 
         $model->sitename = Yii::app()->getSetting('sitename');
-        $model->emailAdmin = Yii::app()->getSetting('email_admin');
+        $model->emailAdmin = Yii::app()->getSetting('emailAdmin');
         $model->datetimeFormat = Yii::app()->getSetting('datetimeFormat');
 
         if (isset($_POST[$class_form]))

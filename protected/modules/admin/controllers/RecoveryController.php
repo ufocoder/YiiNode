@@ -80,7 +80,7 @@ class RecoveryController extends ControllerAuth
                         'model' => $form_change
                     ));
                 } else {
-                    Yii::app()->user->setFlash('warning', Yii::t("site", "Incorrect recovery link."));
+                    Yii::app()->user->setFlash('warning', Yii::t("error", "Incorrect recovery link."));
                     $this->redirect(Yii::app()->user->recoveryUrl);
                 }
             }
@@ -93,7 +93,7 @@ class RecoveryController extends ControllerAuth
                     if ($form->validate()) {
                         $user = User::model()->findbyPk($form->id_user);
                         if (empty($user->email)){
-                            $form->addError("login_or_email", Yii::t("site", "User's email is not exists"));
+                            $form->addError("login_or_email", Yii::t("error", "User's email is not exists"));
                         }
                         else
                         {

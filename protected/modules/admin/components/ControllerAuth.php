@@ -12,6 +12,14 @@ class ControllerAuth extends Controller
      */
     public $layout = '/layouts/form';
 
+    // Bootstrap preload
+    public function beforeAction($action)
+    {
+        Yii::app()->getComponent("bootstrap");
+
+        return true;
+    }
+
     /**
      * @return type filters
      */

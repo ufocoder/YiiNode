@@ -2,6 +2,7 @@
 	/* @var $this BlockController */
 
 	$this->breadcrumbs = array(
+		Yii::t('site', 'Template'),
 		Yii::t('site', 'Info block list'),
 	);
 

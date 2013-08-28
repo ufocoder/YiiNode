@@ -63,11 +63,12 @@ $cs->registerCss('bootstrap-fix', '    body {
             array(
                 'class'=>'bootstrap.widgets.TbMenu',
                 'items'=>array(
-                    array('label'=> Yii::t('site', 'Content'), 'url'=> '#', 'items' => array(
-                        array('label'=> Yii::t('site', 'Structure'), 'url' => Yii::app()->createUrl('/admin/node/'), 'icon'=>'list-alt'),
-                        array('label'=> Yii::t('site', 'Info blocks'), 'url' => Yii::app()->createUrl('/admin/block/'), 'icon'=>'th-large'),
+                    array('label'=> Yii::t('site', 'Content'), 'url'=> Yii::app()->createUrl('/admin/node/')),
+                    array('label'=> Yii::t('site', 'Template'), 'url'=>'#', 'items' => array(
+                        array('label'=> Yii::t('site', 'Info blocks'), 'url' => Yii::app()->createUrl('/admin/block/'), 'icon'=>'list'),
                     )),
                     array('label'=> Yii::t('site', 'Services'), 'url' => '#', 'items' => array(
+                        array('label'=> Yii::t('site', 'Feedback'), 'url' => Yii::app()->createUrl('/admin/feedback/'), 'icon'=>'envelope'),
                         array('label'=> Yii::t('site', 'Filemanager'), 'url' => Yii::app()->createUrl('/admin/filemanager/'), 'icon'=>'file'),
                     )),
                     array('label'=> Yii::t('site', 'Settings'), 'url' => Yii::app()->createUrl('/admin/settings/')),
@@ -85,7 +86,7 @@ $cs->registerCss('bootstrap-fix', '    body {
                         array('label' => Yii::t('site', 'Change password'), 'url'=>Yii::app()->createUrl('/admin/profile/changepassword'), 'icon'=>'lock'),
                         array('label' => Yii::t('site', 'Account settings'), 'url'=>Yii::app()->createUrl('/admin/profile/update'), 'icon'=>'user'),
                         '---',
-                        array('label' => Yii::t('site', 'Log out'), 'url' => Yii::app()->createUrl('/admin/logout'), 'icon'=>'off'),
+                        array('label' => Yii::t('site', 'Logout'), 'url' => Yii::app()->createUrl('/admin/logout'), 'icon'=>'off'),
                     )),
                 ),
             ),

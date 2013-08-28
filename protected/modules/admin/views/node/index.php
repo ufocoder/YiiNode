@@ -4,7 +4,7 @@
 
     $this->title = Yii::t('site', 'Node list');
     $this->breadcrumbs = array(
-        Yii::t('site', 'Node list'),
+        Yii::t('site', 'Structure'),
     );
 ?>
 
