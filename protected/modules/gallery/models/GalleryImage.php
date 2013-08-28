@@ -217,7 +217,9 @@ class GalleryImage extends CActiveRecord
     {
         if (parent::beforeDelete())
         {
-            unlink(self::getUploadPath().$this->image);
+            $filename = self::getUploadPath().$this->image;
+            if (file_exists($filename))
+                unlink($filename);
             return true;
         }
     }
