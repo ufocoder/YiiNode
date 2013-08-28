@@ -74,6 +74,7 @@ return array(
         'image' => array(
             'class' => 'ext.easyimage.EasyImage',
             'cachePath' => '/cache/image/',
+            'defaultImage' => '/img/noimage.jpg';
         ),
 
         'mail' => array(
