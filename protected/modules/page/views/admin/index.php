@@ -8,7 +8,6 @@
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'page-form',
-        'type'=>'horizontal',
         'action'=>Yii::app()->createUrl('default/index', array('nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         'method'=>'post',
         'clientOptions'=>array(
@@ -19,13 +18,20 @@
             'class'=>'well'
         )
     ));
-
-
 ?>
 
 <?php echo $form->errorSummary($model); ?>
 
 <div class="control-group">
+    <?php echo CHtml::activeLabelEx($model, 'title', array('style'=>'font-size: 14px; line-height: 22px;')); ?>
+    <div class="controls">
+        <?php echo $form->textField($model, 'title', array('class'=>'span12')); ?>
+    </div>
+</div>
+
+<div class="control-group">
+    <?php echo CHtml::activeLabelEx($model, 'content', array('style'=>'font-size: 14px; line-height: 22px;')); ?>
+    <div class="controls">
     <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
         'model' => $model,
         'attribute' => 'content',
@@ -48,6 +54,7 @@
             'filebrowserBrowseUrl' => CHtml::normalizeUrl(array("/admin/filemanager/editor"))
         )
     )); ?>
+    </div>
 </div>
 <div class="form-actions" style="padding-left: 0; margin-bottom: 0; ">
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('site', 'Create') : Yii::t('site', 'Save')))); ?>

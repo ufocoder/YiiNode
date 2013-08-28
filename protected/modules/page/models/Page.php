@@ -46,6 +46,7 @@ class Page extends CActiveRecord
     public function relations()
     {
         return array(
+            'Node' => array(self::BELONGS_TO, 'Node', 'id_node'),
         );
     }
 
@@ -56,8 +57,10 @@ class Page extends CActiveRecord
     {
         return array(
             'id_node' => 'Id Node',
-            'title' => Yii::t('site', 'Title'),
-            'content' => Yii::t('site', 'Content'),
+            'title' => Yii::t('site', 'Title page'),
+            'content' => Yii::t('site', 'Content page'),
+            'meta_keywords' => Yii::t('site', 'Meta keywords'),
+            'meta_description' => Yii::t('site', 'Meta description')
         );
     }
 

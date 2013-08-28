@@ -7,27 +7,15 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $model=$this->loadModel();
+
+        $nodeId = Yii::app()->getNodeId();
+        $model = Page::model()->findByPk($nodeId);
+        if($model===null)
+            throw new CHttpException(404, Yii::t('error', 'The requested page does not exist.'));
 
         $this->render('/index',array(
             'model'=>$model
         ));
-    }
-
-    /**
-     * Загрузка модели
-     *
-     * @param integer $id Идентификатор модели 
-     * @return Station загруженная модель
-     * @throws CHttpException
-     */
-    public function loadModel()
-    {
-        $nodeId = Yii::app()->getNodeId();
-        $model = Page::model()->findByPk($nodeId);
-        if($model===null)
-            throw new CHttpException(404,'The requested page does not exist.');
-        return $model;
     }
 
 }
