@@ -25,6 +25,7 @@ Add the following to your config file `components` section:
     //'quality' => 100,
     //'cachePath' => '/assets/easyimage/',
     //'cacheTime' => 2592000,
+    //'defaultImage' => '/img/noimage.jpg',
     //'retinaSupport' => false,
   ),
 ```
@@ -55,11 +56,11 @@ You can create a thumbnail directly in the `View`:
 // Create and autocache
 Yii::app()->easyImage->thumbOf('/path/to/image.jpg', array('rotate' => 90));
 
-// or 
+// or
 Yii::app()->easyImage->thumbOf('image.jpg', array('rotate' => 90),  array('class' => 'image'));
 
-// or 
-Yii::app()->easyImage->thumbOf('image.png', 
+// or
+Yii::app()->easyImage->thumbOf('image.png',
   array(
     'resize' => array('width' => 100, 'height' => 100),
     'rotate' => array('degrees' => 90),
@@ -96,7 +97,7 @@ Yii::app()->easyImage->thumbOf('image.jpg', array('resize' => array('width' => 1
 ####Parameters
 - integer `$width` - New width
 - integer `$height` - New height
-- integer `$master` - Master dimension: `EasyImage::RESIZE_NONE`, `EasyImage::RESIZE_WIDTH`, `EasyImage::RESIZE_HEIGHT`, `EasyImage::RESIZE_AUTO`, `EasyImage::RESIZE_INVERSE`, `EasyImage::RESIZE_PRECISE`   
+- integer `$master` - Master dimension: `EasyImage::RESIZE_NONE`, `EasyImage::RESIZE_WIDTH`, `EasyImage::RESIZE_HEIGHT`, `EasyImage::RESIZE_AUTO`, `EasyImage::RESIZE_INVERSE`, `EasyImage::RESIZE_PRECISE`
 
 ###Crop
 ```php
@@ -151,10 +152,10 @@ Yii::app()->easyImage->thumbOf('image.jpg', array('sharpen' => 20));
 ```php
 // Create a 50 pixel reflection that fades from 0-100% opacity
 $image->reflection(50);
- 
+
 // Create a 50 pixel reflection that fades from 100-0% opacity
 $image->reflection(50, 100, TRUE);
- 
+
 // Create a 50 pixel reflection that fades from 0-60% opacity
 $image->reflection(50, 60, TRUE);
 ```
@@ -173,7 +174,7 @@ Yii::app()->easyImage->thumbOf('image.jpg', array('reflection'));
 ```php
 $mark = new EasyImage('watermark.png');
 $image->watermark($mark, TRUE, TRUE);
-// or 
+// or
 $image->watermark('watermark.png', 20, 20);
 ```
 ```php
@@ -228,7 +229,7 @@ Yii::app()->easyImage->thumbOf('image.png', array('type' => 'jpg')));
 ```php
 // Save the image as a PNG
 $image->save('image.png');
- 
+
 // Overwrite the original image
 $image->save();
 ```
@@ -241,7 +242,7 @@ $image->save();
 
 // Render the image at 50% quality
 $data = $image->render(NULL, 50);
- 
+
 // Render the image as a PNG
 $data = $image->render('png');
 ```

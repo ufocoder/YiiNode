@@ -33,6 +33,7 @@ class EasyImage extends CApplicationComponent
 	public $quality = 100;
 	public $cachePath = '/assets/easyimage/'; //relative web root (recommended: /assets/easyimage/)
 	public $cacheTime = 2592000; // 30 days
+	public $defaultImage = null;
 	public $retinaSupport = false;
 
 	public function __construct($file = null, $driver = null)
@@ -77,10 +78,12 @@ class EasyImage extends CApplicationComponent
 
 	public function detectPath($file)
 	{
-
 		$fullPath = Yii::getpathOfAlias('webroot') . $file;
 		if (is_file($fullPath)) {
 			return $fullPath;
+		}
+		elseif (!empty($this->defaultImage)) {
+			return Yii::getpathOfAlias('webroot').$this->defaultImage;
 		}
 		return $file;
 	}
@@ -193,11 +196,11 @@ class EasyImage extends CApplicationComponent
 	{
 		// Paths
 		$hash = md5($file . serialize($params));
-		$cachePath = Yii::getpathOfAlias('webroot'). $this->cachePath . $hash{0} .DIRECTORY_SEPARATOR . $hash{1};
+		$cachePath = Yii::getpathOfAlias('webroot') . $this->cachePath . $hash{0};
 		$cacheFileExt = isset($params['type']) ? $params['type'] : pathinfo($file, PATHINFO_EXTENSION);
 		$cacheFileName = $hash . '.' . $cacheFileExt;
 		$cacheFile = $cachePath . DIRECTORY_SEPARATOR . $cacheFileName;
-		$webCacheFile = Yii::app()->baseUrl . $this->cachePath . $hash{0} . DIRECTORY_SEPARATOR . $hash{1} . DIRECTORY_SEPARATOR . $cacheFileName;
+		$webCacheFile = Yii::app()->baseUrl . $this->cachePath . $hash{0} . '/' . $cacheFileName;
 
 		// Return cache image URL
 		if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $this->cacheTime)) {
