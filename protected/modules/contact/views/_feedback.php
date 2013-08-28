@@ -4,7 +4,7 @@
     /* @var $form BootActiveForm */
 
     $nodeId = Yii::app()->getNodeId();
-    $action = Yii::app()->createUrl('default/index', array('nodeAdmin'=>true, 'nodeId'=>$nodeId));
+    $action = Yii::app()->createUrl('feedback/default/index', array('nodeId'=>$nodeId));
 
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'feedback-form',
@@ -20,7 +20,7 @@
     ));
 ?>
 
-<div class="feedback-form form">
+<div class="form">
     <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
@@ -41,6 +41,13 @@
         <?php echo $form->labelEx($model, 'contact_email'); ?>
         <div class="value">
             <?php echo $form->textField($model, 'contact_email'); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'content'); ?>
+        <div class="controls">
+            <?php echo $form->textArea($model, 'content', array('class'=>'col_12')); ?>
         </div>
     </div>
 

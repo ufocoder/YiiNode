@@ -8,16 +8,32 @@ class DefaultController extends ControllerAdmin
         $model = new $model_class;
         $nodeId = Yii::app()->getNodeId();
 
-        $emailAdmin = Yii::app()->getSetting('emailAdmin');
-        $model->feedbackNotification = Yii::app()->getSetting('feedbackNotification', $emailAdmin);
+        if (!empty($nodeId)){
+            $model->feedbackEmail = Yii::app()->getNodeSetting($nodeId, 'feedbackEmail');
+            $model->feedbackNotification = Yii::app()->getNodeSetting($nodeId, 'feedbackNotification');
+        }
+        else{
+            $model->feedbackEmail = Yii::app()->getSetting('feedbackEmail');
+            $model->feedbackNotification = Yii::app()->getSetting('feedbackNotification');
+        }
+
 
         if (isset($_POST[$model_class]))
         {
             $model->attributes = $_POST[$model_class];
             if ($model->validate()){
-                Yii::app()->setNodeSettings($nodeId, $model->attributes);
+                if (!empty($nodeId)){
+                    Yii::app()->setNodeSettings($nodeId, $model->attributes);
+                    $redirectUrl = array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>$nodeId);
+                }
+                else{
+                    Yii::app()->setSettings($model->attributes);
+                    $redirectUrl = array('/admin/feedback/default/setting');
+                }
+
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Settings were successfully saved.'));
-                $this->redirect(array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+
+                $this->redirect($redirectUrl);
             }
         }
 
@@ -28,8 +44,11 @@ class DefaultController extends ControllerAdmin
 
     public function actionIndex()
     {
+        $nodeId = Yii::app()->getNodeId();
+
         $model_class = 'Feedback';
-        $model = new $model_class('search');
+        $model = new $model_class;
+        $model->search($nodeId);
         $model->unsetAttributes();
 
         if(isset($_POST[$model_class]))
@@ -65,7 +84,15 @@ class DefaultController extends ControllerAdmin
 
     public function loadModel($id)
     {
-        $model = Feedback::model()->findByPk($id);
+        $nodeId = Yii::app()->getNodeId();
+
+        $model = Feedback::model();
+
+        if (!empty($nodeId))
+            $model->node();
+
+        $model = $model->findByPk($id);
+
         if($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

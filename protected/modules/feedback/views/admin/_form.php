@@ -2,10 +2,17 @@
 
     $nodeId = Yii::app()->getNodeId();
 
+    $urlParams = array('nodeAdmin'=>true);
+
+    if ($nodeId)
+        $urlParams['nodeId'] = $nodeId;
+
     if ($model->isNewRecord)
-        $action = Yii::app()->createUrl('default/create', array('nodeAdmin'=>true, 'nodeId'=>$nodeId));
-    else
-        $action = Yii::app()->createUrl('default/update', array('nodeAdmin'=>true, 'nodeId'=>$nodeId, 'id'=>$model->id_contact));
+        $action = Yii::app()->createUrl('default/create', $urlParams);
+    else{
+        $urlParams['id'] = $model->id_contact;
+        $action = Yii::app()->createUrl('default/update', $urlParams);
+    }
 
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

@@ -42,7 +42,9 @@
             array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
                 'htmlOptions'=>array('style'=>'width: 50px'),
-                'template'=>'{view} {delete}'
+                'template'=>'{view} {delete}',
+                'viewButtonUrl' => 'Yii::app()->controller->createUrl("/admin/feedback/default/view",array("id"=>$data->primaryKey))',
+                'deleteButtonUrl' => 'Yii::app()->controller->createUrl("/admin/feedback/default/delete",array("id"=>$data->primaryKey))'
             ),
         ),
     ));

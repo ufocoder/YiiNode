@@ -41,7 +41,8 @@ class FeedbackModule extends WebModule
     public function route()
     {
         return array(
-            '/'                     => 'feedback/default/index',
+            '/captcha/*'    => 'feedback/default/captcha',
+            '/'             => 'feedback/default/index',
         );
     }
 

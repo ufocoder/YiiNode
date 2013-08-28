@@ -61,7 +61,7 @@ class Feedback extends CActiveRecord
         );
     }
 
-    public function search()
+    public function search($nodeId = null)
     {
         $criteria=new CDbCriteria;
         $criteria->compare('id_feedback',$this->id_feedback);
@@ -72,8 +72,14 @@ class Feedback extends CActiveRecord
         $criteria->compare('time_readed', $this->time_readed, true);
         $criteria->compare('time_updated', $this->time_updated, true);
 
+        if (!empty($nodeId))
+            $criteria->scopes[] = 'node';
+
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'sort'=>array(
+                'defaultOrder'=>'id_feedback DESC',
+            )
         ));
     }
 

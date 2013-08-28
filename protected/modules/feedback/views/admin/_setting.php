@@ -1,9 +1,17 @@
 <?php
+
+    $nodeId = Yii::app()->getNodeId();
+
+    if ($nodeId)
+        $action = Yii::app()->createUrl('default/setting', array('nodeAdmin'=>true, 'nodeId'=> $nodeId));
+    else
+        $action = Yii::app()->createUrl('/admin/feedback/default/setting');
+
     /* @var BootActiveForm $form */
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'setting-form',
         'type'=>'horizontal',
-        'action'=>Yii::app()->createUrl('default/setting', array('nodeAdmin'=>true, 'nodeId'=> Yii::app()->getNodeId())),
+        'action'=>$action,
         'method'=>'post',
         'clientOptions'=>array(
                 'validateOnSubmit'=>true,

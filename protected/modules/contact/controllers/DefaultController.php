@@ -43,15 +43,16 @@ class DefaultController extends Controller
             if (isset($_POST[$class])){
 
                 $feedbackNotification = Yii::app()->getSetting('feedbackNotification');
-                $feedbackEmail = Yii::app()->getSetting('feedbackNotification');
+                $feedbackEmail = Yii::app()->getSetting('feedbackEmail');
 
                 $feedback->attributes = $_POST[$class];
+                $feedback->id_node = Yii::app()->getNodeId();
 
                 if ($feedback->save()){
                     if ($feedbackNotification && !empty($feedbackEmail)){
 
                         $subject = Yii::t("site", "Feedback notification");
-                        $content = $this->renderPartial('//email/feedback/notification', array('feedback'=>$feedback));
+                        $content = $this->renderPartial('//email/feedback/notification', array('feedback'=>$feedback), true);
 
                         WebModule::sendMail($feedbackEmail, $subject, $content);
                     }

@@ -4,7 +4,7 @@
     /* @var $form BootActiveForm */
 
     $nodeId = Yii::app()->getNodeId();
-    $action = Yii::app()->createUrl('default/index', array('nodeAdmin'=>true, 'nodeId'=>$nodeId));
+    $action = Yii::app()->createUrl('feedback/default/index', array('nodeId'=>$nodeId));
 
     $form = $this->beginWidget('CActiveForm', array(
         'id' => 'feedback-form',
@@ -23,28 +23,35 @@
 <div class="feedback-form form">
     <?php echo $form->errorSummary($model); ?>
 
-    <div class="row">
+    <div class="control-group">
         <?php echo $form->labelEx($model, 'person_name'); ?>
-        <div class="value">
+        <div class="controls">
             <?php echo $form->textField($model, 'person_name'); ?>
         </div>
     </div>
 
-    <div class="row">
+    <div class="control-group">
         <?php echo $form->labelEx($model, 'contact_phone'); ?>
-        <div class="value">
+        <div class="controls">
             <?php echo $form->textField($model, 'contact_phone'); ?>
         </div>
     </div>
 
-    <div class="row">
+    <div class="control-group">
         <?php echo $form->labelEx($model, 'contact_email'); ?>
-        <div class="value">
+        <div class="controls">
             <?php echo $form->textField($model, 'contact_email'); ?>
         </div>
     </div>
 
-    <div class="row">
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'content'); ?>
+        <div class="controls">
+            <?php echo $form->textArea($model, 'content', array('class'=>'col_12')); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
         <?php echo $form->labelEx($model, 'verifyCode'); ?>
         <div class="value">
             <?php $this->widget('CCaptcha', array(
