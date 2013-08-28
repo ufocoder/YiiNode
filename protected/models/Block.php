@@ -247,4 +247,18 @@ class Block extends CActiveRecord
             }
     }
 
+    /**
+     * Удаляем файл после удаления модели
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete())
+        {
+            $filename = self::getUploadPath().$this->content;
+            if (file_exists($filename))
+                unlink($filename);
+            return true;
+        }
+    }
+
 }
