@@ -1,7 +1,6 @@
 <?php
     /* @var BootActiveForm $form */
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'type' => 'horizontal',
+    $form = $this->beginWidget('CActiveForm', array(
         'action' => Yii::app()->createUrl($this->route),
         'method' => 'post',
         'clientOptions' => array(
@@ -17,11 +16,23 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldRow($model, 'login', array('class' => 'span4', 'placeholder' => Yii::t('site', 'Enter login'))); ?>
-    <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span4 password', 'placeholder' => Yii::t('site', 'Enter password'))); ?>
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'login'); ?>
+        <div class="controls">
+            <?php echo $form->textField($model, 'login', array('placeholder' => Yii::t('site', 'Enter login'))); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'password'); ?>
+        <div class="controls">
+            <?php echo $form->textField($model, 'password', array('placeholder' => Yii::t('site', 'Enter password'))); ?>
+        </div>
+    </div>
+
     <div class="control-group">
         <?php echo $form->labelEx($model, 'captcha', array('class'=>'control-label')); ?>
-        <div class="span4">
+        <div class="controls">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/login/captcha'),
                     'showRefreshButton'=>false,
@@ -36,19 +47,23 @@
         </div>
     </div>
 
-    <?php echo $form->checkBoxRow($model, 'rememberMe'); ?>
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'rememberMe'); ?>
+        <div class="controls">
+            <?php echo $form->checkBox($model, 'rememberMe'); ?>
+        </div>
+    </div>
 
     <hr>
     <div class="control-group">
-        <label class="control-label"></label>
-        <div class="span4">
+        <div class="controls">
             <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
             <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
         </div>
     </div>
 
     <div class="form-actions">
-        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Login'))); ?>
+        <?php echo CHtml::button(Yii::t('site', 'Login'), array('type'=>'submit')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

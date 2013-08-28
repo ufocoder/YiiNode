@@ -16,7 +16,7 @@
 ?>
 <fieldset>
 <legend><?php echo Yii::t('site', 'Account information');?></legend>
-<?php $this->widget('bootstrap.widgets.TbDetailView', array(
+<?php $this->widget('zii.widgets.CDetailView', array(
     'data'=>$model,
     'attributes'=>array(
         'login',
@@ -55,7 +55,7 @@
 
 <fieldset>
 <legend><?php echo Yii::t('site', 'Profile information');?></legend>
-<?php $this->widget('bootstrap.widgets.TbDetailView', array(
+<?php $this->widget('zii.widgets.CDetailView', array(
     'data'=>$model,
     'attributes'=> $attributes,
 )); ?>

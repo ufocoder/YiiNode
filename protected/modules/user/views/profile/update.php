@@ -21,9 +21,8 @@
     /* @var $model User */
     /* @var $form BootActiveForm */
 
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    $form = $this->beginWidget('CActiveForm', array(
         'id'=>'user-form',
-        'type'=>'horizontal',
         'action'=>Yii::app()->createUrl($this->route),
         'method'=>'post',
         'clientOptions'=>array(
@@ -40,8 +39,21 @@
 
 <fieldset>
     <legend><h4><?php echo Yii::t('site', 'Account information'); ?></h4></legend>
-    <?php echo $form->textFieldRow($model, 'login', array('class'=>'span6')); ?>
-    <?php echo $form->textFieldRow($model, 'email', array('class'=>'span6')); ?>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'login'); ?>
+        <div class="controls">
+            <?php echo $form->textField($model, 'login', array('placeholder' => Yii::t('site', 'Enter login'))); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'email'); ?>
+        <div class="controls">
+            <?php echo $form->textField($model, 'email', array('placeholder' => Yii::t('site', 'Enter login'))); ?>
+        </div>
+    </div>
+
 </fieldset>
 
 <?php
@@ -72,8 +84,8 @@
 <?php endif; ?>
 
     <div class="form-actions">
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=>($model->isNewRecord ? Yii::t('site', 'Create') : Yii::t('site', 'Save')))); ?>
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
+        <?php echo CHtml::button($model->isNewRecord ? Yii::t('site', 'Create') : Yii::t('site', 'Save'), array('type'=>'submit')); ?>
+        <?php echo CHtml::button(Yii::t('site', 'Clear'), array('type'=>'reset')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

@@ -16,8 +16,7 @@
 
 <?php
     /* @var BootActiveForm $form */
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'type' => 'horizontal',
+    $form = $this->beginWidget('CActiveForm', array(
         'action' => Yii::app()->createUrl($this->route),
         'method' => 'post',
         'clientOptions' => array(
@@ -31,13 +30,30 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->passwordFieldRow($model, 'oldPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your old password'))); ?>
-    <?php echo $form->passwordFieldRow($model, 'password', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password'))); ?>
-    <?php echo $form->passwordFieldRow($model, 'verifyPassword', array('class' => 'span6 text', 'placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'oldPassword'); ?>
+        <div class="controls">
+            <?php echo $form->passwordField($model, 'oldPassword', array('placeholder' => Yii::t('site', 'Enter your old password'))); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'password'); ?>
+        <div class="controls">
+            <?php echo $form->passwordField($model, 'password', array('placeholder' => Yii::t('site', 'Enter your new password'))); ?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'verifyPassword'); ?>
+        <div class="controls">
+            <?php echo $form->passwordField($model, 'verifyPassword', array('placeholder' => Yii::t('site', 'Enter your new password again'))); ?>
+        </div>
+    </div>
 
     <div class="form-actions">
-        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Change'))); ?>
-        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'reset', 'label'=>Yii::t('site', 'Clear'))); ?>
+        <?php echo CHtml::button(Yii::t('site', 'Change'), array('type'=>'submit')); ?>
+        <?php echo CHtml::button(Yii::t('site', 'Clear'), array('type'=>'reset')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

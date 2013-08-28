@@ -181,7 +181,7 @@ class FieldController extends ControllerAdmin
     {
         $model = ProfileField::model()->findbyPk($id);
         if ($model === null)
-            throw new CHttpException(404,'The requested page does not exist.');
+            throw new CHttpException(404, Yii::t('error', 'The requested page does not exist.'));
 
         return $model;
     }

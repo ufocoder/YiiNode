@@ -1,7 +1,6 @@
 <?php
     /* @var BootActiveForm $form */
-    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'type' => 'horizontal',
+    $form = $this->beginWidget('CActiveForm', array(
         'action' => Yii::app()->createUrl($this->route),
         'method' => 'post',
         'clientOptions' => array(
@@ -14,10 +13,17 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldRow($model, 'login_or_email', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter login or email'))); ?>
+
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'login_or_email'); ?>
+        <div class="controls">
+            <?php echo $form->passwordField($model, 'login_or_email', array('placeholder' => Yii::t('site', 'Enter login or email'))); ?>
+        </div>
+    </div>
+
     <div class="control-group">
         <?php echo $form->labelEx($model, 'captcha', array('class'=>'control-label')); ?>
-        <div class="span4">
+        <div class="controls">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/recovery/captcha'),
                     'showRefreshButton'=>false,
@@ -34,15 +40,15 @@
 
     <hr>
     <div class="control-group">
-        <label class="control-label"></label>
-        <div class="span4">
-            <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
+        <div class="controls">
+            <?php echo CHtml::link(Yii::t("site", "Login"), Yii::app()->user->loginUrl); ?> |
             <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
         </div>
     </div>
 
+
     <div class="form-actions">
-        <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Restore'))); ?>
+        <?php echo CHtml::button(Yii::t('site', 'Restore'), array('type'=>'submit')); ?>
     </div>
 
 <?php $this->endWidget(); ?>
