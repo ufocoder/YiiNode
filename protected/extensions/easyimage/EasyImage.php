@@ -78,7 +78,7 @@ class EasyImage extends CApplicationComponent
 
 	public function detectPath($file)
 	{
-		$fullPath = Yii::getpathOfAlias('webroot') . $file;
+		$fullPath = Yii::getpathOfAlias('webroot') . "/" .$file;
 		if (is_file($fullPath)) {
 			return $fullPath;
 		}
@@ -196,7 +196,7 @@ class EasyImage extends CApplicationComponent
 	{
 		// Paths
 		$hash = md5($file . serialize($params));
-		$cachePath = Yii::getpathOfAlias('webroot') . $this->cachePath . $hash{0};
+		$cachePath = Yii::getpathOfAlias('webroot') . "/" .$this->cachePath . $hash{0};
 		$cacheFileExt = isset($params['type']) ? $params['type'] : pathinfo($file, PATHINFO_EXTENSION);
 		$cacheFileName = $hash . '.' . $cacheFileExt;
 		$cacheFile = $cachePath . DIRECTORY_SEPARATOR . $cacheFileName;
@@ -276,7 +276,7 @@ class EasyImage extends CApplicationComponent
 		if ($watermark instanceof EasyImage) {
 			$watermark = $watermark->image();
 		} elseif (is_string($watermark)) {
-			$watermark = Image::factory(Yii::getpathOfAlias('webroot') . $watermark);
+			$watermark = Image::factory(Yii::getpathOfAlias('webroot') . "/" .$watermark);
 		}
 		return $this->image()->watermark($watermark, $offset_x, $offset_y, $opacity);
 	}
