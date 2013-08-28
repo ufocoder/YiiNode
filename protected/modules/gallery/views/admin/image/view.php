@@ -1,6 +1,6 @@
 <?php
-    /* @var $this ArticlesController */
-    /* @var $model Article */
+    /* @var $this DefaultController */
+    /* @var $model GalleryImage */
 
     $nodeId = Yii::app()->getNodeId();
     $updateUrl = Yii::app()->createUrl('default/update', array('id'=>$model->id_gallery_image, 'nodeAdmin' => true, 'nodeId' => $nodeId));
@@ -8,7 +8,7 @@
 
     $this->title = Yii::t("site", "Update image");
     $this->breadcrumbs=array(
-        Yii::t('site', 'Article #{id}', array('{id}'=>$model->id_gallery_image))
+        Yii::t('site', 'Image #{id}', array('{id}'=>$model->id_gallery_image))
     );
 
     $this->actions = array(
