@@ -17,7 +17,6 @@ class DefaultController extends ControllerAdmin
             $model->feedbackNotification = Yii::app()->getSetting('feedbackNotification');
         }
 
-
         if (isset($_POST[$model_class]))
         {
             $model->attributes = $_POST[$model_class];
@@ -78,7 +77,7 @@ class DefaultController extends ControllerAdmin
         $model = $this->loadModel($id);
         $model->delete();
         if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
     }
 
 
