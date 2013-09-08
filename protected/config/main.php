@@ -37,6 +37,7 @@ return array(
         'admin',
         'articles',
         'contact',
+        'catalog',
         'feedback',
         'gallery',
         'page',
@@ -74,7 +75,7 @@ return array(
         'image' => array(
             'class' => 'ext.easyimage.EasyImage',
             'cachePath' => '/cache/image/',
-            'defaultImage' => '/img/noimage.jpg';
+            'defaultImage' => '/img/noimage.jpg'
         ),
 
         'mail' => array(
