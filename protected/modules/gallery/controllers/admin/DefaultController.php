@@ -50,17 +50,17 @@ class DefaultController extends ControllerAdmin
             if (empty($model->id_gallery_category))
                 $model->id_gallery_category = null;
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = GalleryImage::getUploadPath();
-                $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
-                    $model->image = $filename;
-            }
 
             if ($model->save()){
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = GalleryImage::getUploadPath();
+                    $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename))
+                        $model->saveAttributes(array('image' => $filename));
+                }
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was created successful!'));
                 $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
@@ -85,17 +85,16 @@ class DefaultController extends ControllerAdmin
             if (empty($model->id_gallery_category))
                 $model->id_gallery_category = null;
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = GalleryImage::getUploadPath();
-                $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
-                    $model->image = $filename;
-            }
-
             if ($model->save()){
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = GalleryImage::getUploadPath();
+                    $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename))
+                        $model->saveAttributes(array('image' => $filename));
+                }
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was updated successful!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_gallery_image, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }

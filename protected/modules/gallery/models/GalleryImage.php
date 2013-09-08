@@ -166,6 +166,11 @@ class GalleryImage extends CActiveRecord
             'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'id_gallery_image DESC',
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
             )
         ));
     }
@@ -218,7 +223,7 @@ class GalleryImage extends CActiveRecord
         if (parent::beforeDelete())
         {
             $filename = self::getUploadPath().$this->image;
-            if (file_exists($filename))
+            if (file_exists($filename) && !empty($this->image))
                 unlink($filename);
             return true;
         }

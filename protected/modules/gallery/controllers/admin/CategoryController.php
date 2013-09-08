@@ -23,17 +23,18 @@ class CategoryController extends ControllerAdmin
             $model->attributes = $_POST[$model_class];
             $model->id_node = Yii::app()->getNodeId();
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = GalleryCategory::getUploadPath();
-                $filename   = md5(time().$model->id_node) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
-                    $model->image = $filename;
-            }
 
             if ($model->save()){
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = GalleryCategory::getUploadPath();
+                    $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename))
+                        $model->saveAttributes(array('image' => $filename));
+                }
+
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery category was created successful!'));
                 $this->redirect(array('/category/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
@@ -59,22 +60,28 @@ class CategoryController extends ControllerAdmin
             // delete file
             if ($model->delete_image){
                 $filename = GalleryCategory::getUploadPath().$model->image;
-                if (file_exists($filename))
+                if (file_exists($filename) && !empty($model->image))
                     unlink($filename);
                 $model->saveAttributes(array('image'=>null));
             }
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = GalleryCategory::getUploadPath();
-                $filename   = md5(time().$model->id_node) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
-                    $model->image = $filename;
-            }
-
             if ($model->save()){
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = GalleryCategory::getUploadPath();
+                    $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename)){
+                        if (!empty($model->image)){
+                                $old_filename = GalleryCategory::getUploadPath().$model->image;
+                                if (file_exists($old_filename) && $old_filename != $filename)
+                                    unlink($old_filename);
+                            }
+                        $model->saveAttributes(array('image' => $filename));
+                    }
+                }
+
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery category was updated successful!'));
                 $this->redirect(array('/category/view', 'id'=>$model->id_gallery_category, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }

@@ -80,7 +80,7 @@
     <div class="control-group">
         <?php echo $form->labelEx($model, 'image', array('class'=>'control-label')); ?>
         <div class="controls">
-         <?php if($model->image): ?>
+         <?php if (!$model->isNewRecord && $model->image): ?>
                 <p>
                     <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
                 </p>
