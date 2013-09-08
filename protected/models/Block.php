@@ -255,7 +255,7 @@ class Block extends CActiveRecord
         if (parent::beforeDelete())
         {
             $filename = self::getUploadPath().$this->content;
-            if (file_exists($filename))
+            if (file_exists($filename) && !empty($this->content))
                 unlink($filename);
             return true;
         }
