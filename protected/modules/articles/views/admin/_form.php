@@ -60,7 +60,6 @@
     </div>
 
     <?php
-        $attributeFile = get_class($model).'[filename]';
         $fileID = substr(md5(time()), 0, 8);
         $script = "$(document).ready(function(){
         $('.attach-button').live('click', function(){
@@ -82,7 +81,7 @@
     <div class="control-group">
         <?php echo $form->labelEx($model, 'image', array('class'=>'control-label')); ?>
         <div class="controls">
-         <?php if($model->image): ?>
+         <?php if (!$model->isNewRecord && $model->image): ?>
                 <p>
                     <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
                     <div><?php echo $form->checkBox($model,'delete_image', array('style' => 'float: left; margin-right: 5px;;')); ?> <?php echo $form->labelEx($model,'delete_image'); ?></div>
@@ -95,7 +94,23 @@
     </div>
 
 
-    <?php echo $form->textAreaRow($model, 'notice', array('class'=>'span8', 'style'=>'min-height: 90px;')); ?>
+    <div class="control-group">
+        <?php echo $form->labelEx($model, 'notice', array('class'=>'control-label')); ?>
+        <div class="controls">
+        <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
+            'model' => $model,
+            'attribute' => 'notice',
+            'editorOptions' => array(
+                'language' => Yii::app()->language,
+                'toolbar' => array(
+                    array('Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo'),
+                    array('Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'),
+                    array('Link','Unlink','Anchor'),
+                )
+            )
+        )); ?>
+        </div>
+    </div>
 
     <div class="control-group">
         <?php echo $form->labelEx($model, 'content', array('class'=>'control-label')); ?>

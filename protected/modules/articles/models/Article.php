@@ -153,7 +153,6 @@ class Article extends CActiveRecord
      */
     public function search()
     {
-        // @todo удалить лишние атрибуты
 
         $criteria=new CDbCriteria;
 
@@ -171,6 +170,11 @@ class Article extends CActiveRecord
             'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'time_published DESC',
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
             )
         ));
     }
@@ -228,7 +232,7 @@ class Article extends CActiveRecord
         if (parent::beforeDelete())
         {
             $filename = self::getUploadPath().$this->image;
-            if (file_exists($filename))
+            if (file_exists($filename) && !empty($this->image))
                 unlink($filename);
             return true;
         }

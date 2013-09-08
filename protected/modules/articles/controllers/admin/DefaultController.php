@@ -46,17 +46,18 @@ class DefaultController extends ControllerAdmin
             $model->time_published = strtotime($model->date_published);
             $model->id_node = Yii::app()->getNodeId();
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = Article::getUploadPath();
-                $filename   = md5(time().$model->id_node) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename))
-                    $model->image = $filename;
-            }
-
             if ($model->save()){
+
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = Article::getUploadPath();
+                    $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename))
+                        $model->saveAttributes(array('image' => $filename));
+                }
+
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Article was created successful!'));
                 $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }
@@ -82,26 +83,29 @@ class DefaultController extends ControllerAdmin
             // delete file
             if ($model->delete_image){
                 $filename = Article::getUploadPath().$model->image;
-                if (file_exists($filename))
+                if (file_exists($filename) && !empty($model->image))
                     unlink($filename);
                 $model->saveAttributes(array('image'=>null));
             }
 
-            // upload file
-            $instance   = CUploadedFile::getInstance($model, 'x_image');
-            if (!empty($instance)){
-                $extension  = CFileHelper::getExtension($instance->getName());
-                $pathname   = Article::getUploadPath();
-                $filename   = md5(time().$model->id_node) . '.' . $extension;
-                if ($instance->saveAs($pathname.$filename)){
-                    $old_filename = Article::getUploadPath().$model->image;
-                    if (file_exists($old_filename) && $old_filename != $filename)
-                        unlink($old_filename);
-                    $model->image = $filename;
-                }
-            }
-
             if ($model->save()){
+
+                // upload file
+                $instance   = CUploadedFile::getInstance($model, 'x_image');
+                if (!empty($instance)){
+                    $extension  = CFileHelper::getExtension($instance->getName());
+                    $pathname   = Article::getUploadPath();
+                    $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    if ($instance->saveAs($pathname.$filename)){
+                        if (!empty($model->image)){
+                            $old_filename = Article::getUploadPath().$model->image;
+                            if (file_exists($old_filename) && $old_filename != $filename)
+                                unlink($old_filename);
+                        }
+                        $model->saveAttributes(array('image' => $filename));
+                    }
+                }
+
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Form values were saved!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_article, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
             }

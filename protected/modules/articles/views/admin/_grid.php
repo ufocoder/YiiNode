@@ -15,7 +15,7 @@
             'name'  => 'time_published',
             'value' => '!empty($data->time_published)?date("m.d.y, H:i:s", $data->time_published):null',
             'htmlOptions' => array(
-                'style' => 'width: 120px;'
+                'style' => 'width: 140px;'
             )
         ),
         array(
