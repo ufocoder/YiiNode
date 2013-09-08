@@ -30,7 +30,7 @@
             'hide':[],
             'val':{
                 'field_size':255,
-                'default':'',
+                'default':'255',
                 'range':'',
             }
         },
@@ -107,6 +107,11 @@
 
             $('div[field].field-show').show(500);
             $('div[field].field-hide').hide(500);
+
+            ".($model->isNewRecord?"
+            for (var t in fieldType[type].val) {
+                $('div[field=\"' + t + '\"] input').val(fieldType[type].val[t]);
+            }":null)."
         }
     }
 

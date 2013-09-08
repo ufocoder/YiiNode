@@ -4,7 +4,10 @@
     'dataProvider'=>$model->search(),
     'filter'=>$model,
     'columns'=>array(
-        'id_user_field',
+        array(
+            'header' => '#',
+            'name'   => 'id_user_field',
+        ),
         array(
             'name'   => 'varname',
             'type'   => 'raw',
