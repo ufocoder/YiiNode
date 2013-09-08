@@ -111,6 +111,11 @@ class Contact extends CActiveRecord
             'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'id_contact DESC',
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
             )
         ));
     }
@@ -166,7 +171,7 @@ class Contact extends CActiveRecord
         if (parent::beforeDelete())
         {
             $filename = self::getUploadPath().$this->image;
-            if (file_exists($filename))
+            if (file_exists($filename) && !empty($this->image))
                 unlink($filename);
             return true;
         }

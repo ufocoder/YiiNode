@@ -54,7 +54,7 @@ class DefaultController extends ControllerAdmin
                     $pathname   = Article::getUploadPath();
                     $filename   = md5(time().$model->id_node) . '.' . $extension;
                     if ($instance->saveAs($pathname.$filename))
-                        $model->image = $filename;
+                        $model->saveAttributes(array('image' => $filename));
                 }
 
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Contact was created successful!'));
@@ -81,7 +81,7 @@ class DefaultController extends ControllerAdmin
             // delete file
             if ($model->delete_image){
                 $filename = Article::getUploadPath().$model->image;
-                if (file_exists($filename))
+                if (file_exists($filename) && !empty($model->image))
                     unlink($filename);
                 $model->saveAttributes(array('image'=>null));
             }
@@ -95,10 +95,12 @@ class DefaultController extends ControllerAdmin
                     $pathname   = Article::getUploadPath();
                     $filename   = md5(time().$model->id_node) . '.' . $extension;
                     if ($instance->saveAs($pathname.$filename)){
-                        $old_filename = Article::getUploadPath().$model->image;
-                        if (file_exists($old_filename) && $old_filename != $filename)
-                            unlink($old_filename);
-                        $model->image = $filename;
+                        if (!empty($model->image)){
+                            $old_filename = Article::getUploadPath().$model->image;
+                            if (file_exists($old_filename) && $old_filename != $filename)
+                                unlink($old_filename);
+                        }
+                        $model->saveAttributes(array('image' => $filename));
                     }
                 }
 
@@ -118,7 +120,7 @@ class DefaultController extends ControllerAdmin
         $model = $this->loadModel($id);
         $model->delete();
         if(!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
     }
 
     public function actionIndex()
