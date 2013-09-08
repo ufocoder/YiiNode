@@ -38,9 +38,7 @@ class NodeController extends ControllerAdmin
             $model->attributes = $_POST[$class];
             if ($model->validate())
             {
-                $flagMove = $model->moveNode();
-                $flagSave = $model->saveNode();
-                $flag = $flagMove && $flagSave;
+                $flag = $model->saveAsNode();
 
                 if (Yii::app()->request->isAjaxRequest){
                     echo CJSON::encode(array('success' => $flag));
@@ -123,7 +121,7 @@ class NodeController extends ControllerAdmin
         if (isset($_POST[$class]))
         {
             $model->attributes=$_POST[$class];
-            if ($model->moveNode())
+            if ($model->saveAsNode())
                 $this->redirect(array('index'));
         }
 
