@@ -228,14 +228,15 @@ class Node extends CActiveRecord
         return parent::model($className);
     }
 
-
-    public function moveNode()
+    public function saveAsNode()
     {
+        // root is not exists
         if (!$this->has_root || $this->isRoot()){
             $this->slug = "/";
             $this->path = "/";
-            return true;
+            return $this->saveNode();
         }
+        // root exists and should be one
         elseif (!isset($this->node_position) || !isset($this->node_related))
             return false;
 
@@ -300,7 +301,7 @@ class Node extends CActiveRecord
 
                     $this->id_node_parent = $node->id_node;
                     $this->path = rtrim($node->path, "/")."/".$this->slug;
-                    $this->setPosition($row['position'], false);
+                    $this->setPosition(isset($row['position'])?$row['position']:0, false);
 
                     // save node
                     return $this->saveNode();
@@ -318,15 +319,37 @@ class Node extends CActiveRecord
         $up     = 'UPDATE '.$this->tableName().' SET position=position+1 WHERE position >= '.$position.' AND id_node_parent'.$where;
         $down   = 'UPDATE '.$this->tableName().' SET position=position-1 WHERE position <= '.$position.' AND id_node_parent'.$where;
 
-        if ($before){
+        if ($before)
             Yii::app()->db->createCommand($up)->execute();
-            $this->position = $position - 1;
-        }else{
+        else
             Yii::app()->db->createCommand($down)->execute();
-            $this->position = $position + 1;
-        }
+
+        $this->saveAttributes(array('position' => $position));
 
         $this->updatePosition();
+    }
+
+    protected function updatePosition()
+    {
+        $criteria=new CDbCriteria;
+        $criteria->order = 'position ASC';
+
+        if ($this->id_node_parent){
+            $criteria->addCondition('id_node_parent = :id_parent');
+            $criteria->params = array(':id_parent' => $this->id_node_parent);
+        }else{
+            $criteria->addCondition('id_node_parent is NULL');
+        }
+
+        $list = self::model()->findAll($criteria);
+
+        $i=0;
+        foreach($list as $item){
+            $item->saveAttributes(array('position'=>$i));
+            if ($this->id_node == $item->id_node)
+                $this->saveAttributes(array('position'=>$i));
+            $i++;
+        }
     }
 
     public function updatePaths()
@@ -344,39 +367,26 @@ class Node extends CActiveRecord
 
     }
 
-    protected function updatePosition()
-    {
-        $criteria=new CDbCriteria;
-        $criteria->order = 'position ASC';
-
-        if ($this->id_node_parent){
-            $criteria->addCondition('id_node_parent = :id_parent');
-            $criteria->params = array(':id_parent' => $this->id_node_parent);
-        }else{
-            $criteria->addCondition('id_node_parent is NULL');
-        }
-
-        $list = self::model()->findAll($criteria);
-        $i=0;
-        foreach($list as $item){
-            $item->position = $i;
-            $item->saveNode();
-            if ($item->id_node == $this->id_node)
-                $this->position = $i;
-            $i++;
-        }
-    }
-
-    /**
-     * Добавить значения дат
-     */
     protected function afterFind()
     {
         $this->old_attributes = $this->attributes;
-
         parent::afterFind();
     }
 
+
+    protected function beforeSave()
+    {
+        if(parent::beforeSave())
+        {
+            if($this->isNewRecord)
+                $this->time_created = time();
+            else
+                $this->time_updated = time();
+            return true;
+        }
+        else
+            return false;
+    }
 
     public function afterSave()
     {
