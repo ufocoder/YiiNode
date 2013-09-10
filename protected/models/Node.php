@@ -62,8 +62,8 @@ class Node extends CActiveRecord
     {
         $settings = array(
             "position" => array(
-                self::POSITION_PREV => Yii::t('site','Node previous'),
-                self::POSITION_NEXT => Yii::t('site','Node after'),
+                self::POSITION_PREV  => Yii::t('site','Node previous'),
+                self::POSITION_NEXT  => Yii::t('site','Node after'),
                 self::POSITION_CHILD => Yii::t('site','Node as child'),
             )
         );
@@ -240,7 +240,11 @@ class Node extends CActiveRecord
         elseif (!isset($this->node_position) || !isset($this->node_related))
             return false;
 
-        $node = self::model()->findByPk($this->node_related);
+        $node   = self::model()->findByPk($this->node_related);
+
+        $result = null;
+        $position = null;
+        $direction = null;
 
         if (!empty($node))
             switch($this->node_position)
@@ -259,10 +263,12 @@ class Node extends CActiveRecord
                     $parentNode = self::model()->findByPk($node->id_node_parent);
                     $this->id_node_parent = $parentNode->id_node;
                     $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
-                    $this->setPosition($node->position, true);
+
+                    $position  = $node->position;
+                    $direction = true;
 
                     // save node
-                    return $this->saveNode();
+                    $result = $this->saveNode();
                 break;
 
                 case self::POSITION_NEXT:
@@ -279,10 +285,11 @@ class Node extends CActiveRecord
                     $parentNode = self::model()->findByPk($node->id_node_parent);
                     $this->id_node_parent = $parentNode->id_node;
                     $this->path = rtrim($parentNode->path, "/")."/".$this->slug;
-                    $this->setPosition($node->position, false);
+                    $position  = $node->position;
+                    $direction = false;
 
                     // save node
-                    return $this->saveNode();
+                    $result = $this->saveNode();
                 break;
 
                 case self::POSITION_CHILD:
@@ -301,13 +308,20 @@ class Node extends CActiveRecord
 
                     $this->id_node_parent = $node->id_node;
                     $this->path = rtrim($node->path, "/")."/".$this->slug;
-                    $this->setPosition(isset($row['position'])?$row['position']:0, false);
+                    $position = isset($row['position'])?$row['position']:0;
+                    $direction = false;
 
                     // save node
-                    return $this->saveNode();
-
+                    $result = $this->saveNode();
                 break;
             }
+
+        if ($result != null && $position != null) {
+            $this->setPosition($position, $direction);
+            $this->updatePosition();
+        }
+
+        return $result;
     }
 
     protected function setPosition($position, $before = true)
@@ -325,8 +339,6 @@ class Node extends CActiveRecord
             Yii::app()->db->createCommand($down)->execute();
 
         $this->saveAttributes(array('position' => $position));
-
-        $this->updatePosition();
     }
 
     protected function updatePosition()
@@ -346,8 +358,6 @@ class Node extends CActiveRecord
         $i=0;
         foreach($list as $item){
             $item->saveAttributes(array('position'=>$i));
-            if ($this->id_node == $item->id_node)
-                $this->saveAttributes(array('position'=>$i));
             $i++;
         }
     }
