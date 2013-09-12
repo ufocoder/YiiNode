@@ -5,9 +5,9 @@ class UserModule extends WebModule
     const CONFIRM_NONE = 1;
     const CONFIRM_MAIL = 2;
 
-    public $activeAfterRegister = true;
+    public $activeAfterRegister = false;
     public $confimTypeRegister = self::CONFIRM_NONE;
-    public $allowRegister = true;
+    public $allowRegister = false;
 
     /**
      * Returns the description of this module.
