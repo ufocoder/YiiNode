@@ -191,8 +191,10 @@ class GalleryImage extends CActiveRecord
      */
     protected function afterFind()
     {
-        $this->date_created = !empty($this->time_created)?date('Y-m-d H:i', $this->time_created):null;
-        $this->date_updated = !empty($this->time_updated)?date('Y-m-d H:i', $this->time_updated):null;
+        $format = Yii::app()->getSetting('datetimeFormat', 'Y-m-d H:i');
+
+        $this->date_created = !empty($this->time_created)?date($format, $this->time_created):null;
+        $this->date_updated = !empty($this->time_updated)?date($format, $this->time_updated):null;
 
         parent::afterFind();
     }
