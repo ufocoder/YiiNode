@@ -43,7 +43,7 @@ class ArticlesModule extends WebModule
         return array(
             '/rss'                          => 'articles/default/rss',
             '/<id:\d+>'                     => 'articles/default/view',
-            '/<slug:[^\d]\w+[\_\-\.\w]+>'   => 'articles/default/view',
+            '/<slug:\w+[\_\-\.\w]+>'   => 'articles/default/view',
             '/'                             => 'articles/default/index',
         );
     }

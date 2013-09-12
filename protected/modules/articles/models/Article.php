@@ -104,7 +104,7 @@ class Article extends CActiveRecord
             array('date_published', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm'),
             array('id_node, title, notice, time_published', 'required'),
             array('title', 'length', 'max'=>255),
-            array('slug', 'match', 'pattern' => '/^[^\d]\w+[\_\-\.\w]+$/i'),
+            array('slug', 'match', 'pattern' => '/^([^\d]\w+[\_\-\.\w]+)$|^([\d+]+[^\d]+)/i'),
             array('content, notice', 'default', 'value'=>null),
             array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
@@ -195,9 +195,11 @@ class Article extends CActiveRecord
      */
     protected function afterFind()
     {
-        $this->date_created = !empty($this->time_created)?date('Y-m-d H:i', $this->time_created):null;
-        $this->date_updated = !empty($this->time_updated)?date('Y-m-d H:i', $this->time_updated):null;
-        $this->date_published = !empty($this->time_published)?date('Y-m-d H:i', $this->time_published):null;
+        $format = Yii::app()->getSetting('datetimeFormat', 'Y-m-d H:i');
+
+        $this->date_created   = !empty($this->time_created)?date($format, $this->time_created):null;
+        $this->date_updated   = !empty($this->time_updated)?date($format, $this->time_updated):null;
+        $this->date_published = !empty($this->time_published)?date($format, $this->time_published):null;
 
         parent::afterFind();
     }
