@@ -3,7 +3,10 @@
         Yii::t('site', 'Wellcome')
     );
 ?>
-
+<h3><?php echo Yii::t('site', 'Wellcome');?></h3>
+<div class="alert alert-info">
+С помощью панели управления вы можете редактировать разделы сайта и изменять его настройки.
+</div>
 <?php
     if (Yii::app()->hasModule('feedback')):
         $path = 'application.modules.feedback';

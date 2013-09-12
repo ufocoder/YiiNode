@@ -16,12 +16,18 @@ class FormSettingDefault extends CFormModel
         $settings = array(
             "datetimeFormat" => array(
                 "list" => array(
-                )
+                    'F j, Y g:i' => date('F j, Y g:i'),
+                    'Y/m/d g:i:s' => date('Y/m/d g:i:s'),
+                    'd.m.Y H:i' => date('d.m.Y H:i'),
+                ),
+                'default' => 'd.m.Y H:i'
             )
         );
 
         if (isset($settings[$setting][$value]))
             return $settings[$setting][$value];
+        elseif (isset($settings[$setting]))
+            return $settings[$setting];
     }
 
     /**
@@ -31,7 +37,7 @@ class FormSettingDefault extends CFormModel
         return array(
             array('sitename', 'required'),
             array('emailAdmin', 'email'),
-            array('datetimeFormat', 'type', 'type' => 'datetime')
+            array('datetimeFormat', 'default', 'value' => self::values('datetimeFormat', 'dafault'))
         );
     }
 

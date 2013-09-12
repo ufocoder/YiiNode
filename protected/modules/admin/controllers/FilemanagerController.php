@@ -21,6 +21,7 @@ class FilemanagerController extends ControllerAdmin
             'connector' => array(
                 'class'=> "ext.elfinder2.ElFinderConnectorAction",
                 'options' => array(
+                    'debug'=>true,
                     'roots'=>array(
                         array(
                             'driver'    => 'LocalFileSystem',

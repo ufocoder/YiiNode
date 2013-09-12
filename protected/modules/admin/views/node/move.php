@@ -4,7 +4,7 @@
 
     $nodeId = $model->id_node;
 
-    $this->title = Yii::t('site', 'Update node');
+    $this->title = Yii::t('site', 'Node move');
     $this->breadcrumbs = array(
         Yii::t('site', 'Move')
     );

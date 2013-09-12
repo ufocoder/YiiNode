@@ -28,7 +28,7 @@
 
 <?php echo $form->errorSummary($model); ?>
 
-<?php echo $form->textFieldRow($model, 'title', array('class'=>'span6')); ?>
+<?php echo $form->textFieldRow($model, 'title', array('class'=>'span8')); ?>
 <?php if (!$model->isRoot() && (!empty($nodes) || !$model->isNewRecord)):
  // get Title html ID
     $attribute = 'title';
@@ -47,7 +47,7 @@
     Yii::app()->getClientScript()->registerScript('article-form-slug', $script);
 
 ?>
-<?php echo $form->textFieldRow($model, 'slug', array('class'=>'span6')); ?>
+<?php echo $form->textFieldRow($model, 'slug', array('class'=>'span8')); ?>
 <?php endif; ?>
 
 <?php if ($model->isNewRecord): ?>
@@ -61,12 +61,11 @@
             'asDropDownList' => true,
             'options' => array(
                 'placeholder' => Yii::t("site", "Select a node"),
-                'width' => '328px',
+                'width' => '370px',
             ),
             'val' => null,
             'data' => $nodes,
-        ));
-        ?>
+        )); ?>
     </div>
 </div>
 <?php echo $form->radioButtonListRow($model, 'node_position', $model->values('position')); ?>
@@ -81,7 +80,7 @@
             'asDropDownList' => true,
             'options' => array(
                 'placeholder' => Yii::t("site", "Select a module"),
-                'width' => '328px',
+                'width' => '370px',
             ),
             'val' => null,
             'data' => $modules,
@@ -101,7 +100,7 @@
             'asDropDownList' => true,
             'options' => array(
                 'placeholder' => Yii::t("site", "Select a module"),
-                'width' => '328px',
+                'width' => '370px',
             ),
             'val' => null,
             'data' => $node_layouts,
@@ -111,23 +110,7 @@
 </div>
 <?php endif; ?>
 
-<div class="control-group">
-    <?php echo $form->labelEx($model, 'description', array('class'=>'control-label')); ?>
-    <div class="controls">
-    <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
-        'model' => $model,
-        'attribute' => 'description',
-        'editorOptions' => array(
-            'language' => Yii::app()->language,
-            'toolbar' => array(
-                array('Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo'),
-                array('Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'),
-                array('Link','Unlink','Anchor'),
-            )
-        )
-    )); ?>
-    </div>
-</div>
+<?php echo $form->textAreaRow($model, 'description', array('class'=>'span8', 'rows'=>7, 'hint'=>Yii::t('site', 'Node description for administration or site manager'))); ?>
 
 <?php echo $form->checkBoxRow($model, 'enabled', $model->isNewRecord?array('checked'=>'checked'):array()); ?>
 <?php echo $form->checkBoxRow($model, 'hidden'); ?>

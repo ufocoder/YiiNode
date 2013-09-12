@@ -8,7 +8,7 @@
 class SettingsController extends ControllerAdmin
 {
     /**
-     * Index page with last changes widgets
+     * Main settings
      */
     public function actionIndex()
     {
@@ -27,7 +27,33 @@ class SettingsController extends ControllerAdmin
                 $this->redirect(array('index'));
             }
         }
-        $this->render('/settings/index', array(
+        $this->render('/settings/setting.site', array(
+            'model' => $model
+        ));
+    }
+
+
+    /**
+     * User settings
+     */
+    public function actionUser()
+    {
+        $class_form = 'FormSettingUser';
+        $model = new $class_form;
+
+        $model->userAllowRegister = Yii::app()->getSetting('userAllowRegister');
+        $model->userActiveAfterRegister = Yii::app()->getSetting('userActiveAfterRegister');
+        $model->userConfirmTypeRegister = Yii::app()->getSetting('userConfirmTypeRegister', $model::values('confirm', 'default'));
+
+        if (isset($_POST[$class_form]))
+        {
+            $model->attributes = $_POST[$class_form];
+            if ($model->validate()){
+                Yii::app()->setSettings($model->attributes);
+                $this->redirect(array('user'));
+            }
+        }
+        $this->render('/settings/setting.user', array(
             'model' => $model
         ));
     }
