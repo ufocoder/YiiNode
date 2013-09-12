@@ -53,7 +53,7 @@ class SettingBehavior extends CBehavior
 
     public function setSetting($title, $value = null)
     {
-        if (empty($title) || empty($value))
+        if (empty($title) || $value == null)
             return false;
 
         if (isset($this->_setting_root[$title]))
