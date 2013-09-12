@@ -2,12 +2,12 @@
 
 class UserModule extends WebModule
 {
+    const CONFIRM_NONE = 1;
+    const CONFIRM_MAIL = 2;
 
-    // @TODO:
     public $activeAfterRegister = true;
-    public $sendActivationMail = false;
-    public $autoLogin = true;
-    public $loginNotActiv = true;
+    public $confimTypeRegister = self::CONFIRM_NONE;
+    public $allowRegister = true;
 
     /**
      * Returns the description of this module.

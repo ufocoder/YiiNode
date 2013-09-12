@@ -8,7 +8,8 @@
         )
     ));
 
-    $this->title =  Yii::t('site', 'Password recovery');
+    $this->title  =  Yii::t('site', 'Password recovery');
+    $flagRegister = Yii::app()->getSetting('userAllowRegister', Yii::app()->controller->module->allowRegister);
 ?>
 
     <?php echo $form->errorSummary($model); ?>
@@ -41,8 +42,10 @@
     <hr>
     <div class="control-group">
         <div class="controls">
-            <?php echo CHtml::link(Yii::t("site", "Login"), Yii::app()->user->loginUrl); ?> |
-            <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
+            <?php echo CHtml::link(Yii::t("site", "Login"), Yii::app()->user->loginUrl); ?>
+            <?php if ($flagRegister):?> |
+                <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
+            <?php endif; ?>
         </div>
     </div>
 

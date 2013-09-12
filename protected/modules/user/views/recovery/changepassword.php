@@ -11,7 +11,8 @@
         )
     ));
 
-    $this->title =  Yii::t('site', 'Change password');
+    $this->title  = Yii::t('site', 'Change password');
+    $flagRegister = Yii::app()->getSetting('userAllowRegister', Yii::app()->controller->module->allowRegister);
 ?>
 
     <?php echo $form->errorSummary($model); ?>
@@ -34,8 +35,10 @@
     <div class="control-group">
         <label class="control-label"></label>
         <div class="controls">
-            <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?> |
-            <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
+            <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?>
+            <?php if ($flagRegister):?> |
+                <?php echo CHtml::link(Yii::t("site", "Registration"), Yii::app()->user->registrationUrl); ?>
+            <?php endif; ?>
         </div>
     </div>
 

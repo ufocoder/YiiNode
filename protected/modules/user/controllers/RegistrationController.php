@@ -18,13 +18,19 @@ class RegistrationController extends Controller
      */
     public function accessRules()
     {
-        return array(
-            array('allow',
+        $module = Yii::app()->controller->module;
+        $flagRegister = Yii::app()->getSetting('userAllowRegister', $module->allowRegister);
+
+        $rules = array();
+        if ($flagRegister)
+            $rules[] =  array('allow',
                 'actions' => array('index', 'captcha'),
                 'users' => array('*'),
-            ),
-            array('deny')
-        );
+            );
+
+        $rules[] = array('deny');
+
+        return $rules;
     }
 
     /**
@@ -45,6 +51,14 @@ class RegistrationController extends Controller
 
             if ($form->validate() && $profile->validate())
             {
+
+                $module = Yii::app()->controller->module;
+                $typeConfirm = Yii::app()->getSetting('userConfirmTypeRegister', $module->confirmTypeRegister);
+
+                $flagConfirmNone = $typeConfirm == $module::CONFIRM_NONE;
+                $flagConfirmMail = $typeConfirm == $module::CONFIRM_MAIL;
+                $flagActiveAfterRegister = Yii::app()->getSetting('userActiveAfterRegister', $module->activeAfterRegister);
+
                 $user =  new User;
                 $user->login = $form->login;
                 $user->email = $form->email;
@@ -52,7 +66,7 @@ class RegistrationController extends Controller
                 $user->activekey = Yii::app()->user->encrypting(microtime().$form->password);
                 $user->password = Yii::app()->user->encrypting($form->password);
 
-                if (Yii::app()->controller->module->activeAfterRegister)
+                if ($flagActiveAfterRegister)
                     $user->status= User::STATUS_ACTIVE;
                 else
                     $user->status = User::STATUS_NOACTIVE;
@@ -62,7 +76,7 @@ class RegistrationController extends Controller
                     $profile->id_user = $user->id_user;
                     $profile->save();
 
-                    if (Yii::app()->controller->module->sendActivationMail)
+                    if ($flagConfirmMail)
                     {
                         $activation_url = $this->createAbsoluteUrl('/user/activation/activation', array("activekey" => $model->activkey, "email" => $model->email));
                         UserModule::sendMail(
@@ -76,23 +90,18 @@ class RegistrationController extends Controller
                         );
                     }
 
-                    if ((Yii::app()->controller->module->loginNotActiv
-                        || (Yii::app()->controller->module->activeAfterRegister
-                            && Yii::app()->controller->module->sendActivationMail==false)
-                        ) && Yii::app()->controller->module->autoLogin) {
+                    if ($flagActiveAfterRegister && $flagConfirmNone)) {
                         $identity = new UserIdentity($user->login, $form->password);
                         $identity->authenticate();
                         Yii::app()->user->login($identity, 0);
+                        Yii::app()->user->setFlash('success', Yii::t("user", "Thank you for your registration."));
                         $this->redirect(Yii::app()->user->returnUrl);
-
                     } else {
-                        if (!Yii::app()->controller->module->activeAfterRegister && !Yii::app()->controller->module->sendActivationMail) {
+                        if (!$flagActiveAfterRegister && $flagConfirmNone) {
                             Yii::app()->user->setFlash('success', Yii::t("user", "Thank you for your registration. Contact Admin to activate your account."));
-                        } elseif(Yii::app()->controller->module->activeAfterRegister && Yii::app()->controller->module->sendActivationMail==false) {
+                        } elseif($flagActiveAfterRegister && $flagConfirmNone) {
                             Yii::app()->user->setFlash('success', Yii::t("user", "Thank you for your registration. Please {{login}}.",array('{{login}}'=>CHtml::link(Yii::t("user", 'Login'),Yii::app()->controller->module->loginUrl))));
-                        } elseif(Yii::app()->controller->module->loginNotActiv) {
-                            Yii::app()->user->setFlash('success', Yii::t("user", "Thank you for your registration. Please check your email or login."));
-                        } else {
+                        } elseif (!$flagActiveAfterRegister && $flagConfirmMail) {
                             Yii::app()->user->setFlash('success', Yii::t("user", "Thank you for your registration. Please check your email."));
                         }
                         $this->refresh();
