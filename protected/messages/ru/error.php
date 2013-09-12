@@ -17,14 +17,16 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Email is incorrect.' => '',
-  'Incorrect recovery link.' => '',
-  'Node ID #{id_node} not exists.' => '',
-  'The requested page does not exist.' => '',
-  'There is only one root node.' => '',
-  'User\'s email is not exists' => '',
-  'Username is incorrect.' => '',
-  'Root node couldn\'t be moved.' => '@@@@',
-  'The requested node does not exist.' => '@@@@',
-  'There was error on creating node!' => '@@@@',
+  'Invalid request. Please do not repeat this request again.' => 'Некорректнаый запрос. Пожалуйста, не повторяйте этот запрос снова.',
+  'Product data is empty' => 'Данные о продукции пусты',
+  'Email is incorrect.' => 'E-mail некорректен.',
+  'Incorrect recovery link.' => 'Некорректная ссылка для восстановления.',
+  'Node ID #{id_node} not exists.' => 'Раздел #{id_node} не существует.',
+  'Root node couldn\'t be moved.' => 'Корневой раздел не может быть перемещен.',
+  'The requested node does not exist.' => 'Запрашиваемый раздел не может быть найден.',
+  'The requested page does not exist.' => 'Запрашиваемая страница не существует.',
+  'There is only one root node.' => 'Может быть только один корневой раздел.',
+  'There was error on creating node!' => 'Произошла ошибка при создании раздела!',
+  'User\'s email is not exists' => 'Указанный e-mail уже существует',
+  'Username is incorrect.' => 'Имя пользователя некорректно.',
 );

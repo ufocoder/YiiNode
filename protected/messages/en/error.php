@@ -19,7 +19,9 @@
 return array (
   'Email is incorrect.' => '',
   'Incorrect recovery link.' => '',
+  'Invalid request. Please do not repeat this request again.' => '',
   'Node ID #{id_node} not exists.' => '',
+  'Product data is empty' => '',
   'The requested page does not exist.' => '',
   'There is only one root node.' => '',
   'User\'s email is not exists' => '',
