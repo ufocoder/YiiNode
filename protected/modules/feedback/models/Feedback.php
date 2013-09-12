@@ -107,9 +107,11 @@ class Feedback extends CActiveRecord
      */
     protected function afterFind()
     {
-        $this->date_created = !empty($this->time_created)?date('Y-m-d H:i', $this->time_created):null;
-        $this->date_updated = !empty($this->time_updated)?date('Y-m-d H:i', $this->time_updated):null;
-        $this->date_readed = !empty($this->time_readed)?date('Y-m-d H:i', $this->time_readed):null;
+        $format = Yii::app()->getSetting('datetimeFormat', 'Y-m-d H:i');
+
+        $this->date_created = !empty($this->time_created)?date($format, $this->time_created):null;
+        $this->date_updated = !empty($this->time_updated)?date($format, $this->time_updated):null;
+        $this->date_readed = !empty($this->time_readed)?date($format, $this->time_readed):null;
 
         parent::afterFind();
     }
