@@ -145,9 +145,10 @@
     </fieldset>
 
     <fieldset>
-    <legend><?php echo Yii::t('site', 'Meta information')?></legend>
-    <?php echo $form->textAreaRow($model, 'meta_keywords', array('class'=>'span8')); ?>
-    <?php echo $form->textAreaRow($model, 'meta_description', array('class'=>'span8')); ?>
+        <legend><?php echo Yii::t('site', 'Meta information')?></legend>
+        <?php echo $form->textFieldRow($model, 'meta_title', array('class'=>'span8')); ?>
+        <?php echo $form->textAreaRow($model, 'meta_keywords', array('class'=>'span8')); ?>
+        <?php echo $form->textAreaRow($model, 'meta_description', array('class'=>'span8')); ?>
     </fieldset>
 
     <div class="form-actions">

@@ -99,6 +99,7 @@ class Article extends CActiveRecord
     public function rules()
     {
         return array(
+            array('meta_title, meta_keywords, meta_description', 'default', 'value'=>null),
             array('x_image', 'file', 'types'=>'jpg, jpeg, gif, png', 'allowEmpty'=>true),
             array('delete_image', 'boolean', 'allowEmpty'=>true),
             array('date_published', 'type', 'type'=>'datetime', 'datetimeFormat'=>'yyyy-MM-dd hh:mm'),
