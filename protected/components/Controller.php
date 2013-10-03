@@ -80,7 +80,9 @@ class Controller extends CController
     {
         $node = Yii::app()->getNode();
 
-        $layouts = array_keys(Yii::app()->Theme->getSetting('layouts'));
+        $layouts = array();
+        if (!empty(Yii::app()->Theme))
+            $layouts = array_keys(Yii::app()->Theme->getSetting('layouts'));
 
         if ($node && in_array($node->layout, $layouts))
             $this->layout = "//layouts/".$node->layout;
