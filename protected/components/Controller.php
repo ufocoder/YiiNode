@@ -16,6 +16,16 @@ class Controller extends CController
     public $pageTitle;
 
     /**
+     * Page meta keywords
+     */
+    public $pageKeywords;
+
+    /**
+     * Page meta keywords
+     */
+    public $pageDescription;
+
+    /**
      * Page title, html tag 'h1'
      */
     public $title;
@@ -70,10 +80,9 @@ class Controller extends CController
     {
         $node = Yii::app()->getNode();
 
-        if (Yii::app()->Theme)
-            $layouts = array_keys(Yii::app()->Theme->getSetting('layouts'));
+        $layouts = array_keys(Yii::app()->Theme->getSetting('layouts'));
 
-        if (!empty($node) && isset($layouts) && in_array($node->layout, $layouts))
+        if ($node && in_array($node->layout, $layouts))
             $this->layout = "//layouts/".$node->layout;
         elseif (!empty($node) && $node->isRoot())
             $this->layout = "//layouts/default";
