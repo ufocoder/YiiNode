@@ -31,10 +31,17 @@ class DefaultController extends Controller
     public function actionCategory($id)
     {
         $pager  = Yii::app()->getNodeSetting(Yii::app()->getNodeId(), 'pager', GallerySetting::values('pager', 'default'));
+        $image = GalleryImage::model()->node()->category();
 
-        $image = GalleryImage::model()->node()->category(array('params'=>array('id_gallery_category'=>$id)));
+        $categories = GalleryCategory::model()->node()->published()->findAll(array('index'=>'id_gallery_category'));
+
+        if (!isset($categories[$id]))
+            throw new CHttpException(404, 'The requested page does not exist.');
 
         $dataProvider = new CActiveDataProvider($image, array(
+            'criteria' => array(
+                'params'=>array(':id_gallery_category'=>$id)
+            ),
             'pagination' => array(
                 'pageSize' => $pager,
                 'pageVar'  => 'page'
@@ -42,6 +49,7 @@ class DefaultController extends Controller
         ));
 
         $this->render('/category', array(
+            'id_category'   => $id,
             'categories'    => $categories,
             'dataProvider'  => $dataProvider
         ));

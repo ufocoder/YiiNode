@@ -50,7 +50,6 @@ class DefaultController extends ControllerAdmin
             if (empty($model->id_gallery_category))
                 $model->id_gallery_category = null;
 
-
             if ($model->save()){
                 // upload file
                 $instance   = CUploadedFile::getInstance($model, 'x_image');

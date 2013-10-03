@@ -6,9 +6,9 @@
     $nodeId = Yii::app()->getNodeId();
 
     if ($model->isNewRecord)
-        $action = Yii::app()->createUrl('default/create', array('nodeAdmin'=>true, 'nodeId'=>$nodeId));
+        $action = Yii::app()->createUrl('category/create', array('nodeAdmin'=>true, 'nodeId'=>$nodeId));
     else
-        $action = Yii::app()->createUrl('default/update', array('nodeAdmin'=>true, 'nodeId'=>$nodeId, 'id'=>$model->id_gallery_category));
+        $action = Yii::app()->createUrl('category/update', array('nodeAdmin'=>true, 'nodeId'=>$nodeId, 'id'=>$model->id_gallery_category));
 
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'articles-form',

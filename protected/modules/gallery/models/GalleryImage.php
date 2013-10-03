@@ -94,11 +94,11 @@ class GalleryImage extends CActiveRecord
     public function rules()
     {
         return array(
-            array('image', 'required'),
-            array('x_image', 'file', 'types'=>'jpg, jpeg, gif, png', 'allowEmpty'=>true),
-            array('title, image', 'required'),
+            array('title', 'required'),
+            array('x_image', 'file', 'types'=>'jpg, jpeg, gif, png', 'allowEmpty'=>!$this->isNewRecord),
             array('title', 'length', 'max'=>255),
             array('content', 'default', 'value'=>null),
+            array('id_gallery_category', 'numerical'),
             array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
             // Правило, использующиеся в search

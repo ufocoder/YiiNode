@@ -24,12 +24,11 @@
         ),
     ));
 
-    $categories = array_merge(
-        array(Yii::t('site', 'Without category')),
-        CHtml::listData(GalleryCategory::model()->node()->findAll(), 'id_gallery_category', 'title')
-    );
+    $categories = array(Yii::t('site', 'Without category'));
+    $data = GalleryCategory::model()->node()->findAll();;
 
-
+    foreach ($data as $item)
+        $categories[$item->id_gallery_category] = $item->title;
 ?>
 
     <?php echo $form->errorSummary($model); ?>
