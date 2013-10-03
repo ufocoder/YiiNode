@@ -359,7 +359,6 @@ class CatalogCategory extends \CActiveRecord
             return false;
     }
 
-
     public function treechild($id)
     {
         $curnode = self::model()->findByPk($id);

@@ -59,13 +59,18 @@ class CatalogProduct extends CActiveRecord
             if (isset($fields[$field]['column']))
             {
                 if  (!empty($param))
-                    $criteria = array('condition'=>'t.'.$fields[$field]['column'].' = '.intval($param));
+                    $criteria = array(
+                        'condition' => 't.'.$fields[$field]['column'].' = :field_'.$field,
+                        'params' => array(
+                            ':field_'.$field => $param
+                        )
+                    );
             }
             else
                 $criteria = array('order'=>'t.'.$field.' '.$direction);
         }
         else
-            $criteria = array('order' => 'price ASC, `store` DESC');
+            $criteria = array('order' => 't.price ASC, t.store DESC');
 
         return array(
             'criteria'  => $criteria,
@@ -147,11 +152,11 @@ class CatalogProduct extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id_category' => Yii::t('site', 'Category'),
-            'id_brand' => Yii::t('site', 'Brand'),
-            'article' => Yii::t('site', 'Article'),
+            'id_category' => Yii::t('catalog', 'Category'),
+            'id_brand' => Yii::t('catalog', 'Brand'),
+            'article' => Yii::t('catalog', 'Article'),
             'title' => Yii::t('site', 'Title'),
-            'notice' => 'Краткое описание',
+            'notice' => Yii::t('site', 'Notice'),
             'content' => Yii::t('site', 'Content'),
             'count' => Yii::t('site', 'Count'),
             'price' => Yii::t('site', 'Price'),

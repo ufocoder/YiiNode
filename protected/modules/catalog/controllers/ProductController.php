@@ -2,8 +2,6 @@
 
 class ProductController extends Controller
 {
-    public $defaultAction = "Product";
-
     public function actionIndex($id)
     {
         $id = intval($id);

@@ -23,7 +23,7 @@ class CatalogField extends CActiveRecord
             ),
             'field_type' => array(
                 'INTEGER' => Yii::t('site', 'INTEGER'),
-                'VARCHAR' => Yii::t('site', 'VARCHAR'),
+                'VARCHAR' => Yii::t('site','VARCHAR'),
                 'TEXT'=> Yii::t('site', 'TEXT'),
                 'DATE'=> Yii::t('site', 'DATE'),
                 'FLOAT'=> Yii::t('site', 'FLOAT'),
@@ -38,8 +38,8 @@ class CatalogField extends CActiveRecord
             ),
             'visible' => array(
                 self::VISIBLE_ALL => Yii::t('site', 'For all'),
-                self::VISIBLE_ONLY_LIST => Yii::t('site', 'Only for data list'),
-                self::VISIBLE_ONLY_ITEM => Yii::t('site', 'Only for item data'),
+                self::VISIBLE_ONLY_LIST => Yii::t('site', 'Only for list view'),
+                self::VISIBLE_ONLY_ITEM => Yii::t('site', 'Only for item view'),
                 self::VISIBLE_NO => Yii::t('site', 'Hidden'),
             ),
         );

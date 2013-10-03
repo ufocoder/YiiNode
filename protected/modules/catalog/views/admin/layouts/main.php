@@ -9,13 +9,13 @@
     ), $this->breadcrumbs);
 
     $this->menu = array(
-        array('label'=>Yii::t('site', 'Settings'),  'icon'=>'cog', 'url'=>array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         array('label'=>Yii::t('site', 'Products'),  'icon'=>'list','url'=>array('/product/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
-        array('label'=>Yii::t('site', 'Fields'),  'icon'=>'th-list', 'url'=>array('/field/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         array('label'=>Yii::t('site', 'Categories'),  'icon'=>'list', 'url'=>array('/category/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         array('label'=>Yii::t('site', 'Brands'),  'icon'=>'list', 'url'=>array('/brand/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         array('label'=>Yii::t('site', 'Stores'),  'icon'=>'list', 'url'=>array('/store/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
+        array('label'=>Yii::t('site', 'Field manage'),  'icon'=>'th-list', 'url'=>array('/field/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
         array('label'=>Yii::t('site', 'Import'),  'icon'=>'random', 'url'=>array('/import/index', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
+        array('label'=>Yii::t('site', 'Settings'),  'icon'=>'cog', 'url'=>array('/default/setting', 'nodeAdmin'=>true, 'nodeId'=>$nodeId)),
     );
 
 ?>

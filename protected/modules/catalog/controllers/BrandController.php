@@ -2,23 +2,11 @@
 
 class BrandController extends ControllerFrontEnd
 {
-    public $defaultAction = "Product";
-
-    public function behaviors() {
-        return array(
-            'Meta' => array(
-                'class' => 'ext.meta.MetaControllerBahavior'
-            )
-        );
-    }
-
-
-    public function actionProduct($id = 0)
+    public function actionIndex($id = 0)
     {
-        $brands     = array();
-        $brand      = new modules\catalog\models\Brand;
-        $product    = new modules\catalog\models\Product;
-        $settings   = new modules\catalog\models\Settings;
+        $brand      = new CatalogBrand;
+        $product    = new CatalogProduct;
+        $settings   = new CatalogSetting;
 
         $brand              = $brand::model()->findByPk($id);
         $product_data       = $product::model()->published()->brand($id);
@@ -28,7 +16,7 @@ class BrandController extends ControllerFrontEnd
         $product_criteria->mergeWith($filter['criteria']);
 
         $order_noremain = Setting::getItem('order_noremain', 'catalog', $settings->values('order_noremain', 'default'));
-        
+
         $size = Setting::getItem('pager', 'catalog', $settings->values('pager', 'default'));
         $size = $filter['pager'];
 
