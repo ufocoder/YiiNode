@@ -134,6 +134,7 @@ class Article extends CActiveRecord
             'title' => Yii::t('site', 'Title'),
             'notice' => Yii::t('site', 'Notice'),
             'slug' => Yii::t('site', 'Slug'),
+            'meta_title' => Yii::t('site', 'Meta title'),
             'meta_keywords' => Yii::t('site', 'Meta keywords'),
             'meta_description' => Yii::t('site', 'Meta description'),
             'x_image' => Yii::t('site', 'Image'),
