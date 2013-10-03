@@ -85,6 +85,7 @@ class Node extends CActiveRecord
         $rules = array(
             // default
             array('position,level, time_created, time_updated', 'numerical', 'integerOnly'=>true),
+            array('meta_title, meta_keywords, meta_description', 'default', 'value'=>null),
             // create
             array('module', 'default', 'value'=>null, 'on'=>'create'),
             // create & update
@@ -418,4 +419,31 @@ class Node extends CActiveRecord
 
         return true;
     }
+
+
+    public function treechild($id)
+    {
+        $curnode = self::model()->findByPk($id);
+        if ($curnode){
+            $childrens = $curnode->children()->findAll();
+            if(sizeOf($childrens)>0){
+                $out = array();
+                foreach($childrens as $children)
+                {
+                    $currow = array(
+                        'id' => $children->id_node,
+                        'text' => $children->title,
+                        'children' => $this->treechild($children->id_node)
+                    );
+                    $out[]=$currow;
+                }
+            return $out;
+            }
+            else{
+                return null;
+            }
+        }
+        return null;
+    }
+
 }
