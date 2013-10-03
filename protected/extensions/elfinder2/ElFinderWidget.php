@@ -31,9 +31,9 @@ class ElFinderWidget extends CWidget
         );
 
         $lang = Yii::app()->language;
-        if (!in_array($lang, $langs)){
+        if (in_array($lang, $langs)){
             $lang = current(explode('_', $lang));
-            if (!in_array($lang, $langs))
+            if (in_array($lang, $langs))
                 $cs->registerScriptFile($assets . '/js/i18n/elfinder.' . $lang . '.js');
         }
 
