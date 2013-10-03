@@ -33,7 +33,7 @@ class DefaultController extends Controller
                 if ($feedbackNotification && !empty($feedbackEmail)){
                     $subject = Yii::t("site", "Feedback notification");
                     $content = $this->renderPartial('//email/feedback/notification', array('feedback'=>$model), true);
-                    WebModule::sendMail($feedbackEmail, $subject, $content);
+                    FeedbackModule::sendMail($feedbackEmail, $subject, $content);
                 }
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Your feedback message was successfully received.'));
             }

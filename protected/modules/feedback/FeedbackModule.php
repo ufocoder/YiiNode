@@ -46,4 +46,37 @@ class FeedbackModule extends WebModule
         );
     }
 
+    /**
+    * Static send mail method
+     *
+     * @param type $email
+     * @param type $subject
+     * @param type $message
+     *
+     * @return type результат отправки
+     */
+    public static function sendMail($email, $subject, $message)
+    {
+        $message = wordwrap($message, 70);
+        $message = str_replace("\n.", "\n..", $message);
+
+        $feedbackEmail = Yii::app()->getSetting('feedbackEmail');
+
+        $from = !empty($feedbackEmail)?$feedbackEmail:Yii::app()->params['robotEmail'];
+
+        $mail = new YiiMailMessage;
+        $mail->view = 'template';
+        $mail->addTo($email);
+        $mail->from = $from;
+        $mail->subject = $subject;
+        $mail->setBody(array(
+            'title' => $subject,
+            'content' => $message
+        ), 'text/html');
+
+        Yii::app()->mail->getTransport()->setExtraParams(null);
+
+        return Yii::app()->mail->send($mail);
+    }
+
 }
