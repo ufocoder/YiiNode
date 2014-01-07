@@ -5,7 +5,12 @@
         'method' => 'post',
         'clientOptions' => array(
             'validateOnSubmit'=>true,
-        )
+        ),
+        'htmlOptions' => array(
+            'class' => 'form form-vertical',
+            'enctype' => 'multipart/form-data',
+            'enableClientValidation'=>true
+        ),
     ));
 
     $this->title = Yii::t('site', 'Authorization');
@@ -18,23 +23,29 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <div class="control-group">
-        <?php echo $form->labelEx($model, 'login'); ?>
-        <div class="controls">
+    <div class="form-row">
+        <div class="form-label">
+            <?php echo $form->labelEx($model, 'login'); ?>
+        </div>
+        <div class="form-value">
             <?php echo $form->textField($model, 'login', array('placeholder' => Yii::t('site', 'Enter login'))); ?>
         </div>
     </div>
 
-    <div class="control-group">
-        <?php echo $form->labelEx($model, 'password'); ?>
-        <div class="controls">
+    <div class="form-row">
+        <div class="form-label">
+            <?php echo $form->labelEx($model, 'password'); ?>
+        </div>
+        <div class="form-value">
             <?php echo $form->textField($model, 'password', array('placeholder' => Yii::t('site', 'Enter password'))); ?>
         </div>
     </div>
 
-    <div class="control-group">
-        <?php echo $form->labelEx($model, 'captcha', array('class'=>'control-label')); ?>
-        <div class="controls">
+    <div class="form-row">
+        <div class="form-label">
+            <?php echo $form->labelEx($model, 'captcha'); ?>
+        </div>
+        <div class="form-value">
             <?php $this->widget('CCaptcha', array(
                     'captchaAction' => Yii::app()->createUrl('/user/login/captcha'),
                     'showRefreshButton'=>false,
@@ -49,15 +60,17 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <?php echo $form->labelEx($model, 'rememberMe'); ?>
-        <div class="controls">
+    <div class="form-row">
+        <div class="form-label">
+            <?php echo $form->labelEx($model, 'rememberMe'); ?>
+        </div>
+        <div class="form-value">
             <?php echo $form->checkBox($model, 'rememberMe'); ?>
         </div>
     </div>
 
     <hr>
-    <div class="control-group">
+    <div class="form-row">
         <div class="controls">
             <?php echo CHtml::link(Yii::t("site", "Forgot password?"), Yii::app()->user->recoveryUrl); ?>
             <?php if ($flagRegister):?> |
@@ -67,6 +80,7 @@
     </div>
 
     <div class="form-actions">
+
         <?php echo CHtml::button(Yii::t('site', 'Login'), array('type'=>'submit')); ?>
     </div>
 

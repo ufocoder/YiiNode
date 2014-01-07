@@ -90,7 +90,7 @@ class RegistrationController extends Controller
                         );
                     }
 
-                    if ($flagActiveAfterRegister && $flagConfirmNone)) {
+                    if ($flagActiveAfterRegister && $flagConfirmNone) {
                         $identity = new UserIdentity($user->login, $form->password);
                         $identity->authenticate();
                         Yii::app()->user->login($identity, 0);

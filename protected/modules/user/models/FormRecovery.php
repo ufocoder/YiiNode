@@ -30,7 +30,8 @@ class FormRecovery extends CFormModel
     public function attributeLabels()
     {
         return array(
-            'login' => Yii::t("site", "login or email"),
+            'login_or_email' => Yii::t("site", "Login or email"),
+            'verifyCode' => Yii::t("site", "Verify code"),
         );
     }
 

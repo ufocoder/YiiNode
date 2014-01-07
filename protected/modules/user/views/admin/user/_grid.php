@@ -26,8 +26,14 @@
             'value'  => '$data->role?User::values("role", $data->role):null',
             'filter' => User::values("role"),
         ),
-        'time_created',
-        'time_visited',
+        array(
+            'name' => 'time_created',
+            'value' => '!empty($data->time_created)?date("d-m-Y H:i", $data->time_created):null'
+        ),
+        array(
+            'name' => 'time_visited',
+            'value' => '!empty($data->time_visited)?date("d-m-Y H:i", $data->time_visited):null'
+        ),
         array(
             'name'=>'status',
             'value'=>'User::values("status", $data->status)',

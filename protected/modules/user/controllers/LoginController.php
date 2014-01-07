@@ -45,6 +45,12 @@ class LoginController extends Controller
         {
             $class_form = 'FormLogin';
             $model = new $class_form;
+
+            if (isset($_POST['ajax']) && $_POST['ajax'] === 'form-login') {
+                echo CActiveForm::validate($model);
+                Yii::app()->end();
+            }
+
             if (isset($_POST[$class_form]))
             {
                 $model->attributes = $_POST[$class_form];

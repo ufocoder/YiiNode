@@ -21,7 +21,9 @@ class FormRegistration extends CFormModel
         return array(
             array('login, email, password, verifyPassword', 'required'),
             array('login', 'length', 'max'=>20, 'min' => 3, 'message' => Yii::t("site", "Incorrect login (length between 3 and 20 characters).")),
-            array('password', 'length', 'max'=>128, 'min' => 4, 'message' => Yii::t("site", "Incorrect password (minimal length 4 symbols).")),
+            array('password', 'length', 'max'=>128, 'min' => 4, 'message' => Yii::t("site", "Incorrect password (minimal length {symbols} symbols).", array(
+                    '{symbols}' => 4
+                ))),
             array('email', 'email'),
             array('login', 'unique', 'className'=>'User', 'message' => Yii::t("site", "This user's name already exists.")),
             array('email', 'unique', 'className'=>'User', 'message' => Yii::t("site", "This user's email already exists.")),

@@ -31,6 +31,7 @@ class FormLogin extends CFormModel
     {
         return array(
             'login' => Yii::t('site', 'Username or email'),
+            'rememberMe' => Yii::t('site', 'Remember me'),
             'password' => Yii::t('site', 'Password'),
             'rememberMe' => Yii::t('site', 'Remember me next time'),
         );

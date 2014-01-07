@@ -1,7 +1,7 @@
-<?php 
-    $this->pageTitle = UserModule::t("User activation");
+<?php
+    $this->pageTitle = Yii::t("site", "User activation");
     $this->breadcrumbs=array(
-        UserModule::t("Profile"),
+        Yii::t("site", "Profile"),
     );
 ?>
 
