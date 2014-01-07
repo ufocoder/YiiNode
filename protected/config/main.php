@@ -40,6 +40,7 @@ return array(
         'catalog',
         'feedback',
         'gallery',
+        'slider',
         'translation',
         'redirect',
         'page',
@@ -119,9 +120,9 @@ return array(
                     'class'=>'UrlRuleAdminNode'
                 ),
 
-                'admin/<module:(user|feedback)>/<controller:\w+>/<action:\w+>/*' => '<module>/admin/<controller>/<action>',
-                'admin/<module:(user|feedback)>/<controller:\w+>' => '<module>/admin/<controller>',
-                'admin/<module:(user|feedback)>' => '<module>/admin/default/index',
+                'admin/<module:(user|slider|feedback)>/<controller:\w+>/<action:\w+>/*' => '<module>/admin/<controller>/<action>',
+                'admin/<module:(user|slider|feedback)>/<controller:\w+>' => '<module>/admin/<controller>',
+                'admin/<module:(user|slider|feedback)>' => '<module>/admin/default/index',
 
                 'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 'admin/<controller:\w+>' => 'admin/<controller>',
