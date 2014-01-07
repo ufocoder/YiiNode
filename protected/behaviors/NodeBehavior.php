@@ -48,6 +48,11 @@ class NodeBehavior extends CBehavior
     protected $_nodeAdmin = false;
 
     /**
+     * Node modules
+     */
+    protected $_nodeModules = null;
+
+    /**
      * Set current node
      */
     public function setNode($node, $flag_admin = false)
@@ -60,7 +65,7 @@ class NodeBehavior extends CBehavior
     }
 
     /**
-     *
+     * Check admin node
      */
     public function isAdminNode()
     {
@@ -180,7 +185,7 @@ class NodeBehavior extends CBehavior
         if (empty($path))
             return array("/");
 
-        $paths = explode("/", $path);
+        $paths = explode("/", ltrim($path, "/"));
 
         $paths = array_slice($paths, 0, self::LEVEL_LIMIT);
         $result = array();
@@ -217,6 +222,23 @@ class NodeBehavior extends CBehavior
 
         if (isset($this->_moduleUrlManager[$node->id_node]))
             return $this->_moduleUrlManager[$node->id_node];
+    }
+
+    /**
+     * Get node module list
+     */
+    public function getNodeModules($forceUpdate = false)
+    {
+        if ($this->_nodeModules == null || $forceUpdate){
+            $modules = array_keys(Yii::app()->modules);
+
+            foreach ($modules as $module)
+                if (!empty(Yii::app()->getModule($module)->nodeModule))
+                    $this->_nodeModules[] = $module;
+        }
+
+
+        return $this->_nodeModules;
     }
 
     /**
