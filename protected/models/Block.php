@@ -40,19 +40,6 @@ class Block extends CActiveRecord
     }
 
     /**
-     * Url для загрузки документов
-     */
-    protected static $uploadUrl = '/upload/block/';
-
-    /*
-     * Получить физический путь загрузки документов
-     */
-    public static function getUploadUrl()
-    {
-        return self::$uploadUrl;
-    }
-
-    /**
      * @return string Получить имя таблицы связанное с моделью
      */
     public function tableName()
@@ -208,7 +195,7 @@ class Block extends CActiveRecord
 
                         $htmlOptions = isset($params['htmlOptions'])?$params['htmlOptions']:array();
                         $htmlOptions['type'] = 'application/x-shockwave-flash';
-                        $htmlOptions['data'] = $model->getUploadUrl().$value;
+                        $htmlOptions['data'] = $value;
 
                         $content = null;
                         $object = CHtml::tag('object', $htmlOptions, $content);
@@ -219,7 +206,7 @@ class Block extends CActiveRecord
 
                 case self::TYPE_IMAGE:
                     if (!empty($value)){
-                        $src = $model->getUploadUrl().$value;
+                        $src = $value;
                         $alt = isset($params['alt'])?$params['alt']:null;
                         $htmlOptions = isset($params['htmlOptions'])?$params['htmlOptions']:array();
                         return CHtml::image($src, $alt, $htmlOptions);
@@ -228,7 +215,7 @@ class Block extends CActiveRecord
 
                 case self::TYPE_FILE:
                     if (!empty($value))
-                        return $model->getUploadUrl().$value;
+                        return $value;
                 break;
 
                 case self::TYPE_HTML:

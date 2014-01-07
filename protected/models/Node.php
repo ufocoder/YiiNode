@@ -43,7 +43,7 @@ class Node extends CActiveRecord
     protected $has_root = null;
 
     /**
-     *
+     * Старые аттрибуты
      */
     protected $old_attributes = array();
 

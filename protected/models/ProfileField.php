@@ -53,7 +53,6 @@ class ProfileField extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id_user_field' => Yii::t('site', 'Id'),
             'varname' => Yii::t('site', 'Variable name'),
             'title' => Yii::t('site', 'Title'),
             'field_type' => Yii::t('site', 'Field type'),

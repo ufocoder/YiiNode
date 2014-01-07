@@ -32,6 +32,13 @@ class User extends CActiveRecord
     public $verifyPassword;
 
     /**
+     * Date list
+     */
+    public $date_created;
+    public $date_updated;
+    public $date_visited;
+
+    /**
      * Values list
      *
      * @param type $setting
@@ -80,7 +87,7 @@ class User extends CActiveRecord
             ),
             'banned' => array(
                 'condition' => 't.status=' . self::STATUS_BANNED,
-            ),
+            )
         );
     }
 
@@ -165,8 +172,20 @@ class User extends CActiveRecord
         $criteria->compare('status', $this->status);
 
         return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
+            'criteria'=>$criteria
         ));
+    }
+
+    /**
+     * Добавить значения дат
+     */
+    protected function afterFind()
+    {
+        $this->date_created = !empty($this->time_created)?date('d-m-Y H:i', $this->time_created):null;
+        $this->date_updated = !empty($this->time_updated)?date('d-m-Y H:i', $this->time_updated):null;
+        $this->date_visited = !empty($this->date_visited)?date('d-m-Y H:i', $this->time_visited):null;
+
+        parent::afterFind();
     }
 
     /**
@@ -179,4 +198,30 @@ class User extends CActiveRecord
     {
         return parent::model($className);
     }
+
+    /**
+     * Получить список пользователей
+     */
+    public static function getDropDownData($role = null, $fields = array())
+    {
+        $list = self::model()->active()->with('profile')->findAll(array(
+            'condition' => 't.role = :role',
+            'params'=>array(
+                ':role'=>WebUser::ROLE_MANAGER
+            )
+        ));
+
+        $users = array();
+        foreach($list as $user){
+            $username = null;
+            foreach ($fields as $field)
+                $username .= $user->profile->$field." ";
+            if (empty($username))
+                $username = $user->login;
+            $users[$user->id_user] = $username;
+        }
+
+        return $users;
+    }
+
 }
