@@ -10,6 +10,8 @@
     else
         $action = Yii::app()->createUrl('default/update', array('nodeAdmin'=>true, 'nodeId'=>$nodeId, 'id'=>$model->id_article));
 
+    $fieldPosition = Yii::app()->getNodeSetting($nodeId, 'fieldPosition', ArticleSetting::values('fieldPosition', 'default'));
+
     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'id'=>'articles-form',
         'type'=>'horizontal',
@@ -23,6 +25,8 @@
             'class'=>'well'
         ),
     ));
+
+    $data_tags = CHtml::listData(ArticleTag::model()->node()->findAll(), 'id_article_tag', 'title');
 
     // get Title html ID
     $attribute = 'title';
@@ -49,12 +53,29 @@
     <?php echo $form->textFieldRow($model, 'title', array('class'=>'span8')); ?>
     <?php echo $form->textFieldRow($model, 'slug', array('class'=>'span8')); ?>
 
+
+
+    <?php echo $form->checkBoxListRow($model, 'tag_list', $data_tags, array()); ?>
+
+
+
+<?php if ($fieldPosition): ?>
+    <?php echo $form->textFieldRow($model, 'position', array('class'=>'span8')); ?>
+<?php endif; ?>
+
     <div class="control-group">
         <?php echo $form->labelEx($model, 'time_published', array('class'=>'control-label')); ?>
         <div class="controls">
-        <?php $this->widget('ext.datetimepicker.DatetimePickerWidget', array(
-            'model' => $model,
-            'attribute' => 'date_published'
+        <?php
+            $default = SettingDefault::values('datetime', 'default');
+            $defaultFormat = SettingDefault::values('datetimeFormat', 'default');
+            $settingFormat = Yii::app()->getSetting('datetime', $default);
+            $dataFormat = SettingDefault::values('datetimeFormat', 'list', $settingFormat);
+
+            $this->widget('ext.datetimepicker.DatetimePickerWidget', array(
+                'model' => $model,
+                'attribute' => 'date_published',
+                'dataFormat' => $dataFormat
         ));?>
         </div>
     </div>
@@ -78,12 +99,16 @@
     });";
         Yii::app()->clientScript->registerScript('form-file', $script);
     ?>
+
     <div class="control-group">
         <?php echo $form->labelEx($model, 'image', array('class'=>'control-label')); ?>
         <div class="controls">
-         <?php if (!$model->isNewRecord && $model->image): ?>
+        <?php if (!$model->isNewRecord && $model->image):
+                $image = $model->image;
+                $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
+         ?>
                 <p>
-                    <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
+                    <div><?php echo CHtml::link(CHtml::image($thumb), $image); ?></div>
                     <div><?php echo $form->checkBox($model,'delete_image', array('style' => 'float: left; margin-right: 5px;;')); ?> <?php echo $form->labelEx($model,'delete_image'); ?></div>
                 </p>
         <?php endif; ?>
@@ -92,7 +117,6 @@
                 <?php echo CHtml::link(Yii::t('site', 'Choose'), '#', array('attachId'=>$fileID, 'class'=>'attach-button btn'));?>
         </div>
     </div>
-
 
     <div class="control-group">
         <?php echo $form->labelEx($model, 'notice', array('class'=>'control-label')); ?>
@@ -157,5 +181,3 @@
     </div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->

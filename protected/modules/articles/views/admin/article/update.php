@@ -14,7 +14,7 @@
 
     $this->actions = array(
         array('label'=>Yii::t('site', 'View article'), 'url' => $viewUrl, 'icon'=>'eye-open'),
-        array('label'=>Yii::t('site', 'Delete article'), 'url' => Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',
+        array('label'=>Yii::t('site', 'Delete article'), 'url' => $deleteUrl, 'icon'=>'trash',
             'htmlOptions'=>array(
                 'data-confirm-title' => Yii::t('site', 'Confirm dialog'),
                 'data-confirm-content' => Yii::t('site', 'Are you sure to delete?'),
@@ -22,4 +22,4 @@
         )
     );
 ?>
-<?php echo $this->renderPartial('/admin/_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('/admin/article/_form', array('model'=>$model)); ?>

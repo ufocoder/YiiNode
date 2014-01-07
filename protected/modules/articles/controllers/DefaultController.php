@@ -7,20 +7,22 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $default = ArticleSetting::values('pager', 'default');
-        $pager = Yii::app()->getNodeSetting(Yii::app()->getNodeId(), 'pager', $default);
-
-        $model = Article::model()->node()->preview()->published();
-
-        $dataProvider = new CActiveDataProvider($model, array(
-            'pagination' => array(
-                'pageSize' => $pager,
-                'pageVar'  => 'page'
-            )
-        ));
-
         $this->render('/index', array(
-            'dataProvider'=>$dataProvider,
+            'id_article_tag' => null,
+            'tags' => ArticleTag::model()->published()->node()->findAll(),
+            'dataProvider' => Article::model()->items(),
+        ));
+    }
+
+    /**
+     * View articles by tag
+     */
+    public function actionTag($id)
+    {
+        $this->render('/index', array(
+            'id_article_tag' => $id,
+            'tags' => ArticleTag::model()->published()->node()->findAll(),
+            'dataProvider' => Article::model()->items($id),
         ));
     }
 

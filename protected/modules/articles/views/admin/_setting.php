@@ -16,6 +16,11 @@
 ?>
 <?php echo $form->errorSummary($model); ?>
 
+<?php echo $form->checkBoxRow($model, 'showDate'); ?>
+<?php echo $form->checkBoxRow($model, 'showImageItem'); ?>
+<?php echo $form->checkBoxRow($model, 'showImageList'); ?>
+<?php echo $form->checkBoxRow($model, 'fieldPosition'); ?>
+<?php echo $form->dropDownListRow($model, 'orderPosition', $model::values('orderPosition', 'data')); ?>
 <?php echo $form->textFieldRow($model, 'pager', array('class'=>'span6')); ?>
 <?php echo $form->checkBoxRow($model, 'rss'); ?>
 

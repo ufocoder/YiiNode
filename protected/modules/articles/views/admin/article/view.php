@@ -13,13 +13,16 @@
 
     $this->actions = array(
         array('label'=>Yii::t('site', 'Update article'), 'url' => $updateUrl, 'icon'=>'pencil'),
-        array('label'=>Yii::t('site', 'Delete article'), 'url' => Yii::app()->createUrl('default/delete', array('id'=>$model->id_article, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',
+        array('label'=>Yii::t('site', 'Delete article'), 'url' => $deleteUrl, 'icon'=>'trash',
             'htmlOptions'=>array(
                 'data-confirm-title' => Yii::t('site', 'Confirm dialog'),
                 'data-confirm-content' => Yii::t('site', 'Are you sure to delete?'),
             )
         )
     );
+
+    $image = $model->image;
+    $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
 ?>
 
 <fieldset>
@@ -32,7 +35,7 @@
             'date_published',
             array(
                 'name'  => 'image',
-                'value' => !empty($model->image)?CHtml::image($model->getUploadUrl().$model->image):null,
+                'value' => !empty($image)?(CHtml::link(CHtml::image($thumb), $image)):null,
                 'type'  => 'raw'
             ),
             array(

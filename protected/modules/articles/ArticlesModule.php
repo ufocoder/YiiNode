@@ -8,6 +8,11 @@
 class ArticlesModule extends WebModule
 {
     /**
+     * Flag module is node type
+     */
+    public $nodeModule = true;
+
+    /**
      * Module initialize
      */
     public function init()
@@ -42,8 +47,9 @@ class ArticlesModule extends WebModule
     {
         return array(
             '/rss'                          => 'articles/default/rss',
+            '/tag/<id:\d+>'                 => 'articles/default/tag',
             '/<id:\d+>'                     => 'articles/default/view',
-            '/<slug:\w+[\_\-\.\w]+>'   => 'articles/default/view',
+            '/<slug:\w+[\_\-\.\w]+>'        => 'articles/default/view',
             '/'                             => 'articles/default/index',
         );
     }

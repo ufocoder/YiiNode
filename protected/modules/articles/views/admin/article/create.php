@@ -9,4 +9,4 @@
         Yii::t('site', 'Create')
     );
 ?>
-<?php echo $this->renderPartial('/admin/_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('/admin/article/_form', array('model'=>$model)); ?>
