@@ -90,9 +90,9 @@ class SettingBehavior extends CBehavior
             return $default;
     }
 
-    public function setNodeSetting($id_node, $title, $value)
+    public function setNodeSetting($id_node, $title, $value = null)
     {
-        if (empty($id_node) || empty($title) || empty($value))
+        if (empty($id_node) || empty($title) || $value == null)
             return false;
 
         if (isset($this->_setting_node[$id_node][$title]))
