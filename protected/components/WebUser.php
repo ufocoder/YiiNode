@@ -24,7 +24,7 @@ class WebUser extends CWebUser
     /**
      * Remember me time
      */
-    public $rememberMeTime = 6000;
+    public $rememberMeTime = 604800;
 
     /**
      * Return logout URL
@@ -72,9 +72,7 @@ class WebUser extends CWebUser
     private function _getModel()
     {
         if (!$this->isGuest && $this->_model === null)
-        {
-            $this->_model = User::model()->findByPk($this->id);
-        }
+            $this->_model = User::model()->with('profile')->findByPk($this->id);
 
         return $this->_model;
     }
@@ -106,6 +104,12 @@ class WebUser extends CWebUser
     {
         if ($user = $this->_getModel())
             return $user->role;
+    }
+
+    public function getModel()
+    {
+        if ($user = $this->_getModel())
+            return $this->_model;
     }
 
     public function getPassword()

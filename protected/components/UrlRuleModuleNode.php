@@ -74,6 +74,8 @@ class UrlRuleModuleNode extends CBaseUrlRule
             if ($urlManager = Yii::app()->getModuleUrlManager($node)){
                 return $urlManager->parseUrl($request);
             }
+            else
+                return false;
 
         }
         else
