@@ -15,39 +15,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 <?php
-$cs = Yii::app()->getClientScript();
-$cs->registerCss('bootstrap-fix', '    body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-    }
+    $cs = Yii::app()->getClientScript();
+    $cs->registerCss('bootstrap-fix', '    body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
 
-    label{
-        font-size: 13px;
-    }
+        label{
+            font-size: 13px;
+        }
 
-    table{
-        font-size: 90%;
-    }
+        table{
+            font-size: 90%;
+        }
 
-    #wrapper{
-        min-width: 1000px;
-        width: 82%;
-        margin: 0 auto;
-    }
+        #wrapper{
+            min-width: 1000px;
+            width: 82%;
+            margin: 0 auto;
+        }
 
-    .wrapper-container .container{
-        min-width: 1000px;
-        width: 82%;
-    }
+        .wrapper-container .container{
+            min-width: 1000px;
+            width: 82%;
+        }
 
-    .help-block{
-        font-size: 12px;
-    }
+        .help-block{
+            font-size: 12px;
+        }
 
-    .breadcrumbs {
-        margin: 10px 0 !important;
-    }
-');
+        .breadcrumbs {
+            margin: 10px 0 !important;
+        }
+    ');
 
 ?>
   <body>
@@ -63,9 +63,13 @@ $cs->registerCss('bootstrap-fix', '    body {
             array(
                 'class'=>'bootstrap.widgets.TbMenu',
                 'items'=>array(
-                    array('label'=> Yii::t('site', 'Content'), 'url'=> Yii::app()->createUrl('/admin/node/')),
+                    array('label'=> Yii::t('site', 'Content'), 'url'=> '#', 'items'=>array(
+                        array('label' => Yii::t('site', 'Structure'), 'url'=>Yii::app()->createUrl('/admin/node'), 'icon'=>'th'),
+                        array('label' => Yii::t('site', 'Menu'), 'url'=>Yii::app()->createUrl('/admin/menu/list'), 'icon'=>'list-alt'),
+                    )),
                     array('label'=> Yii::t('site', 'Template'), 'url'=>'#', 'items' => array(
                         array('label'=> Yii::t('site', 'Info blocks'), 'url' => Yii::app()->createUrl('/admin/block/'), 'icon'=>'list'),
+                        array('label'=> Yii::t('site', 'Slider'), 'url' => Yii::app()->createUrl('/admin/slider/admin/index'), 'icon'=>'play'),
                     )),
                     array('label'=> Yii::t('site', 'Services'), 'url' => '#', 'items' => array(
                         array('label'=> Yii::t('site', 'Feedback'), 'url' => Yii::app()->createUrl('/admin/feedback/'), 'icon'=>'envelope'),

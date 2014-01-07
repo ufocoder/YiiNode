@@ -12,12 +12,12 @@ class SettingsController extends ControllerAdmin
      */
     public function actionIndex()
     {
-        $class_form = 'FormSettingDefault';
+        $class_form = 'SettingDefault';
         $model = new $class_form;
 
         $model->sitename = Yii::app()->getSetting('sitename');
         $model->emailAdmin = Yii::app()->getSetting('emailAdmin');
-        $model->datetimeFormat = Yii::app()->getSetting('datetimeFormat');
+        $model->datetime = Yii::app()->getSetting('datetime');
 
         if (isset($_POST[$class_form]))
         {

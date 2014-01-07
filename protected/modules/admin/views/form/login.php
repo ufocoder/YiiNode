@@ -46,7 +46,7 @@
     </div>
 
     <?php echo $form->labelEx($model, 'rememberMe', array('label'=> $form->checkBox($model, 'rememberMe'). Yii::t('site', 'Remember me next time'), 'class' => 'checkbox')); ?>
-    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Login'))); ?>
+    <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Log in'))); ?>
 </div>
     <hr>
     <div style="text-align:center;">

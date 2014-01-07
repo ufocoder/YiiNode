@@ -19,7 +19,7 @@
         )
     ));
 
-    $data_datetimeFormat = $model::values('datetimeFormat', 'list');
+    $data_datetimeFormat = $model::values('datetime', 'list');
 ?>
 
     <?php echo $form->errorSummary($model); ?>
@@ -31,9 +31,7 @@
 
 <fieldset>
     <legend><?php echo Yii::t('site', 'Datetime format')?></legend>
-    <?php // echo $form->radioButtonList($model,'menuType',array('Page'=>'Page','PhpPage'=>'PHP Page', 'External'=>'External'), array('onchange' => 'menuTypeChange(this.value);')); ?>
-
-    <?php echo $form->radioButtonListRow($model, 'datetimeFormat', $data_datetimeFormat); ?>
+    <?php echo $form->radioButtonListRow($model, 'datetime', $data_datetimeFormat); ?>
 </fieldset>
 
     <div class="form-actions">

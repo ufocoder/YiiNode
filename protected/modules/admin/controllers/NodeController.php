@@ -53,13 +53,10 @@ class NodeController extends ControllerAdmin
             }
         }
 
-        $_modules = Yii::app()->modules;
-        unset($_modules['admin']);
-        unset($_modules['user']);
-        $_modules = array_keys($_modules);
+        $list = Yii::app()->getNodeModules();
 
         $modules = array();
-        foreach($_modules as $module)
+        foreach($list as $module)
             $modules[$module] = Yii::t('module', $module);
 
         $nodes = CHtml::listData(Node::model()->tree()->findAll(), 'id_node', 'title');
@@ -157,7 +154,7 @@ class NodeController extends ControllerAdmin
      * Если данные модели не найден, появляется HTTP исключение
      *
      * @param integer $id Идентификатор модели
-     * @return License загруженная модель
+     * @return Node загруженная модель
      * @throws CHttpException
      */
     public function loadModel($id)

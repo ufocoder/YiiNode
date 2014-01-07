@@ -40,7 +40,7 @@ class FilemanagerController extends ControllerAdmin
                             'uploadOrder'  => 'deny,allow',
                             'uploadDeny'   => array('all'),
                             'uploadAllow'  => array(
-                                'image/*',
+                                'image',
                                 'application/pdf',
                                 'application/x-shockwave-flash',
                                 'application/pdf',

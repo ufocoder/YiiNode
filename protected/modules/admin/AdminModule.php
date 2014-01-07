@@ -8,6 +8,11 @@
 class AdminModule extends WebModule
 {
     /**
+     * Flag module is node type
+     */
+    public $nodeModule = false;
+
+    /**
      * Module initialization
      */
     public function init()

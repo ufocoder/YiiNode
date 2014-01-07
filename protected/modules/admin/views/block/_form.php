@@ -77,7 +77,7 @@
 			<?php echo CHtml::textField(null, $model->content, array('attachId'=>$fileID, 'class' => 'attach-name span4', 'readonly'=>'true')); ?>
 			<?php echo CHtml::link(Yii::t('site', 'Choose'), '#', array('attachId'=>$fileID, 'class'=>'attach-button btn'));?>
 		<?php if (!empty($model->content)): ?>
-			<?php echo CHtml::link(Yii::t('site', 'Download file'), $model->getUploadUrl().$model->content); ?>
+			<?php echo CHtml::link(Yii::t('site', 'Download file'), $model->content); ?>
 		<?php endif;?>
 	</div>
 </div>
@@ -90,5 +90,3 @@
 	</div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->
