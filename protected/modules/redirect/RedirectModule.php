@@ -8,6 +8,11 @@
 class RedirectModule extends WebModule
 {
     /**
+     * Flag module is node type
+     */
+    public $nodeModule = true;
+
+    /**
      * Module initialize
      */
     public function init()
