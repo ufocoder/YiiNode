@@ -62,7 +62,7 @@
         <div class="controls">
          <?php if (!$model->isNewRecord && $model->image): ?>
                 <p>
-                    <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
+                    <div><?php echo CHtml::link(CHtml::image($model->image), $model->image); ?></div>
                     <div><?php echo $form->checkBox($model,'delete_image', array('style' => 'float: left; margin-right: 5px;;')); ?> <?php echo $form->labelEx($model,'delete_image'); ?></div>
                 </p>
         <?php endif; ?>

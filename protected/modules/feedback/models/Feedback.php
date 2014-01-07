@@ -32,7 +32,7 @@ class Feedback extends CActiveRecord
             array('content', 'length', 'min'=>3),
             array('contact_email', 'email'),
             array('contact_phone', 'default', 'value'=>null),
-            array('verifyCode', 'captcha', 'allowEmpty'=>false)
+            array('verifyCode', 'captcha', 'allowEmpty'=>false, 'except'=>'ajax')
         );
     }
 
@@ -61,7 +61,7 @@ class Feedback extends CActiveRecord
         );
     }
 
-    public function search($nodeId = null)
+    public function search($nodeId = null, $limit = 10)
     {
         $criteria=new CDbCriteria;
         $criteria->compare('id_feedback',$this->id_feedback);
@@ -79,6 +79,19 @@ class Feedback extends CActiveRecord
             'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'id_feedback DESC',
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
+            ),
+            'pagination'=>array(
+                'pageSize'=>$limit,
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
             )
         ));
     }
