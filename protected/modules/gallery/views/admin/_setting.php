@@ -21,6 +21,7 @@
     <legend><?php echo Yii::t('site', 'Content settings');?></legend>
     <?php echo $form->textFieldRow($model, 'pager', array('class'=>'span6')); ?>
     <?php echo $form->textFieldRow($model, 'column', array('class'=>'span6')); ?>
+    <?php echo $form->checkBoxRow($model, 'showTitle'); ?>
 </fieldset>
 
 <fieldset>

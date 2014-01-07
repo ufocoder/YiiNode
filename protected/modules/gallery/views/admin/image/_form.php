@@ -70,7 +70,6 @@
             var id = $(this).attr('attachId'),
                 val = $(this).val(),
                 file = val.split(/[\\\]/);
-            console.log(file);
             $('.attach-name[attachId='+id+']').val(file[file.length-1]);
         });
     });";
@@ -79,9 +78,12 @@
     <div class="control-group">
         <?php echo $form->labelEx($model, 'image', array('class'=>'control-label')); ?>
         <div class="controls">
-         <?php if (!$model->isNewRecord && $model->image): ?>
+        <?php if (!$model->isNewRecord && $model->image):
+                $image = $model->image;
+                $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
+        ?>
                 <p>
-                    <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
+                    <div><?php echo CHtml::link(CHtml::image($thumb), $image); ?></div>
                 </p>
         <?php endif; ?>
                 <?php echo $form->fileField($model, 'x_image', array('attachId'=>$fileID, 'class'=>'attach-input', 'style'=>'display: none;')); ?>
@@ -121,5 +123,3 @@
     </div>
 
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->

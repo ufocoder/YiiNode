@@ -3,15 +3,22 @@
     /* @var $model GalleryCategory */
 
     $nodeId = Yii::app()->getNodeId();
+    $listUrl = Yii::app()->createUrl('default/index', array('id_category'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $updateUrl = Yii::app()->createUrl('category/update', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $deleteUrl = Yii::app()->createUrl('category/delete', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
+    if (empty($model->title))
+        $categoryTitle = Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category));
+    else
+        $categoryTitle = $model->title;
+
     $this->title = Yii::t("site", "Update category");
     $this->breadcrumbs=array(
-        Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category))
+        $categoryTitle
     );
 
     $this->actions = array(
+        array('label'=>Yii::t('site', 'Image list'), 'url' => $listUrl, 'icon'=>'list'),
         array('label'=>Yii::t('site', 'Update category'), 'url' => $updateUrl, 'icon'=>'pencil'),
         array('label'=>Yii::t('site', 'Delete category'), 'url' => Yii::app()->createUrl('category/delete', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',
             'htmlOptions'=>array(
@@ -20,6 +27,9 @@
             )
         )
     );
+
+    $image = $model->image;
+    $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
 
 ?>
 
@@ -30,13 +40,14 @@
         'attributes'=>array(
             'title',
             array(
-                'header' => Yii::t('site', 'Count of images in category'),
+                'header' => Yii::t('site', 'Count of images'),
+                'name' => 'count',
                 'value' => GalleryImage::model()->category()->count('', array('id_gallery_category'=>$model->id_gallery_category)),
                 'type'  => 'raw'
             ),
             array(
                 'name'  => 'image',
-                'value' => !empty($model->image)?CHtml::image($model->getUploadUrl().$model->image):null,
+                'value' => !empty($image)?(CHtml::link(CHtml::image($thumb), $image)):null,
                 'type'  => 'raw'
             ),
             array(

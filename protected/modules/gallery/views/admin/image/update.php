@@ -6,9 +6,15 @@
     $viewUrl = Yii::app()->createUrl('default/view', array('id'=>$model->id_gallery_image, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $deleteUrl = Yii::app()->createUrl('default/delete', array('id'=>$model->id_gallery_image, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
+    if (empty($model->Category->title))
+        $categoryTitle = Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category));
+    else
+        $categoryTitle = $model->Category->title;
+
     $this->title = Yii::t("site", "Update image");
     $this->breadcrumbs=array(
-        Yii::t('site', 'Image #{id}', array('{id}'=>$model->id_gallery_image)).": ".CHtml::encode($model->title) => $viewUrl,
+        $categoryTitle => Yii::app()->createUrl('category/view', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId)),
+        Yii::t('site', 'Image #{id}', array('{id}'=>$model->id_gallery_image)) => $viewUrl,
         Yii::t('site', 'Update'),
     );
 

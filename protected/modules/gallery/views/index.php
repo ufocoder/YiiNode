@@ -4,6 +4,7 @@
     $column = Yii::app()->getNodeSetting($nodeId, 'column', GallerySetting::values('column', 'default'));
     $width  = Yii::app()->getNodeSetting($nodeId, 'width', GallerySetting::values('width', 'default'));
     $height = Yii::app()->getNodeSetting($nodeId, 'height', GallerySetting::values('height', 'default'));
+    $showTitle = Yii::app()->getNodeSetting($nodeId, 'showTitle', GallerySetting::values('showTitle', 'default'));
     $resize = Yii::app()->getNodeSetting($nodeId, 'resize');
 ?>
 
@@ -29,7 +30,8 @@
         'column' => $column,
         'height' => $height,
         'width' => $width,
-        'resize' => $resize
+        'resize' => $resize,
+        'showTitle' => $showTitle
     ),
     'pagerCssClass' => 'paging',
     'pager'=>array(

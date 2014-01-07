@@ -12,6 +12,7 @@ class DefaultController extends ControllerAdmin
         $model->column = Yii::app()->getNodeSetting($nodeId, 'column', $model::values('column', 'default'));
         $model->width = Yii::app()->getNodeSetting($nodeId, 'width', $model::values('width', 'default'));
         $model->height = Yii::app()->getNodeSetting($nodeId, 'height', $model::values('height', 'default'));
+        $model->showTitle = Yii::app()->getNodeSetting($nodeId, 'showTitle', $model::values('showTitle', 'default'));
         $model->resize = Yii::app()->getNodeSetting($nodeId, 'resize');
 
         if (isset($_POST[$model_class]))
@@ -57,8 +58,11 @@ class DefaultController extends ControllerAdmin
                     $extension  = CFileHelper::getExtension($instance->getName());
                     $pathname   = GalleryImage::getUploadPath();
                     $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                    $baseUrl = Yii::app()->request->getBaseUrl();
+                    if (empty($baseUrl))
+                        $baseUrl = "/";
                     if ($instance->saveAs($pathname.$filename))
-                        $model->saveAttributes(array('image' => $filename));
+                        $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                 }
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was created successful!'));
                 $this->redirect(array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
@@ -71,6 +75,7 @@ class DefaultController extends ControllerAdmin
             'model'=>$model,
         ));
     }
+
 
     public function actionUpdate($id)
     {
@@ -91,8 +96,11 @@ class DefaultController extends ControllerAdmin
                     $extension  = CFileHelper::getExtension($instance->getName());
                     $pathname   = GalleryImage::getUploadPath();
                     $filename   = md5(time().Yii::app()->getNodeId()) . '.' . $extension;
+                    $baseUrl = Yii::app()->request->getBaseUrl();
+                    if (empty($baseUrl))
+                        $baseUrl = "/";
                     if ($instance->saveAs($pathname.$filename))
-                        $model->saveAttributes(array('image' => $filename));
+                        $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                 }
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery image was updated successful!'));
                 $this->redirect(array('/default/view', 'id'=>$model->id_gallery_image, 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
@@ -114,18 +122,58 @@ class DefaultController extends ControllerAdmin
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/default/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
     }
 
+    public function actionMoveUp($id)
+    {
+        $model = $this->loadModel($id);
+        $model->moveUp();
+
+        $redirectParams = array(
+            '/default/index',
+            'nodeAdmin'=>true,
+            'nodeId'=>Yii::app()->getNodeId()
+        );
+
+        if (!empty($id_category))
+            $redirectParams['id_category'] = $id_category;
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $redirectParams);
+    }
+
+    public function actionMoveDown($id)
+    {
+        $model = $this->loadModel($id);
+        $model->moveDown();
+
+        $redirectParams = array(
+            '/default/index',
+            'nodeAdmin'=>true,
+            'nodeId'=>Yii::app()->getNodeId()
+        );
+
+        if (!empty($id_category))
+            $redirectParams['id_category'] = $id_category;
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $redirectParams);
+    }
+
     public function actionIndex($id_category = null)
     {
+        $category = null;
+        if (!empty($id_category))
+            $category = $this->loadCategory($id_category);
+
         $model_class = "GalleryImage";
         $model = new $model_class;
         $model->search($id_category);
         $model->unsetAttributes();
 
-        if(isset($_POST[$model_class]))
+        if (isset($_POST[$model_class]))
             $model->attributes=$_POST[$model_class];
 
         $this->render('/admin/image/index',array(
-            'model'=>$model,
+            'model' => $model,
+            'id_category' => $id_category,
+            'category' => $category
         ));
     }
 
@@ -137,4 +185,11 @@ class DefaultController extends ControllerAdmin
         return $model;
     }
 
+    public function loadCategory($id)
+    {
+        $model = GalleryCategory::model()->node()->findByPk($id);
+        if($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
 }

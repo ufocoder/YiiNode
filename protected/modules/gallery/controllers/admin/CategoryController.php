@@ -23,7 +23,6 @@ class CategoryController extends ControllerAdmin
             $model->attributes = $_POST[$model_class];
             $model->id_node = Yii::app()->getNodeId();
 
-
             if ($model->save()){
                 // upload file
                 $instance   = CUploadedFile::getInstance($model, 'x_image');
@@ -31,8 +30,11 @@ class CategoryController extends ControllerAdmin
                     $extension  = CFileHelper::getExtension($instance->getName());
                     $pathname   = GalleryCategory::getUploadPath();
                     $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    $baseUrl = Yii::app()->request->getBaseUrl();
+                    if (empty($baseUrl))
+                        $baseUrl = "/";
                     if ($instance->saveAs($pathname.$filename))
-                        $model->saveAttributes(array('image' => $filename));
+                        $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                 }
 
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Gallery category was created successful!'));
@@ -74,11 +76,15 @@ class CategoryController extends ControllerAdmin
                     $filename   = md5(time().$model->id_node) . '.' . $extension;
                     if ($instance->saveAs($pathname.$filename)){
                         if (!empty($model->image)){
-                                $old_filename = GalleryCategory::getUploadPath().$model->image;
-                                if (file_exists($old_filename) && $old_filename != $filename)
-                                    unlink($old_filename);
-                            }
-                        $model->saveAttributes(array('image' => $filename));
+                            $old_filename = GalleryCategory::getUploadPath().$model->image;
+                            if (file_exists($old_filename) && $old_filename != $filename)
+                                unlink($old_filename);
+                        }
+                    $baseUrl = Yii::app()->request->getBaseUrl();
+                    if (empty($baseUrl))
+                        $baseUrl = "/";
+                    if ($instance->saveAs($pathname.$filename))
+                        $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                     }
                 }
 
@@ -100,6 +106,34 @@ class CategoryController extends ControllerAdmin
         $model->delete();
         if(!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/category/index', 'nodeAdmin'=>true, 'nodeId'=>Yii::app()->getNodeId()));
+    }
+
+    public function actionMoveUp($id)
+    {
+        $model = $this->loadModel($id);
+        $model->moveUp();
+
+        $redirectParams = array(
+            '/category/index',
+            'nodeAdmin'=>true,
+            'nodeId'=>Yii::app()->getNodeId()
+        );
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $redirectParams);
+    }
+
+    public function actionMoveDown($id)
+    {
+        $model = $this->loadModel($id);
+        $model->moveDown();
+
+        $redirectParams = array(
+            '/category/index',
+            'nodeAdmin'=>true,
+            'nodeId'=>Yii::app()->getNodeId()
+        );
+
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : $redirectParams);
     }
 
     public function actionIndex()

@@ -6,8 +6,14 @@
     $updateUrl = Yii::app()->createUrl('default/update', array('id'=>$model->id_gallery_image, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $deleteUrl = Yii::app()->createUrl('default/delete', array('id'=>$model->id_gallery_image, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
+    if (empty($model->Category->title))
+        $categoryTitle = Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category));
+    else
+        $categoryTitle = $model->Category->title;
+
     $this->title = Yii::t("site", "Update image");
     $this->breadcrumbs=array(
+        $categoryTitle => Yii::app()->createUrl('category/view', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId)),
         Yii::t('site', 'Image #{id}', array('{id}'=>$model->id_gallery_image))
     );
 
@@ -20,6 +26,9 @@
             )
         )
     );
+
+    $image = $model->image;
+    $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
 ?>
 
 <fieldset>
@@ -30,7 +39,7 @@
             'title',
             array(
                 'name'  => 'image',
-                'value' => !empty($model->image)?CHtml::image($model->getUploadUrl().$model->image):null,
+                'value' => !empty($image)?(CHtml::link(CHtml::image($thumb), $image)):null,
                 'type'  => 'raw'
             )
         )

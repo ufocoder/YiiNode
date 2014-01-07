@@ -40,19 +40,6 @@ class GalleryImage extends CActiveRecord
     }
 
     /**
-     * Url для загрузки документов
-     */
-    protected static $uploadUrl = '/upload/gallery/';
-
-    /*
-     * Получить физический путь загрузки документов
-     */
-    public static function getUploadUrl()
-    {
-        return self::$uploadUrl;
-    }
-
-    /**
      * Экземляр файла для загрузки
      */
     public $x_image;
@@ -83,7 +70,8 @@ class GalleryImage extends CActiveRecord
                 'condition' => 't.id_gallery_category IS NULL'
             ),
             'published' => array(
-                'condition' => ' t.enabled = 1'
+                'condition' => 't.enabled = 1',
+                'order' => 't.position DESC, t.id_gallery_image DESC'
             )
         );
     }
@@ -101,9 +89,6 @@ class GalleryImage extends CActiveRecord
             array('id_gallery_category', 'numerical'),
             array('enabled', 'boolean'),
             array('time_created, time_updated', 'length', 'max'=>10),
-            // Правило, использующиеся в search
-            // @todo удалить лишние атрибуты
-            array('id_gallery_image, id_gallery_category, title, content, time_created, time_updated', 'safe', 'on'=>'search'),
         );
     }
 
@@ -143,7 +128,6 @@ class GalleryImage extends CActiveRecord
      */
     public function search($id_category = null)
     {
-        // @todo удалить лишние атрибуты
 
         $criteria=new CDbCriteria;
 
@@ -154,23 +138,36 @@ class GalleryImage extends CActiveRecord
         $criteria->compare('time_created', $this->time_created, true);
         $criteria->compare('time_updated', $this->time_updated, true);
 
+        $criteria->scopes[] = 'node';
+
+        $urlParams = array(
+            'nodeId' => Yii::app()->getNodeId(),
+            'nodeAdmin' => true
+        );
+
+        $criteriaParams = array(
+            'id_node' => Yii::app()->getNodeId(),
+        );
+
         if (!empty($id_category)){
-            $criteria->params['id_gallery_category'] = $id_category;
             $criteria->scopes[] = 'category';
+            $urlParams['id_category'] = $id_category;
+            $criteriaParams['id_gallery_category'] = $id_category;
         }
 
-        $criteria->scopes[] = 'node';
         $criteria->with = array('Category');
+        $criteria->params = $criteriaParams;
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort'=>array(
-                'defaultOrder'=>'id_gallery_image DESC',
+                'defaultOrder'=>'t.id_gallery_category DESC, t.position DESC, t.id_gallery_image DESC',
                 'route'=>'/default/index',
-                'params'=>array(
-                    'nodeId' => Yii::app()->getNodeId(),
-                    'nodeAdmin' => true
-                )
+                'params'=>$urlParams
+            ),
+            'pagination'=>array(
+                'route'=>'/default/index',
+                'params'=>$urlParams
             )
         ));
     }
@@ -184,6 +181,119 @@ class GalleryImage extends CActiveRecord
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
+    }
+
+    /**
+     * Поднять изображение в списке
+     */
+    public function moveUp()
+    {
+        if (!empty($this->id_gallery_category))
+            $near = self::model()->find(array(
+                'condition' => 'position >= :position AND id_gallery_category = :id_gallery_category AND id_gallery_image != :id_gallery_image',
+                'order' => 'position ASC',
+                'params' => array(
+                    ':position' => $this->position,
+                    ':id_gallery_category' => $this->id_gallery_category,
+                    ':id_gallery_image' => $this->id_gallery_image
+                )
+            ));
+        else
+            $near = self::model()->find(array(
+                'condition' => 'position >= :position AND id_gallery_category IS NULL AND id_gallery_image != :id_gallery_image',
+                'order' => 'position ASC',
+                'params' => array(
+                    ':position' => $this->position,
+                    ':id_gallery_image' => $this->id_gallery_image
+                )
+            ));
+
+        if (empty($near))
+            return true;
+
+        $position = $this->position;
+
+        $this->saveAttributes(array(
+            'position' => $near->position
+        ));
+
+        $near->saveAttributes(array(
+            'position' => $position
+        ));
+
+        $this->updatePosition();
+    }
+
+    /**
+     * Опустить изображение в списке
+     */
+    public function moveDown()
+    {
+        if (!empty($this->id_gallery_category))
+            $near = self::model()->find(array(
+                'condition' => 'position <= :position AND id_gallery_category = :id_gallery_category AND id_gallery_image != :id_gallery_image',
+                'order' => 'position DESC',
+                'params' => array(
+                    ':position' => $this->position,
+                    ':id_gallery_category' => $this->id_gallery_category,
+                    ':id_gallery_image' => $this->id_gallery_image
+                )
+            ));
+        else
+            $near = self::model()->find(array(
+                'condition' => 'position <= :position AND id_gallery_category IS NULL AND id_gallery_image != :id_gallery_image',
+                'order' => 'position DESC',
+                'params' => array(
+                    ':position' => $this->position,
+                    ':id_gallery_image' => $this->id_gallery_image
+                )
+            ));
+
+        if (empty($near))
+            return true;
+
+        $position = $this->position;
+
+        $this->saveAttributes(array(
+            'position' => $near->position
+        ));
+
+        $near->saveAttributes(array(
+            'position' => $position
+        ));
+
+        return $this->updatePosition();
+    }
+
+    /**
+     * Обновить список позиций
+     */
+    protected function updatePosition()
+    {
+        if (!empty($this->id_gallery_category))
+            $list = self::model()->findAll(array(
+                'condition' => 'id_gallery_category = :id_gallery_category',
+                'order' => 'position ASC',
+                'params' => array(
+                    ':id_gallery_category' => $this->id_gallery_category
+                )
+            ));
+        else
+            $list = self::model()->findAll(array(
+                'condition' => 'id_gallery_category IS NULL',
+                'order' => 'position ASC'
+            ));
+
+        $position = 0;
+
+        foreach($list as $item){
+            $item->saveAttributes(array(
+                'position' => $position
+            ));
+            $position++;
+        }
+
+        return true;
     }
 
     /**

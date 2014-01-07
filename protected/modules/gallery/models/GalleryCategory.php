@@ -40,19 +40,6 @@ class GalleryCategory extends CActiveRecord
     }
 
     /**
-     * Url для загрузки документов
-     */
-    protected static $uploadUrl = '/upload/gallery/';
-
-    /*
-     * Получить физический путь загрузки документов
-     */
-    public static function getUploadUrl()
-    {
-        return self::$uploadUrl;
-    }
-
-    /**
      * Количество изображений в категории
      */
     public $count = 0;
@@ -131,6 +118,7 @@ class GalleryCategory extends CActiveRecord
         return array(
             'title' => Yii::t('site', 'Title'),
             'content' => Yii::t('site', 'Content'),
+            'count' => Yii::t('site', 'Count of images'),
             'meta_keywords' => Yii::t('site', 'Meta keywords'),
             'meta_description' => Yii::t('site', 'Meta description'),
             'x_image' => Yii::t('site', 'Image'),
@@ -166,7 +154,14 @@ class GalleryCategory extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort'=>array(
-                'defaultOrder'=>'id_gallery_category DESC',
+                'defaultOrder'=>'t.position DESC',
+                'route'=>'/category/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
+            ),
+            'pagination'=>array(
                 'route'=>'/category/index',
                 'params'=>array(
                     'nodeId' => Yii::app()->getNodeId(),
@@ -174,6 +169,87 @@ class GalleryCategory extends CActiveRecord
                 )
             )
         ));
+    }
+
+    /**
+     * Поднять в списке
+     */
+    public function moveUp()
+    {
+        $near = self::model()->find(array(
+            'condition' => 'position >= :position AND id_gallery_category != :id_gallery_category',
+            'order' => 'position ASC',
+            'params' => array(
+                ':position' => $this->position,
+                ':id_gallery_category' => $this->id_gallery_category
+            )
+        ));
+
+        if (empty($near))
+            return true;
+
+        $position = $this->position;
+
+        $this->saveAttributes(array(
+            'position' => $near->position
+        ));
+
+        $near->saveAttributes(array(
+            'position' => $position
+        ));
+
+        $this->updatePosition();
+    }
+
+    /**
+     * Опустить в списке
+     */
+    public function moveDown()
+    {
+        $near = self::model()->find(array(
+            'condition' => 'position <= :position AND id_gallery_category != :id_gallery_category',
+            'order' => 'position DESC',
+            'params' => array(
+                ':position' => $this->position,
+                ':id_gallery_category' => $this->id_gallery_category
+            )
+        ));
+
+        if (empty($near))
+            return true;
+
+        $position = $this->position;
+
+        $this->saveAttributes(array(
+            'position' => $near->position
+        ));
+
+        $near->saveAttributes(array(
+            'position' => $position
+        ));
+
+        return $this->updatePosition();
+    }
+
+    /**
+     * Обновить список позиций
+     */
+    protected function updatePosition()
+    {
+        $list = self::model()->findAll(array(
+            'order' => 'position ASC'
+        ));
+
+        $position = 0;
+
+        foreach($list as $item){
+            $item->saveAttributes(array(
+                'position' => $position
+            ));
+            $position++;
+        }
+
+        return true;
     }
 
     /**

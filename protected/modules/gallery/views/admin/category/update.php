@@ -3,16 +3,23 @@
     /* @var $model GalleryCategory */
 
     $nodeId = Yii::app()->getNodeId();
+    $listUrl = Yii::app()->createUrl('default/index', array('id_category'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $viewUrl = Yii::app()->createUrl('category/view', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
     $deleteUrl = Yii::app()->createUrl('category/delete', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId));
 
+    if (empty($model->title))
+        $categoryTitle = Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category));
+    else
+        $categoryTitle = $model->title;
+
     $this->title = Yii::t("site", "Update category");
     $this->breadcrumbs=array(
-        Yii::t('site', 'Gallery category #{id}', array('{id}'=>$model->id_gallery_category)).": ".CHtml::encode($model->title) => $viewUrl,
+        $categoryTitle => $viewUrl,
         Yii::t('site', 'Update'),
     );
 
     $this->actions = array(
+        array('label'=>Yii::t('site', 'Image list'), 'url' => $listUrl, 'icon'=>'list'),
         array('label'=>Yii::t('site', 'View category'), 'url' => $viewUrl, 'icon'=>'eye-open'),
         array('label'=>Yii::t('site', 'Delete category'), 'url' => Yii::app()->createUrl('category/delete', array('id'=>$model->id_gallery_category, 'nodeAdmin' => true, 'nodeId' => $nodeId)), 'icon'=>'trash',
             'htmlOptions'=>array(
