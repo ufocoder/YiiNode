@@ -17,8 +17,18 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'The relation "{relation}" in active record class "{class}" is specified with an incomplete foreign key. The foreign key must consist of columns referencing both joining tables.' => '',
-  'The relation "{relation}" in active record class "{class}" is specified with an invalid foreign key "{key}". There is no such column in the table "{table}".' => '',
-  'Your request is invalid.' => '',
-  '{attribute} "{value}" is invalid.' => '',
+  'Add slide' => '',
+  'Background color' => '',
+  'Effect of transition' => '',
+  'Height slide' => '',
+  'Pause on hover' => '',
+  'Slide animation' => '',
+  'Slide list' => '',
+  'Slide was created successful!' => '',
+  'Slider delay' => '',
+  'Slider enabled' => '',
+  'Slider was updated successful!' => '',
+  'Update slide' => '',
+  'View slide' => '',
+  'Width slide' => '',
 );

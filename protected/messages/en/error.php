@@ -22,6 +22,8 @@ return array (
   'Invalid request. Please do not repeat this request again.' => '',
   'Node ID #{id_node} not exists.' => '',
   'Product data is empty' => '',
+  'Selected order is not exists!' => '',
+  'The request product does not exists!' => '',
   'The requested page does not exist.' => '',
   'There is only one root node.' => '',
   'User\'s email is not exists' => '',

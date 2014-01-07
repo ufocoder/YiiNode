@@ -19,9 +19,10 @@
 return array (
   'Login' => '',
   'Please activate you account go to {activation_url}' => '',
+  'Thank you for your registration.' => '',
   'Thank you for your registration. Contact Admin to activate your account.' => '',
-  'Thank you for your registration. Please check your email or login.' => '',
   'Thank you for your registration. Please check your email.' => '',
   'Thank you for your registration. Please {{login}}.' => '',
   'You registered from {site_name}' => '',
+  'Thank you for your registration. Please check your email or login.' => '@@@@',
 );

@@ -17,11 +17,13 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'Invalid request. Please do not repeat this request again.' => 'Некорректнаый запрос. Пожалуйста, не повторяйте этот запрос снова.',
-  'Product data is empty' => 'Данные о продукции пусты',
+  'Selected order is not exists!' => '',
+  'The request product does not exists!' => '',
   'Email is incorrect.' => 'E-mail некорректен.',
   'Incorrect recovery link.' => 'Некорректная ссылка для восстановления.',
+  'Invalid request. Please do not repeat this request again.' => 'Некорректнаый запрос. Пожалуйста, не повторяйте этот запрос снова.',
   'Node ID #{id_node} not exists.' => 'Раздел #{id_node} не существует.',
+  'Product data is empty' => 'Данные о продукции пусты',
   'Root node couldn\'t be moved.' => 'Корневой раздел не может быть перемещен.',
   'The requested node does not exist.' => 'Запрашиваемый раздел не может быть найден.',
   'The requested page does not exist.' => 'Запрашиваемая страница не существует.',
