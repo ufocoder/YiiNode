@@ -20,6 +20,9 @@
             )
         )
     );
+
+    $image = $model->image;
+    $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
 ?>
 
 <h4><?php echo Yii::t('site', 'Page content')?></h4>
@@ -38,7 +41,7 @@
         array(
             'name'  => 'image',
             'type' => 'raw',
-            'value' => ($model->image)?(CHtml::image($imagePath.$model->image)):null,
+            'value' => !empty($image)?(CHtml::link(CHtml::image($thumb), $image)):null,
         ),
         'timework',
         'email',

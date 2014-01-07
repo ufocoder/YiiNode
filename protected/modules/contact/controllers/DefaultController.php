@@ -40,6 +40,12 @@ class DefaultController extends Controller
             $class = "Feedback";
             $feedback = new $class;
 
+            if (isset($_POST['ajax']) && $_POST['ajax'] === 'form-feedback') {
+                $model->scenario = 'ajax';
+                echo CActiveForm::validate($model);
+                Yii::app()->end();
+            }
+
             if (isset($_POST[$class])){
 
                 $feedbackNotification = Yii::app()->getSetting('feedbackNotification');

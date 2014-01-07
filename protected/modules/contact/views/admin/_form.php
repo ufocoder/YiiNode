@@ -28,7 +28,34 @@
 
 <?php echo $form->errorSummary($model); ?>
 <?php echo $form->textFieldRow($model, 'title', array('class'=>'span8')); ?>
-<?php echo $form->textAreaRow($model, 'content', array('class'=>'span8')); ?>
+
+<div class="control-group">
+    <?php echo $form->labelEx($model, 'content', array('class'=>'control-label')); ?>
+    <div class="span8">
+        <?php $this->widget('bootstrap.widgets.TbCKEditor', array(
+            'model' => $model,
+            'attribute' => 'content',
+            'editorOptions' => array(
+                'language' => Yii::app()->language,
+                'toolbar' => array(
+                    array('Source','-','Preview','Templates','Print'),
+                    array('Maximize', 'ShowBlocks'),
+                    array('Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo'),
+                    array('Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt'),
+                    '/',
+                    array('Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat'),
+                    array('Link','Unlink','Anchor'),
+                    array('NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl'),
+                    '/',
+                    array('Styles','Format','Font','FontSize'),
+                    array('TextColor','BGColor'),
+                    array('Image','Flash','Table','HorizontalRule','SpecialChar','PageBreak','Iframe')
+                ),
+                'filebrowserBrowseUrl' => CHtml::normalizeUrl(array("/admin/filemanager/editor"))
+            )
+        )); ?>
+    </div>
+</div>
 
 <?php
         $attributeFile = get_class($model).'[filename]';
@@ -53,9 +80,12 @@
     <div class="control-group">
         <?php echo $form->labelEx($model, 'image', array('class'=>'control-label')); ?>
         <div class="controls">
-         <?php if($model->image): ?>
+        <?php if($model->image):
+                $image = $model->image;
+                $thumb = Yii::app()->image->thumbSrcOf($image, array('resize' => array('width' => 350)));
+        ?>
                 <p>
-                    <div><?php echo CHtml::link(CHtml::image($model->getUploadUrl().$model->image), $model->getUploadUrl().$model->image); ?></div>
+                    <div><?php echo CHtml::link(CHtml::image($thumb), $image); ?></div>
                     <div><?php echo $form->checkBox($model,'delete_image', array('style' => 'float: left; margin-right: 5px;;')); ?> <?php echo $form->labelEx($model,'delete_image'); ?></div>
                 </p>
         <?php endif; ?>

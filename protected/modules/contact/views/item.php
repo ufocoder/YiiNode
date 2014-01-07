@@ -2,7 +2,7 @@
 <h3><?php echo CHtml::encode($data->title)?></h3>
 
 <?php if (!empty($data->image)):
-    $thumb = Yii::app()->image->thumbSrcOf($data->getUploadPath().$data->image, array('resize' => array('width' => 150)));
+    $thumb = Yii::app()->image->thumbSrcOf($data->image, array('resize' => array('width' => 150)));
 ?>
         <div class="item-image">
             <img src="<?php echo $thumb;?>">

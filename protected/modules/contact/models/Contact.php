@@ -21,19 +21,6 @@ class Contact extends CActiveRecord
         return self::$uploadPath;
     }
 
-    /**
-     * Url для загрузки документов
-     */
-    protected static $uploadUrl = '/upload/contact/';
-
-    /*
-     * Получить физический путь загрузки документов
-     */
-    public static function getUploadUrl()
-    {
-        return self::$uploadUrl;
-    }
-
     public $x_image;
     public $delete_image;
 
@@ -111,6 +98,13 @@ class Contact extends CActiveRecord
             'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'id_contact DESC',
+                'route'=>'/default/index',
+                'params'=>array(
+                    'nodeId' => Yii::app()->getNodeId(),
+                    'nodeAdmin' => true
+                )
+            ),
+            'pagination'=>array(
                 'route'=>'/default/index',
                 'params'=>array(
                     'nodeId' => Yii::app()->getNodeId(),

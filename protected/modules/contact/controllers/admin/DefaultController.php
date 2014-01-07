@@ -53,8 +53,11 @@ class DefaultController extends ControllerAdmin
                     $extension  = CFileHelper::getExtension($instance->getName());
                     $pathname   = Article::getUploadPath();
                     $filename   = md5(time().$model->id_node) . '.' . $extension;
+                    $baseUrl = Yii::app()->request->getBaseUrl();
+                    if (empty($baseUrl))
+                        $baseUrl = "/";
                     if ($instance->saveAs($pathname.$filename))
-                        $model->saveAttributes(array('image' => $filename));
+                        $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                 }
 
                 Yii::app()->user->setFlash('success', Yii::t('site', 'Contact was created successful!'));
@@ -100,7 +103,11 @@ class DefaultController extends ControllerAdmin
                             if (file_exists($old_filename) && $old_filename != $filename)
                                 unlink($old_filename);
                         }
-                        $model->saveAttributes(array('image' => $filename));
+                        $baseUrl = Yii::app()->request->getBaseUrl();
+                        if (empty($baseUrl))
+                            $baseUrl = "/";
+                        if ($instance->saveAs($pathname.$filename))
+                            $model->saveAttributes(array('image' => $baseUrl . $model::getUploadPath() .$filename));
                     }
                 }
 
