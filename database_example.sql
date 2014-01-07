@@ -1,0 +1,496 @@
+# ************************************************************
+# Sequel Pro SQL dump
+# Версия 4096
+#
+# http://www.sequelpro.com/
+# http://code.google.com/p/sequel-pro/
+#
+# Адрес: localhost (MySQL 5.5.29)
+# Схема: YiiNode
+# Время создания: 2014-01-07 07:38:46 +0000
+# ************************************************************
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Дамп таблицы db_block
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_block`;
+
+CREATE TABLE `db_block` (
+  `id_block` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `theme` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `content` text NOT NULL,
+  `params` text,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id_block`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_block` WRITE;
+/*!40000 ALTER TABLE `db_block` DISABLE KEYS */;
+
+INSERT INTO `db_block` (`id_block`, `title`, `theme`, `type`, `content`, `params`, `time_created`, `time_updated`)
+VALUES
+	(1,'Footer: copyright',NULL,'string','',NULL,1389079121,NULL);
+
+/*!40000 ALTER TABLE `db_block` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы db_menu_item
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_menu_item`;
+
+CREATE TABLE `db_menu_item` (
+  `id_menu_item` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_menu_list` int(11) unsigned NOT NULL,
+  `id_node` int(11) unsigned DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `alttitle` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT '',
+  `icon` varchar(255) DEFAULT '',
+  `image` varchar(255) DEFAULT '',
+  `notice` text NOT NULL,
+  `position` int(11) unsigned NOT NULL DEFAULT '0',
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_menu_item`),
+  KEY `time_created` (`time_created`),
+  KEY `time_updated` (`time_updated`),
+  KEY `fk_menu_item_id_node` (`id_node`),
+  KEY `fk_menu_item_id_menu_list` (`id_menu_list`),
+  CONSTRAINT `fk_menu_item_id_menu_list` FOREIGN KEY (`id_menu_list`) REFERENCES `db_menu_list` (`id_menu_list`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_menu_item_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы db_menu_list
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_menu_list`;
+
+CREATE TABLE `db_menu_list` (
+  `id_menu_list` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL DEFAULT '',
+  `notice` text,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_menu_list`),
+  KEY `time_created` (`time_created`),
+  KEY `time_updated` (`time_updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы db_node
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_node`;
+
+CREATE TABLE `db_node` (
+  `id_node` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_node_parent` int(11) unsigned DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT '0',
+  `rgt` int(11) unsigned NOT NULL,
+  `lft` int(11) unsigned NOT NULL,
+  `level` smallint(5) unsigned NOT NULL,
+  `path` varchar(512) NOT NULL,
+  `slug` varchar(128) NOT NULL,
+  `module` varchar(255) NOT NULL,
+  `layout` varchar(128) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_keywords` text,
+  `meta_description` text,
+  `image` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `hidden` tinyint(4) NOT NULL DEFAULT '0',
+  `time_created` int(11) NOT NULL,
+  `time_updated` int(11) NOT NULL,
+  PRIMARY KEY (`id_node`),
+  KEY `lft` (`lft`),
+  KEY `rgt` (`rgt`),
+  KEY `level` (`level`),
+  KEY `id_parent` (`id_node_parent`),
+  CONSTRAINT `fk_db_node_id_node_parent` FOREIGN KEY (`id_node_parent`) REFERENCES `db_node` (`id_node`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_node` WRITE;
+/*!40000 ALTER TABLE `db_node` DISABLE KEYS */;
+
+INSERT INTO `db_node` (`id_node`, `id_node_parent`, `position`, `rgt`, `lft`, `level`, `path`, `slug`, `module`, `layout`, `title`, `label`, `meta_title`, `meta_keywords`, `meta_description`, `image`, `description`, `enabled`, `hidden`, `time_created`, `time_updated`)
+VALUES
+	(1,NULL,0,118,1,1,'/','/','page','','Главная','',NULL,NULL,NULL,'','',1,0,1378641875,0),
+	(2,1,0,105,104,2,'/single_page','single_page','page','','Страница','',NULL,NULL,NULL,'','',1,0,1389079542,1389079542),
+	(3,1,1,107,106,2,'/articles','articles','articles','','Статьи','',NULL,NULL,NULL,'','',1,0,1389079565,1389079565),
+	(4,1,2,109,108,2,'/contacts','contacts','contact','','Контакты','',NULL,NULL,NULL,'','',1,0,1389079582,1389079582),
+	(5,1,3,111,110,2,'/feedback','feedback','feedback','','Обратная связь','',NULL,NULL,NULL,'','',1,0,1389079610,1389079610),
+	(6,1,4,113,112,2,'/gallery','gallery','gallery','','Галерея','',NULL,NULL,NULL,'','',1,0,1389079635,1389079635),
+	(7,1,5,115,114,2,'/translation','translation','translation','','Трансляция','',NULL,NULL,NULL,'','',1,0,1389079874,1389079874),
+	(8,1,6,117,116,2,'/redirect','redirect','redirect','','Переадресация','',NULL,NULL,NULL,'','',1,0,1389079895,1389079895);
+
+/*!40000 ALTER TABLE `db_node` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы db_setting
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_setting`;
+
+CREATE TABLE `db_setting` (
+  `id_setting` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) unsigned DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id_setting`),
+  KEY `time_created` (`time_created`),
+  KEY `time_updated` (`time_updated`),
+  KEY `id_node` (`id_node`),
+  CONSTRAINT `fk_db_node_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_setting` WRITE;
+/*!40000 ALTER TABLE `db_setting` DISABLE KEYS */;
+
+INSERT INTO `db_setting` (`id_setting`, `id_node`, `title`, `value`, `time_created`, `time_updated`)
+VALUES
+	(1,8,'nodeId','2',1389079901,NULL),
+	(2,7,'nodeId','2',1389079908,NULL);
+
+/*!40000 ALTER TABLE `db_setting` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы db_user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_user`;
+
+CREATE TABLE `db_user` (
+  `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `login` varchar(255) NOT NULL,
+  `password` varchar(64) NOT NULL,
+  `activekey` varchar(64) NOT NULL,
+  `role` varchar(64) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `time_visited` int(11) unsigned DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_user`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_user` WRITE;
+/*!40000 ALTER TABLE `db_user` DISABLE KEYS */;
+
+INSERT INTO `db_user` (`id_user`, `login`, `password`, `activekey`, `role`, `email`, `time_created`, `time_updated`, `time_visited`, `status`)
+VALUES
+	(1,'admin','21232f297a57a5a743894a0e4a801fc3','','admin','',NULL,NULL,1389079023,1);
+
+/*!40000 ALTER TABLE `db_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы db_user_field
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_user_field`;
+
+CREATE TABLE `db_user_field` (
+  `id_user_field` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `varname` varchar(50) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `field_type` varchar(50) NOT NULL,
+  `field_size` varchar(15) NOT NULL DEFAULT '0',
+  `field_size_min` varchar(15) NOT NULL DEFAULT '0',
+  `required` int(1) NOT NULL DEFAULT '0',
+  `match` varchar(255) NOT NULL DEFAULT '',
+  `range` varchar(255) NOT NULL DEFAULT '',
+  `error_message` varchar(255) NOT NULL DEFAULT '',
+  `default` varchar(255) NOT NULL DEFAULT '',
+  `position` int(11) unsigned NOT NULL DEFAULT '0',
+  `visible` tinyint(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_user_field`),
+  KEY `varname` (`varname`,`visible`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_user_field` WRITE;
+/*!40000 ALTER TABLE `db_user_field` DISABLE KEYS */;
+
+INSERT INTO `db_user_field` (`id_user_field`, `varname`, `title`, `field_type`, `field_size`, `field_size_min`, `required`, `match`, `range`, `error_message`, `default`, `position`, `visible`)
+VALUES
+	(1,'lastname','Last Name','VARCHAR','50','3',1,'','','Incorrect Last Name (length between 3 and 50 characters).','',1,3),
+	(2,'firstname','First Name','VARCHAR','50','3',1,'','','Incorrect First Name (length between 3 and 50 characters).','',0,3),
+	(3,'phone','Телефон','VARCHAR','255','0',0,'','','','',0,1);
+
+/*!40000 ALTER TABLE `db_user_field` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы db_user_profile
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `db_user_profile`;
+
+CREATE TABLE `db_user_profile` (
+  `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `lastname` varchar(50) NOT NULL DEFAULT '',
+  `firstname` varchar(50) NOT NULL DEFAULT '',
+  `phone` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id_user`),
+  CONSTRAINT `fk_user_profile_id_user` FOREIGN KEY (`id_user`) REFERENCES `db_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `db_user_profile` WRITE;
+/*!40000 ALTER TABLE `db_user_profile` DISABLE KEYS */;
+
+INSERT INTO `db_user_profile` (`id_user`, `lastname`, `firstname`, `phone`)
+VALUES
+	(1,'','','');
+
+/*!40000 ALTER TABLE `db_user_profile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы mod_article
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_article`;
+
+CREATE TABLE `mod_article` (
+  `id_article` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `position` int(11) unsigned NOT NULL DEFAULT '0',
+  `image` varchar(255) DEFAULT '',
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_keywords` text,
+  `meta_description` text,
+  `notice` text NOT NULL,
+  `content` text,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_published` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_article`),
+  KEY `id_node` (`id_node`),
+  CONSTRAINT `fk_mod_article_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_article_tag
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_article_tag`;
+
+CREATE TABLE `mod_article_tag` (
+  `id_article_tag` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `weight` varchar(255) NOT NULL DEFAULT '',
+  `count` int(11) NOT NULL DEFAULT '0',
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `enabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_article_tag`),
+  KEY `fk_article_tag_id_node` (`id_node`),
+  CONSTRAINT `fk_article_tag_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_article_tag_article
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_article_tag_article`;
+
+CREATE TABLE `mod_article_tag_article` (
+  `id_article` int(11) unsigned NOT NULL,
+  `id_article_tag` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id_article`,`id_article_tag`),
+  CONSTRAINT `mod_article_tag_article_id_article` FOREIGN KEY (`id_article`) REFERENCES `mod_article` (`id_article`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_contact
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_contact`;
+
+CREATE TABLE `mod_contact` (
+  `id_contact` int(11) NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `image` varchar(255) NOT NULL,
+  `addr` text,
+  `timework` text,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `skype` varchar(255) DEFAULT NULL,
+  `icq` varchar(255) DEFAULT NULL,
+  `map_lat` double DEFAULT NULL,
+  `map_long` double DEFAULT NULL,
+  `map_zoom` int(11) DEFAULT NULL,
+  `coord_code` text,
+  `time_created` int(11) DEFAULT NULL,
+  `time_updated` int(11) DEFAULT NULL,
+  `enabled` smallint(6) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_contact`),
+  KEY `time_created` (`time_created`),
+  KEY `time_updated` (`time_updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_feedback
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_feedback`;
+
+CREATE TABLE `mod_feedback` (
+  `id_feedback` int(11) NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) NOT NULL,
+  `person_name` varchar(255) NOT NULL,
+  `contact_phone` varchar(255) NOT NULL,
+  `contact_email` varchar(255) NOT NULL,
+  `content` text,
+  `time_created` int(11) DEFAULT NULL,
+  `time_readed` int(11) DEFAULT NULL,
+  `time_updated` int(11) DEFAULT NULL,
+  `enabled` smallint(6) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_feedback`),
+  KEY `time_created` (`time_created`),
+  KEY `time_readed` (`time_readed`),
+  KEY `time_updated` (`time_updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_gallery_category
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_gallery_category`;
+
+CREATE TABLE `mod_gallery_category` (
+  `id_gallery_category` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_node` int(11) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `image` varchar(255) NOT NULL,
+  `position` int(11) NOT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '0',
+  `time_created` int(11) NOT NULL,
+  `time_updated` int(11) NOT NULL,
+  PRIMARY KEY (`id_gallery_category`),
+  KEY `id_node` (`id_node`),
+  CONSTRAINT `fk_gallery_category_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_gallery_image
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_gallery_image`;
+
+CREATE TABLE `mod_gallery_image` (
+  `id_gallery_image` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_gallery_category` int(11) unsigned DEFAULT NULL,
+  `id_node` int(11) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `image` varchar(255) NOT NULL,
+  `position` int(11) DEFAULT NULL,
+  `enabled` smallint(6) NOT NULL DEFAULT '0',
+  `time_created` int(11) DEFAULT NULL,
+  `time_updated` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_gallery_image`),
+  KEY `id_gallery_category` (`id_gallery_category`),
+  KEY `title` (`title`),
+  KEY `id_node` (`id_node`),
+  CONSTRAINT `fk_gallery_image_id_gallery_category` FOREIGN KEY (`id_gallery_category`) REFERENCES `mod_gallery_category` (`id_gallery_category`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_gallery_image_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Дамп таблицы mod_page
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_page`;
+
+CREATE TABLE `mod_page` (
+  `id_node` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `time_created` int(11) DEFAULT NULL,
+  `time_updated` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_node`),
+  CONSTRAINT `fk_mod_page_id_node` FOREIGN KEY (`id_node`) REFERENCES `db_node` (`id_node`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `mod_page` WRITE;
+/*!40000 ALTER TABLE `mod_page` DISABLE KEYS */;
+
+INSERT INTO `mod_page` (`id_node`, `title`, `content`, `time_created`, `time_updated`)
+VALUES
+	(1,'Добро пожаловать!','<p>Добро пожаловать!</p>\r\n',1389079114,NULL),
+	(2,'Страница','',1389079542,NULL);
+
+/*!40000 ALTER TABLE `mod_page` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Дамп таблицы mod_slider
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `mod_slider`;
+
+CREATE TABLE `mod_slider` (
+  `id_slider` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `background` varchar(124) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `content` text,
+  `time_created` int(11) unsigned DEFAULT NULL,
+  `time_updated` int(11) unsigned DEFAULT NULL,
+  `position` int(11) unsigned DEFAULT NULL,
+  `enabled` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_slider`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
