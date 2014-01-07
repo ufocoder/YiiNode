@@ -40,6 +40,8 @@ return array(
         'catalog',
         'feedback',
         'gallery',
+        'translation',
+        'redirect',
         'page',
         'user'
     ),
