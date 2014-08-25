@@ -5,6 +5,7 @@
  * @version GIT: $Id$
  * @revision: $Revision$
  */
+
 return array(
     'name' => 'Application name',
     'language' => 'ru',
@@ -52,7 +53,7 @@ return array(
     'components'=> array(
 
         'bootstrap'=>array(
-            'class'=>'ext.bootstrap.components.Bootstrap'
+            'class'=>'application.vendor.clevertech.yii-bootstrap.src.components.Bootstrap'
         ),
 
         'authManager'=>array(
