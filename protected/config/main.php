@@ -52,8 +52,8 @@ return array(
 
     'components'=> array(
 
-        'bootstrap'=>array(
-            'class'=>'application.vendor.clevertech.yii-bootstrap.src.components.Bootstrap'
+        'bootstrap' => array(
+            'class'=>'application.vendor.clevertech.yii-booster.src.components.Bootstrap'
         ),
 
         'authManager'=>array(

@@ -1,7 +1,7 @@
 {
     "require": {
         "yiisoft/yii": ">=1.1.15",
-        "clevertech/yii-booster": ">=4.0.1",
+        "clevertech/yii-booster": "3.0.1",
         "malyshev/yii-debug-toolbar": "dev-master"
     },
     "autoload": {
@@ -9,7 +9,7 @@
             "": "src"
         }
     },
-    "config":{
+    "config": {
         "vendor-dir": "protected/vendor"
     }
 }
