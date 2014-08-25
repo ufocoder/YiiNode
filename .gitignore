@@ -34,4 +34,4 @@ $RECYCLE.BIN/
 composer.lock
 
 /nbproject/
-/vendor
+/protected/vendor
