@@ -9,6 +9,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.idea
 
 # CDT-specific
 .cproject
@@ -30,5 +31,7 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+composer.lock
+
 /nbproject/
-/framework
+/vendor
