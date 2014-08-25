@@ -5,6 +5,7 @@
  * @version GIT: $Id$
  * @revision: $Revision$
  */
+
 return CMap::mergeArray(
     require_once(dirname(__FILE__).'/main.php'),
     array(
@@ -30,7 +31,7 @@ return CMap::mergeArray(
                         'levels'    => 'error, warning, debug',
                     ),
                     array(
-                        'class'     => 'application.extensions.yii-debug-toolbar.YiiDebugToolbarRoute',
+                        'class'     => 'application.vendor.malyshev.yii-debug-toolbar.YiiDebugToolbarRoute',
                         'ipFilters' => array('127.0.0.1'),
                     ),
                 ),
