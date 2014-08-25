@@ -32,6 +32,8 @@
 <div class="form-signin-wrapper">
     <?php echo $form->textField($model, 'login', array('class' => 'span4 text', 'placeholder' => Yii::t('site', 'Enter login'))); ?>
     <?php echo $form->passwordField($model, 'password', array('class' => 'span4 password', 'placeholder' => Yii::t('site', 'Enter password'))); ?>
+
+<?php if ($model->isCaptchaShowed()): ?>
     <div>
         <?php $this->widget('CCaptcha', array(
                 'captchaAction' => Yii::app()->createUrl('/admin/login/captcha'),
@@ -44,6 +46,7 @@
         ?>
         <?php echo CHtml::activeTextField($model, 'verifyCode', array('class'=>'span2 captcha-input', 'placeholder' => Yii::t('site', 'Enter code')))?>
     </div>
+<?php endif; ?>
 
     <?php echo $form->labelEx($model, 'rememberMe', array('label'=> $form->checkBox($model, 'rememberMe'). Yii::t('site', 'Remember me next time'), 'class' => 'checkbox')); ?>
     <?php $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'submit', 'type'=>'primary', 'label'=> Yii::t('site', 'Log in'))); ?>

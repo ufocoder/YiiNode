@@ -7,21 +7,64 @@
  */
 class FormLogin extends CFormModel
 {
+    /**
+     * Константы
+     */
+    const CAPTCHA_ATTEMPT = 3;
+    const CAPTCHA_STATE = 'adminLoginFormCaptchaAttempt';
+
+    /**
+     * Фоля формы
+     */
     public $login;
     public $password;
     public $rememberMe;
     public $verifyCode;
 
     /**
+     * Инициализируем состояние пользователя
+     */
+    public function init()
+    {
+        if (!Yii::app()->user->hasState(self::CAPTCHA_STATE))
+            Yii::app()->user->setState(self::CAPTCHA_STATE, 1);
+    }
+
+    /**
      * @return type Правила валидации атрибутов
      */
-    public function rules() {
-        return array(
+    public function rules()
+    {
+        $rules = array(
             array('login, password', 'required'),
             array('rememberMe', 'boolean'),
-            array('verifyCode', 'captcha', 'allowEmpty'=>false),
             array('password', 'authenticate'),
+            array('verifyCode', 'captchaAttempt')
         );
+
+        if ($this->isCaptchaShowed())
+            $rules[] = array('verifyCode', 'captcha', 'allowEmpty' => false);
+
+        return $rules;
+    }
+
+    public function captchaAttempt($attribute, $params)
+    {
+        if ($this->hasErrors()){
+            $count = Yii::app()->user->getState(self::CAPTCHA_STATE);
+            Yii::app()->user->setState(self::CAPTCHA_STATE, $count + 1);
+        }
+    }
+
+    public function isCaptchaShowed()
+    {
+        if (!Yii::app()->user->hasState(self::CAPTCHA_STATE))
+            return true;
+
+        $attempts = Yii::app()->user->getState(self::CAPTCHA_STATE);
+
+        if ($attempts > self::CAPTCHA_ATTEMPT)
+            return true;
     }
 
     /**
